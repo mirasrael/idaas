@@ -29,10 +29,15 @@ int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 	if (!m_client->is_connected())
 		return -1;
 
+	__int32 commandSize = 4;
+	m_client->send((char *) &commandSize, sizeof(commandSize));
 	__int32 command = DatabaseCommands::FunctionsList;
 	m_client->send((char *) &command, sizeof(command));
 	char header[4];
-	m_client->recieve(header, sizeof(header));
+	int result = m_client->recieve(header, sizeof(header));
+	if (result != 4) {
+		return result;
+	}
 	__int32 count = *(__int32 *) header;
 	for (int i = 0; i < count; i++) {
 		IdaFunction function;
