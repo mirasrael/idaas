@@ -5,9 +5,7 @@
 
 typedef int (*EnumFunctionsCallback)(IdaFunction *function, void *userData);
 
-namespace socketizer {
-	class client;
-}
+class DatabaseClient;
 
 class Database
 {
@@ -19,6 +17,6 @@ public:
 	int Connect(const char *hostname, int port);
 	int EnumFunctions(EnumFunctionsCallback callback, void *ud);
 private:	
-	socketizer::client *m_client;
+	DatabaseClient *m_client;
 };
 

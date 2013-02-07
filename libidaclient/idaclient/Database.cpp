@@ -2,23 +2,26 @@
 #include <string>
 #include <fstream>
 #include <DatabaseCommands.h>
+#include <BinaryDataObjectBuilder.h>
 
-#include <socketizer\client.h>
+#include "DatabaseClient.h"
 
-Database::Database()
-{	
-	m_client = new socketizer::client();
+Database::Database() : m_client(0)
+{		
 }
 
 
 Database::~Database(void)
 {
-	delete m_client;
+	if (0 != m_client) {
+		delete m_client;
+	}
 }
 
 int Database::Connect(const char *hostname, int port) {
 	try {
-		m_client->connect(hostname, port);		
+		m_client = new DatabaseClient(hostname, port);
+		m_client->run_async();
 		return 0;
 	} catch (const char *) {
 		return -1;
@@ -29,16 +32,17 @@ int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 	if (!m_client->is_connected())
 		return -1;
 
-	__int32 commandSize = 4;
-	m_client->send((char *) &commandSize, sizeof(commandSize));
-	__int32 command = DatabaseCommands::FunctionsList;
-	m_client->send((char *) &command, sizeof(command));
-	char header[4];
-	int result = m_client->recieve(header, sizeof(header));
-	if (result != 4) {
-		return result;
+	unsigned __int32 command = DatabaseCommands::FunctionsList;	
+
+	BinaryDataObjectBuilder builder;
+	builder.Write(command);	
+		
+	BinaryDataObjectPtr result = m_client->ExecuteCommand(builder.Build(), DatabaseCommands::FunctionsList);	
+	if (0 == result) {
+		return -1;
 	}
-	__int32 count = *(__int32 *) header;
+
+	__int32 count = result->DWordAt(4);
 	for (int i = 0; i < count; i++) {
 		IdaFunction function;
 		callback(&function, ud);

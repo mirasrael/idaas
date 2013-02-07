@@ -13,8 +13,9 @@ CommandProcessor::~CommandProcessor(void)
 
 int CommandProcessor::Handle(DatabaseCommands command, BinaryDataObjectPtr &output) {
 	BinaryDataObjectBuilder builder;
+	builder.Write((unsigned __int32) command);
 	switch (command) {
-	case DatabaseCommands::FunctionsList:
+	case DatabaseCommands::FunctionsList:		
 		builder.Write((unsigned __int32) 1);		
 		break;
 	default:
