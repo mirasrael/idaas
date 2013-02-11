@@ -11,11 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="idaclient\Enumeration.cpp" />
     <ClCompile Include="idaclient\DatabaseClient.cpp" />
     <ClCompile Include="idaclient\Function.cpp" />
     <ClCompile Include="idaclient\Database.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="idaclient\Enumeration.h" />
     <ClInclude Include="idaclient\DatabaseClient.h" />
     <ClInclude Include="idaclient\Function.h" />
     <ClInclude Include="idaclient\Database.h" />

@@ -22,7 +22,6 @@ namespace Ida {
 		IEnumerator<Function^>^ Functions::GetEnumerator() {
 			vector<IdaFunction> functions;			
 			int result = m_database->EnumFunctions(Functions_OnNextFunction, &functions);			
-			System::Console::WriteLine("{0}", result);
 			List<Function^>^ functions2 = gcnew List<Function^>();
 			for (vector<IdaFunction>::iterator it = functions.begin(); it != functions.end(); it++) {
 				Function^ function = gcnew Function();				

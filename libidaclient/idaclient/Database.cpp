@@ -28,6 +28,32 @@ int Database::Connect(const char *hostname, int port) {
 	}	
 }
 
+int Database::EnumEnumerations(EnumEnumerationsCallback callback, void *ud) {
+	if (!m_client->is_connected())
+		return -1;
+
+	unsigned __int32 command = DatabaseCommands::EnumerationsList;	
+
+	BinaryDataObjectBuilder builder;
+	builder.Write(command);	
+		
+	BinaryDataObjectPtr result = m_client->ExecuteCommand(builder.Build(), DatabaseCommands::EnumerationsList);	
+	if (0 == result) {
+		return -1;
+	}
+
+	__int32 count = result->DWordAt(4);
+	char *ptr = (char *) result->getInfoRef() + 8;
+	for (int i = 0; i < count; i++) {
+		IdaEnumeration enumeration;
+		enumeration.name = ptr;
+		ptr += enumeration.name.size() + 1;
+		enumeration.is_bitfield = *ptr;
+		callback(&enumeration, ud);
+	}
+	return 0;
+}
+
 int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 	if (!m_client->is_connected())
 		return -1;

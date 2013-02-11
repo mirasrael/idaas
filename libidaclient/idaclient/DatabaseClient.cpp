@@ -41,11 +41,7 @@ DatabaseClient::DatabaseClient(std::string hostname, unsigned __int16 port) : so
 }
 
 DatabaseClient::~DatabaseClient(void)
-{
-	fstream ofs("c:/_1/111.txt", ios::app);
-	ofs << "Destroy Database Client" << endl;
-	ofs.close();
-
+{	
 	CloseHandle(m_resultReceivedEvent);
 	CloseHandle(m_connectionClosedEvent);
 }

@@ -74,12 +74,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />
+    <ClInclude Include="Enumeration.h" />
+    <ClInclude Include="Enumerations.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="Enumeration.cpp" />
+    <ClCompile Include="Enumerations.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="Functions.cpp" />
   </ItemGroup>
