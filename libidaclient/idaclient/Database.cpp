@@ -4,6 +4,7 @@
 
 #include <DatabaseCommands.h>
 #include <BinaryDataObjectBuilder.h>
+#include <BinaryDataObjectReader.h>
 
 #include "DatabaseClient.h"
 
@@ -29,9 +30,26 @@ int Database::Connect(const char *hostname, int port) {
 	}	
 }
 
-int Database::EnumEnumerations(EnumEnumerationsCallback callback, void *ud) {
+EnumerationsReader::EnumerationsReader(shared_ptr<BinaryDataObjectReader> reader) : m_reader(reader) {
+	m_count = m_reader->ReadUInt32();
+}
+
+shared_ptr<IdaEnumeration> EnumerationsReader::Read() {
+	if (m_count <= 0) {
+		return shared_ptr<IdaEnumeration>();
+	}
+
+	m_count--;
+	shared_ptr<IdaEnumeration> enumeration(new IdaEnumeration());
+	enumeration->id = m_reader->ReadUInt32();		
+	enumeration->name = m_reader->ReadString();		
+	enumeration->is_bitfield = m_reader->ReadBoolean();
+	return enumeration;
+}
+
+shared_ptr<EnumerationsReader> Database::GetEnumerationsReader() {
 	if (!m_client->is_connected())
-		return -1;
+		throw "Client is not connected";
 
 	unsigned __int32 command = DatabaseCommands::EnumerationsList;	
 
@@ -40,21 +58,12 @@ int Database::EnumEnumerations(EnumEnumerationsCallback callback, void *ud) {
 		
 	BinaryDataObjectPtr result = m_client->ExecuteCommand(builder.Build(), DatabaseCommands::EnumerationsList);	
 	if (0 == result) {
-		return -1;
+		throw "Command failed";
 	}
-
-	__int32 count = result->DWordAt(4);
-	char *ptr = (char *) result->getInfoRef() + 8;
-	for (int i = 0; i < count; i++) {
-		shared_ptr<IdaEnumeration> enumeration(new IdaEnumeration());
-		enumeration->id = *reinterpret_cast<unsigned __int32*>(ptr);
-		ptr += sizeof(unsigned __int32);
-		enumeration->name = ptr;
-		ptr += enumeration->name.size() + 1;
-		enumeration->is_bitfield = *ptr;
-		callback(enumeration, ud);
-	}
-	return 0;
+	
+	shared_ptr<BinaryDataObjectReader> reader(new BinaryDataObjectReader(result));
+	reader->SkipUInt32(); // Command	
+	return shared_ptr<EnumerationsReader>(new EnumerationsReader(reader));
 }
 
 int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {

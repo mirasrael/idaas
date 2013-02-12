@@ -18,18 +18,23 @@ namespace Ida {
 		{
 		}
 
-		IEnumerator<Enumeration^>^ Enumerations::GetEnumerator() {
-			vector<shared_ptr<IdaEnumeration>> enumerations;
-			int result = m_database->EnumEnumerations(Enumerations_OnNextFunction, &enumerations);
-			List<Enumeration^>^ enumerations2 = gcnew List<Enumeration^>();
-			for (vector<shared_ptr<IdaEnumeration>>::iterator it = enumerations.begin(); it != enumerations.end(); it++) {
-				Enumeration^ enumeration = gcnew Enumeration();				
-				enumeration->Id = (*it)->id;
-				enumeration->Name = gcnew String((*it)->name.c_str());
-				enumeration->IsBitfield = (*it)->is_bitfield;
-				enumerations2->Add(enumeration);
-			}
-			return enumerations2->GetEnumerator();
+		IEnumerator<Enumeration^>^ Enumerations::GetEnumerator() {			
+			try {
+				List<Enumeration^>^ enumerations = gcnew List<Enumeration^>();
+
+				shared_ptr<EnumerationsReader> reader = m_database->GetEnumerationsReader();
+				shared_ptr<IdaEnumeration> idaEnumeration;
+				while (0 != (idaEnumeration = reader->Read())) {
+					Enumeration^ enumeration = gcnew Enumeration();				
+					enumeration->Id = idaEnumeration->id;
+					enumeration->Name = gcnew String(idaEnumeration->name.c_str());
+					enumeration->IsBitfield = idaEnumeration->is_bitfield;
+					enumerations->Add(enumeration);
+				}
+				return enumerations->GetEnumerator();
+			} catch(const char *error) {
+				throw gcnew Exception(gcnew String(error));
+			}									
 		}
 
 		System::Collections::IEnumerator^ Enumerations::IEnumerable_GetEnumerator() {
