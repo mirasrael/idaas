@@ -1,11 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "Function.h"
 #include "Enumeration.h"
 #include <WinSock2.h>
 
-typedef int (*EnumFunctionsCallback)(IdaFunction *function, void *userData);
-typedef int (*EnumEnumerationsCallback)(IdaEnumeration *function, void *userData);
+using namespace std;
+
+typedef int (*EnumFunctionsCallback)(shared_ptr<IdaFunction> &function, void *userData);
+typedef int (*EnumEnumerationsCallback)(shared_ptr<IdaEnumeration> &function, void *userData);
 
 class DatabaseClient;
 

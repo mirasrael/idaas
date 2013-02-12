@@ -7,11 +7,9 @@ using namespace std;
 
 namespace Ida {
 	namespace Client {
-		static int __cdecl Functions_OnNextFunction(IdaFunction *function, void *ud)
+		static int __cdecl Functions_OnNextFunction(shared_ptr<IdaFunction> &function, void *ud)
 		{
-			vector<IdaFunction>* functions = (vector<IdaFunction>*)ud;
-			IdaFunction copy;
-			functions->push_back(copy);
+			reinterpret_cast<vector<shared_ptr<IdaFunction>>*>(ud)->push_back(function);
 			return 0;
 		}
 
@@ -20,10 +18,10 @@ namespace Ida {
 		}
 
 		IEnumerator<Function^>^ Functions::GetEnumerator() {
-			vector<IdaFunction> functions;			
+			vector<shared_ptr<IdaFunction>> functions;			
 			int result = m_database->EnumFunctions(Functions_OnNextFunction, &functions);			
 			List<Function^>^ functions2 = gcnew List<Function^>();
-			for (vector<IdaFunction>::iterator it = functions.begin(); it != functions.end(); it++) {
+			for (vector<shared_ptr<IdaFunction>>::iterator it = functions.begin(); it != functions.end(); it++) {
 				Function^ function = gcnew Function();				
 				functions2->Add(function);
 			}

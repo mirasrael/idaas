@@ -19,7 +19,9 @@ void __stdcall onMessageReceived(socketizer::connection *connection, BinaryDataO
 	int result = commandProcessor.Handle(command, output);
 	if (result == 0) {
 		connection->send_async(output);
-	}	
+	} else {
+		closesocket(*connection);
+	}
 }
 
 void __stdcall logerror(const char *error) {

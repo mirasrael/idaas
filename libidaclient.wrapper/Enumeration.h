@@ -9,8 +9,9 @@ namespace Ida {
 		public:
 			Enumeration();
 
+			property unsigned __int32 Id;
 			property String^ Name;
-			property bool IsBitfield;
+			property bool IsBitfield;			
 		};
 	}
 }

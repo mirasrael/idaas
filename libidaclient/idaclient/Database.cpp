@@ -1,6 +1,7 @@
 #include "Database.h"
 #include <string>
 #include <fstream>
+
 #include <DatabaseCommands.h>
 #include <BinaryDataObjectBuilder.h>
 
@@ -45,11 +46,13 @@ int Database::EnumEnumerations(EnumEnumerationsCallback callback, void *ud) {
 	__int32 count = result->DWordAt(4);
 	char *ptr = (char *) result->getInfoRef() + 8;
 	for (int i = 0; i < count; i++) {
-		IdaEnumeration enumeration;
-		enumeration.name = ptr;
-		ptr += enumeration.name.size() + 1;
-		enumeration.is_bitfield = *ptr;
-		callback(&enumeration, ud);
+		shared_ptr<IdaEnumeration> enumeration(new IdaEnumeration());
+		enumeration->id = *reinterpret_cast<unsigned __int32*>(ptr);
+		ptr += sizeof(unsigned __int32);
+		enumeration->name = ptr;
+		ptr += enumeration->name.size() + 1;
+		enumeration->is_bitfield = *ptr;
+		callback(enumeration, ud);
 	}
 	return 0;
 }
@@ -70,8 +73,8 @@ int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 
 	__int32 count = result->DWordAt(4);
 	for (int i = 0; i < count; i++) {
-		IdaFunction function;
-		callback(&function, ud);
+		shared_ptr<IdaFunction> function(new IdaFunction());
+		callback(function, ud);
 	}
 	return 0;
 }

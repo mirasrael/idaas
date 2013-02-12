@@ -16,7 +16,7 @@ namespace IDA.Client.Test
                 Assert.That(database.Enumerations.Count(), Is.EqualTo(1));
                 var enumeration = database.Enumerations.First();
                 Assert.That(enumeration.Name, Is.EqualTo("INTERNET_SCHEME"));
-                Console.WriteLine(enumeration.Name);
+                Console.WriteLine(enumeration.Id);
                 Assert.That(enumeration.IsBitfield, Is.False);
             }
         }
