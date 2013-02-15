@@ -11,6 +11,7 @@ using namespace std;
 typedef int (*EnumFunctionsCallback)(shared_ptr<IdaFunction> &function, void *userData);
 
 class BinaryDataObjectReader;
+class BinaryDataObjectBuilder;
 
 class EnumerationsReader {
 	shared_ptr<BinaryDataObjectReader> m_reader;
@@ -24,6 +25,12 @@ class DatabaseClient;
 
 class Database
 {
+private: //fields
+	DatabaseClient *m_client;
+
+private: //methods
+	void WriteEnum(shared_ptr<IdaEnumeration> enumeration, BinaryDataObjectBuilder& output);
+
 public:
 	Database();
 	~Database(void);
@@ -32,7 +39,9 @@ public:
 	int Connect(const char *hostname, int port);
 	int EnumFunctions(EnumFunctionsCallback callback, void *ud);
 	shared_ptr<EnumerationsReader> GetEnumerationsReader();
-private:	
-	DatabaseClient *m_client;
+	bool CreateEnum(shared_ptr<IdaEnumeration> enumeration);
+	bool UpdateEnum(shared_ptr<IdaEnumeration> enumeration);
+	bool DeleteEnum(unsigned __int32 id);
+	bool DeleteEnum(shared_ptr<IdaEnumeration> enumeration);
 };
 

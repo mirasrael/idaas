@@ -44,6 +44,17 @@ shared_ptr<IdaEnumeration> EnumerationsReader::Read() {
 	enumeration->id = m_reader->ReadUInt32();		
 	enumeration->name = m_reader->ReadString();		
 	enumeration->is_bitfield = m_reader->ReadBoolean();
+	int membersCount = m_reader->ReadUInt32();
+	enumeration->costants.reserve(membersCount);
+	for (int memberIndex = 0; memberIndex < membersCount; memberIndex++) {		
+		shared_ptr<IdaEnumerationConstant> constant(new IdaEnumerationConstant());
+		constant->id = m_reader->ReadUInt32();		
+		constant->name = m_reader->ReadString();	
+		constant->value = m_reader->ReadUInt32();
+		constant->serial = m_reader->ReadByte();
+		constant->bit_mask = m_reader->ReadUInt32();
+		enumeration->costants.push_back(constant);
+	}
 	return enumeration;
 }
 
@@ -108,4 +119,60 @@ Database* Database::Open(const char *path) {
 		return 0;
 	}
 	return database;
+}
+
+bool Database::CreateEnum(shared_ptr<IdaEnumeration> enumeration)
+{
+	if (!m_client->is_connected())
+		return false;
+	
+	BinaryDataObjectBuilder builder;
+	builder.Write(unsigned __int32(DatabaseCommands::CreateEnumeration));	
+	WriteEnum(enumeration, builder);
+	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::CreateEnumeration);
+	return true;
+}
+
+bool Database::UpdateEnum(shared_ptr<IdaEnumeration> enumeration)
+{
+	if (!m_client->is_connected())
+		return false;
+	
+	BinaryDataObjectBuilder builder;
+	builder.Write(unsigned __int32(DatabaseCommands::UpdateEnumeration));
+	builder.Write(unsigned __int32(enumeration->id));
+	WriteEnum(enumeration, builder);
+	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::UpdateEnumeration);
+	return true;
+}
+
+bool Database::DeleteEnum(shared_ptr<IdaEnumeration> enumeration)
+{	
+	return DeleteEnum(enumeration->id);
+}
+
+bool Database::DeleteEnum(unsigned __int32 id)
+{
+	if (!m_client->is_connected())
+		return false;
+
+	BinaryDataObjectBuilder builder;
+	builder.Write(unsigned __int32(DatabaseCommands::DeleteEnumeration));
+	builder.Write(id);
+	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::DeleteEnumeration);
+	return true;
+}
+
+void Database::WriteEnum(shared_ptr<IdaEnumeration> enumeration, BinaryDataObjectBuilder& output)
+{
+	output.Write(enumeration->name.c_str());
+	output.Write(unsigned __int8(enumeration->is_bitfield ? 1 : 0));
+	output.Write(unsigned __int32(enumeration->costants.size()));
+	for (vector<shared_ptr<IdaEnumerationConstant>>::iterator it = enumeration->costants.begin(); it != enumeration->costants.end(); it++)
+	{
+		shared_ptr<IdaEnumerationConstant> &constant = *it;
+		output.Write(constant->name.c_str());		
+		output.Write(unsigned __int32(constant->value));		
+		output.Write(unsigned __int32(constant->bit_mask));
+	}
 }

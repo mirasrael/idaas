@@ -1,5 +1,6 @@
 #include <winsock2.h>
 #include <WS2tcpip.h>
+#include <BinaryDataObjectReader.h>
 
 #include "TcpServer.h"
 #include "Logging.h"
@@ -11,12 +12,11 @@ char *DEFAULT_PORT = "13044";
 
 socketizer::server* tcpServer = 0;
 
-void __stdcall onMessageReceived(socketizer::connection *connection, BinaryDataObjectPtr& message, void *ctx) {
-	DatabaseCommands command = *(DatabaseCommands*) message->getInfoRef();
-	logmsg("Execute command: %d\n", command);	
+void __stdcall onMessageReceived(socketizer::connection *connection, BinaryDataObjectPtr& message, void *ctx) {	
+	logmsg("Execute command: %d\n", *(DatabaseCommands *) message->getInfoRef());
 	CommandProcessor commandProcessor;
 	BinaryDataObjectPtr output;
-	int result = commandProcessor.Handle(command, output);
+	int result = commandProcessor.Handle(message, output);
 	if (result == 0) {
 		connection->send_async(output);
 	} else {
