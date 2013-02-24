@@ -4,6 +4,7 @@
 
 #include "Functions.h"
 #include "Enumerations.h"
+#include <atlstr.h>
 
 using System::String;
 
@@ -19,12 +20,16 @@ namespace Ida {
 			Functions^ _functions;
 		public:			
 			~Database(void);
-			static Database^ Open(String^ path);			
+			static Database^ Open(String^ path);
+			void Database::Close();
 			property Functions^ Functions {
 				Ida::Client::Functions^ get() { return _functions; }
 			}
 			property Enumerations^ Enumerations {
 				Ida::Client::Enumerations^ get() { return _enumerations; }
+			}
+			property static String^ IdaHome {
+				void set(System::String^ value) { ::Database::SetIdaHome(CString(value)); }
 			}
 		};
 	}

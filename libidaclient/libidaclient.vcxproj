@@ -59,10 +59,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\projects\BinaryData;D:\projects\socketizer;D:\projects\idaas\idaas;$(IncludePath)</IncludePath>
+    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\BinaryData;D:\projects\socketizer;D:\projects\idaas\idaas;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\projects\BinaryData;D:\projects\socketizer;D:\projects\idaas\idaas;$(IncludePath)</IncludePath>
+    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\BinaryData;D:\projects\socketizer;D:\projects\idaas\idaas;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -76,6 +76,7 @@
     <Lib>
       <AdditionalDependencies>
       </AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,6 +95,7 @@
     <Lib>
       <AdditionalDependencies>
       </AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -12,6 +12,22 @@ char *DEFAULT_PORT = "13044";
 
 socketizer::server* tcpServer = 0;
 
+struct term_kernel_sync_t : exec_request_t {
+	int idaapi execute() {
+		//term_kernel();
+		return 0;
+	}
+} term_kernel_sync;
+
+struct term_database_sync_t : exec_request_t {
+	int idaapi execute() {
+		term_database();
+		CloseConnection();
+		execute_sync(term_kernel_sync, MFF_NOWAIT | MFF_WRITE);
+		return 0;
+	}
+} term_database_sync;
+
 void __stdcall onMessageReceived(socketizer::connection *connection, BinaryDataObjectPtr& message, void *ctx) {	
 	logmsg("Execute command: %d\n", *(DatabaseCommands *) message->getInfoRef());
 	CommandProcessor commandProcessor;
@@ -19,9 +35,12 @@ void __stdcall onMessageReceived(socketizer::connection *connection, BinaryDataO
 	int result = commandProcessor.Handle(message, output);
 	if (result == 0) {
 		connection->send_async(output);
-	} else {
+	} else if (result == CommandProcessor::TERMINATE_CODE) {
 		closesocket(*connection);
-	}
+		execute_sync(term_database_sync, MFF_NOWAIT);				
+	} else {
+		closesocket(*connection);		
+	}	
 }
 
 void __stdcall logerror(const char *error) {
@@ -43,6 +62,10 @@ void __stdcall onConnectionAccepted(socketizer::connection *connection, void *ct
 }
 
 int idaapi CreateConnection() {		
+	if (tcpServer != 0) {
+		CloseConnection();
+	}
+
 	tcpServer = new socketizer::server(atoi(DEFAULT_PORT));
 	tcpServer->add_error_callback(logerror);
 	tcpServer->add_start_callback(onServerStarted);

@@ -103,7 +103,7 @@ int CommandProcessor::HandleCreateEnumeration(BinaryDataObjectReader& input, Bin
 
 int CommandProcessor::Handle(BinaryDataObjectPtr& input, BinaryDataObjectPtr &output) {
 	int result = 0;
-	
+
 	BinaryDataObjectBuilder builder;
 	BinaryDataObjectReader reader(input);
 
@@ -125,6 +125,8 @@ int CommandProcessor::Handle(BinaryDataObjectPtr& input, BinaryDataObjectPtr &ou
 	case DatabaseCommands::DeleteEnumeration:
 		result = HandleDeleteEnumeration(reader, builder);
 		break;
+	case DatabaseCommands::Exit:								
+		return TERMINATE_CODE;		
 	default:
 		return -1;
 	}

@@ -14,7 +14,9 @@ private:
 	int HandleCreateEnumeration(BinaryDataObjectReader &input, BinaryDataObjectBuilder &output);
 	int HandleUpdateEnumeration(BinaryDataObjectReader &input, BinaryDataObjectBuilder &output);
 	int HandleDeleteEnumeration(BinaryDataObjectReader& input, BinaryDataObjectBuilder &output);
-public:
+public:	
+	static const int TERMINATE_CODE = -2;
+
 	CommandProcessor(void);
 	~CommandProcessor(void);
 	int Handle(BinaryDataObjectPtr& input, BinaryDataObjectPtr &output);	

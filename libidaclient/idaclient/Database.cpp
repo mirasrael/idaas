@@ -1,3 +1,6 @@
+#include "boost/date_time/posix_time/posix_time_types.hpp"
+#include "boost/thread.hpp"
+
 #include "Database.h"
 #include <string>
 #include <fstream>
@@ -7,6 +10,10 @@
 #include <BinaryDataObjectReader.h>
 
 #include "DatabaseClient.h"
+
+using namespace boost::posix_time;
+
+std::string Database::m_idaExecutablePath;
 
 Database::Database() : m_client(0)
 {		
@@ -28,6 +35,12 @@ int Database::Connect(const char *hostname, int port) {
 	} catch (const char *) {
 		return -1;
 	}	
+}
+
+void Database::Close() {
+	BinaryDataObjectBuilder builder;
+	builder.Write(unsigned __int32(DatabaseCommands::Exit));
+	m_client->send(builder.Build());
 }
 
 EnumerationsReader::EnumerationsReader(shared_ptr<BinaryDataObjectReader> reader) : m_reader(reader) {
@@ -106,8 +119,35 @@ Database* Database::Open(const char *path) {
 	infFile.open(infFilePath);
 	if (!infFile.is_open())
     {
-		return 0;		
-	}
+		if (!m_idaExecutablePath.empty())
+		{		
+			STARTUPINFO si;
+			ZeroMemory(&si, sizeof(si));
+			si.cb = sizeof(si);
+			PROCESS_INFORMATION pi;			
+			ZeroMemory(&pi, sizeof(pi));
+
+			std::string commandLine = m_idaExecutablePath;
+			commandLine.append(" ").append(path);			
+
+			std::string workingDirectory = m_idaExecutablePath.substr(0, m_idaExecutablePath.rfind('/'));
+			char *_commandLine = new char[commandLine.size() + 1];
+			commandLine.copy(_commandLine, commandLine.size());			
+			CreateProcess(0, _commandLine, 0, 0, 0, 0, 0, workingDirectory.c_str(), &si, &pi);						
+			delete _commandLine;
+			
+			ptime start = second_clock::local_time();
+			while (second_clock::local_time() - start < seconds(10)) {
+				infFile.open(infFilePath);
+				if (infFile.is_open()) 
+					break;
+				boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
+			}
+		}
+		if (!infFile.is_open()) {
+			return 0;
+		}
+	}	
 	char portString[30];	
 	infFile.getline(portString, sizeof(portString));
 	int port = atoi(portString);
@@ -175,4 +215,10 @@ void Database::WriteEnum(shared_ptr<IdaEnumeration> enumeration, BinaryDataObjec
 		output.Write(unsigned __int32(constant->value));		
 		output.Write(unsigned __int32(constant->bit_mask));
 	}
+}
+
+void Database::SetIdaHome( const char *idaHome )
+{
+	m_idaExecutablePath = idaHome;
+	m_idaExecutablePath.append("/idag.exe");
 }

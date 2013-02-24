@@ -74,7 +74,7 @@ extern "C" {
 	{
 		unhook_from_notification_point(HT_UI, HOOK_UI_Callback);
 		setLoggingEnabled(false);
-		CloseConnection();
+		CloseConnection();		
 
 		// Stuff to do when exiting, generally you'd put any sort
 		// of clean-up jobs here.

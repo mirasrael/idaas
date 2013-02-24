@@ -23,6 +23,10 @@ namespace Ida {
 				throw gcnew System::ArgumentException(String::Format("Can't open database for {0}", path));
 			}
 			return gcnew Database(database);
-		}		
+		}
+
+		void Database::Close() {
+			m_database->Close();
+		}
 	}
 }

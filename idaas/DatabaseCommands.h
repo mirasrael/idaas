@@ -7,4 +7,5 @@ enum DatabaseCommands : __int32
 	CreateEnumeration = 0x2001,
 	UpdateEnumeration = 0x2002,
 	DeleteEnumeration = 0x2003,
+	Exit = 0xFFFF
 };

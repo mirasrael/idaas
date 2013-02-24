@@ -5,7 +5,7 @@
 
 class DatabaseClient : public socketizer::client
 {
-private:
+private:	
 	static void __stdcall RedirectToOnConnect(socketizer::connection *connection, void *context) {
 		reinterpret_cast<DatabaseClient *>(context)->OnConnect(connection);
 	}

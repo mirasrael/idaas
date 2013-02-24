@@ -27,6 +27,7 @@ class Database
 {
 private: //fields
 	DatabaseClient *m_client;
+	static std::string m_idaExecutablePath;
 
 private: //methods
 	void WriteEnum(shared_ptr<IdaEnumeration> enumeration, BinaryDataObjectBuilder& output);
@@ -36,6 +37,8 @@ public:
 	~Database(void);
 
 	static Database* Open(const char *path);
+	static void SetIdaHome(const char *idaHome);
+
 	int Connect(const char *hostname, int port);
 	int EnumFunctions(EnumFunctionsCallback callback, void *ud);
 	shared_ptr<EnumerationsReader> GetEnumerationsReader();
@@ -43,5 +46,6 @@ public:
 	bool UpdateEnum(shared_ptr<IdaEnumeration> enumeration);
 	bool DeleteEnum(unsigned __int32 id);
 	bool DeleteEnum(shared_ptr<IdaEnumeration> enumeration);
+	void Close();
 };
 

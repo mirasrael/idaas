@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -57,6 +57,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ida.lib;pro.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\projects\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,6 +76,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ida.lib;pro.lib;Ws2_32.lib</AdditionalDependencies>
       <AdditionalOptions>/EXPORT:PLUGIN %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>D:\projects\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy $(TargetPath) d:\soft\ida61\plugins\ /Y</Command>
