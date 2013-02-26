@@ -17,7 +17,7 @@ namespace Ida {
 			}
 		}
 
-		Database^ Database::Open(String^ path) {
+		Database^ Database::Open(String^ path) {			
 			::Database *database = ::Database::Open(CString(path));
 			if (database == nullptr) {
 				throw gcnew System::ArgumentException(String::Format("Can't open database for {0}", path));

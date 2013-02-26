@@ -1,6 +1,6 @@
 #include "DatabaseClient.h"
 
-void DatabaseClient::OnConnect(socketizer::connection *connection)
+void DatabaseClient::OnConnect(shared_ptr<socketizer::connection> connection)
 {		
 	ResetEvent(m_connectionClosedEvent);	
 	connection->add_close_callback(&DatabaseClient::RedirectToOnDisconnect, this);
@@ -12,7 +12,7 @@ void DatabaseClient::OnDisconnect(socketizer::connection *connection)
 	SetEvent(m_connectionClosedEvent);
 }
 
-void DatabaseClient::OnMessageReceive(socketizer::connection *connection, BinaryDataObjectPtr &message) {	
+void DatabaseClient::OnMessageReceive(shared_ptr<socketizer::connection> connection, BinaryDataObjectPtr &message) {	
 	if (message->DWordAt(0) == m_expectedResultCode) {
 		m_commandResult = message;
 		SetEvent(m_resultReceivedEvent);

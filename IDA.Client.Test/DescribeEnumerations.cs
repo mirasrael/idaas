@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Ida.Client;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ namespace IDA.Client.Test
         [SetUp]
         public void Connect()
         {
+            Database.IdaHome = @"d:\soft\ida61";
             _database = Database.Open(DatabaseName);
             Assume.That(_database, Is.Not.Null);
         }
@@ -49,6 +51,19 @@ namespace IDA.Client.Test
             Assert.That(partialScheme, Is.Not.Null);
             var unknownScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_UNKNOWN");
             Assert.That(unknownScheme, Is.Not.Null);                            
+        }
+
+        [Test]
+        public void ItShouldBatchCreateEnumerations()
+        {
+            for (var i = 0; i < 20; i++)
+            {
+                var @enum = _database.Enumerations.New(Guid.NewGuid().ToString("N"));
+                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 1});
+                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 2 });
+                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 3 });
+                _database.Enumerations.Persist(@enum);
+            }
         }
 
         [Test]
