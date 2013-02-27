@@ -36,16 +36,17 @@ public:
 	Database();
 	~Database(void);
 
-	static Database* Open(const char *path);
-	static void SetIdaHome(const char *idaHome);
+	static Database* Open(std::string& path);
+	static void SetIdaHome(std::string& idaHome);
 
 	int Connect(const char *hostname, int port);
 	int EnumFunctions(EnumFunctionsCallback callback, void *ud);
 	shared_ptr<EnumerationsReader> GetEnumerationsReader();
-	bool CreateEnum(shared_ptr<IdaEnumeration> enumeration);
-	bool UpdateEnum(shared_ptr<IdaEnumeration> enumeration);
-	bool DeleteEnum(unsigned __int32 id);
-	bool DeleteEnum(shared_ptr<IdaEnumeration> enumeration);
+	bool CreateEnum(shared_ptr<IdaEnumeration> enumeration, bool async = false);
+	bool UpdateEnum(shared_ptr<IdaEnumeration> enumeration, bool async = false);
+	bool DeleteEnum(unsigned __int32 id, bool async = false);
+	bool DeleteEnum(shared_ptr<IdaEnumeration> enumeration, bool async = false);
 	void Close();
+	bool Wait();
 };
 

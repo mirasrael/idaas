@@ -89,25 +89,25 @@ namespace Ida {
 			return result;
 		}
 
-		bool Enumerations::Delete(Enumeration^ enumeration)
+		bool Enumerations::Delete(Enumeration^ enumeration, bool async)
 		{
-			if (enumeration->Id != 0 && !_database->DeleteEnum(enumeration->Id))
+			if (enumeration->Id != 0 && !_database->DeleteEnum(enumeration->Id, async))
 				return false;
 
 			Items->Remove(enumeration);
 			return true;
 		}
 
-		bool Enumerations::Persist(Enumeration^ enumeration) {
+		bool Enumerations::Persist(Enumeration^ enumeration, bool async) {
 			ItemState state;
 			if (!_itemStates->TryGetValue(enumeration, state)) {
 				return true;
 			}			
 			switch(state) {
 			case ItemState::New:				
-				return _database->CreateEnum(ToNative(enumeration));
+				return _database->CreateEnum(ToNative(enumeration), async);
 			case ItemState::Updated:
-				return _database->UpdateEnum(ToNative(enumeration));
+				return _database->UpdateEnum(ToNative(enumeration), async);
 			default:
 				return false;
 			}			

@@ -22,6 +22,7 @@ namespace Ida {
 			~Database(void);
 			static Database^ Open(String^ path);
 			void Database::Close();
+			bool Database::Wait();
 			property Functions^ Functions {
 				Ida::Client::Functions^ get() { return _functions; }
 			}
@@ -29,7 +30,7 @@ namespace Ida {
 				Ida::Client::Enumerations^ get() { return _enumerations; }
 			}
 			property static String^ IdaHome {
-				void set(System::String^ value) { ::Database::SetIdaHome(CString(value)); }
+				void set(System::String^ value) { ::Database::SetIdaHome(std::string(CString(value))); }
 			}
 		};
 	}

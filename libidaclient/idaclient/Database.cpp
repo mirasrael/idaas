@@ -21,7 +21,7 @@ Database::Database() : m_client(0)
 
 
 Database::~Database(void)
-{
+{	
 	if (0 != m_client) {
 		delete m_client;
 	}
@@ -90,6 +90,12 @@ shared_ptr<EnumerationsReader> Database::GetEnumerationsReader() {
 	return shared_ptr<EnumerationsReader>(new EnumerationsReader(reader));
 }
 
+bool Database::Wait() {
+	BinaryDataObjectPtr request(new BinaryDataObject(sizeof(DatabaseCommands)));
+	request->DWordAt(0) = DatabaseCommands::Wait;
+	return 0 == m_client->ExecuteCommand(request, DatabaseCommands::Wait);
+}
+
 int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 	if (!m_client->is_connected())
 		return -1;
@@ -112,7 +118,7 @@ int Database::EnumFunctions(EnumFunctionsCallback callback, void *ud) {
 	return 0;
 }
 
-Database* Database::Open(const char *path) {
+Database* Database::Open(std::string& path) {
 	std::string infFilePath(path);
 	infFilePath += ".idaas";
 	std::ifstream infFile;
@@ -161,19 +167,19 @@ Database* Database::Open(const char *path) {
 	return database;
 }
 
-bool Database::CreateEnum(shared_ptr<IdaEnumeration> enumeration)
+bool Database::CreateEnum(shared_ptr<IdaEnumeration> enumeration, bool async)
 {
 	if (!m_client->is_connected())
 		return false;
 	
 	BinaryDataObjectBuilder builder;
 	builder.Write(unsigned __int32(DatabaseCommands::CreateEnumeration));	
-	WriteEnum(enumeration, builder);
-	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::CreateEnumeration);
+	WriteEnum(enumeration, builder);	
+	m_client->ExecuteCommand(builder.Build(), async);	
 	return true;
 }
 
-bool Database::UpdateEnum(shared_ptr<IdaEnumeration> enumeration)
+bool Database::UpdateEnum(shared_ptr<IdaEnumeration> enumeration, bool async)
 {
 	if (!m_client->is_connected())
 		return false;
@@ -182,16 +188,16 @@ bool Database::UpdateEnum(shared_ptr<IdaEnumeration> enumeration)
 	builder.Write(unsigned __int32(DatabaseCommands::UpdateEnumeration));
 	builder.Write(unsigned __int32(enumeration->id));
 	WriteEnum(enumeration, builder);
-	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::UpdateEnumeration);
+	m_client->ExecuteCommand(builder.Build(), async);
 	return true;
 }
 
-bool Database::DeleteEnum(shared_ptr<IdaEnumeration> enumeration)
+bool Database::DeleteEnum(shared_ptr<IdaEnumeration> enumeration, bool async)
 {	
-	return DeleteEnum(enumeration->id);
+	return DeleteEnum(enumeration->id, async);
 }
 
-bool Database::DeleteEnum(unsigned __int32 id)
+bool Database::DeleteEnum(unsigned __int32 id, bool async)
 {
 	if (!m_client->is_connected())
 		return false;
@@ -199,7 +205,7 @@ bool Database::DeleteEnum(unsigned __int32 id)
 	BinaryDataObjectBuilder builder;
 	builder.Write(unsigned __int32(DatabaseCommands::DeleteEnumeration));
 	builder.Write(id);
-	m_client->ExecuteCommand(builder.Build(), DatabaseCommands::DeleteEnumeration);
+	m_client->ExecuteCommand(builder.Build(), async);
 	return true;
 }
 
@@ -217,7 +223,7 @@ void Database::WriteEnum(shared_ptr<IdaEnumeration> enumeration, BinaryDataObjec
 	}
 }
 
-void Database::SetIdaHome( const char *idaHome )
+void Database::SetIdaHome( std::string& idaHome )
 {
 	m_idaExecutablePath = idaHome;
 	m_idaExecutablePath.append("/idag.exe");

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <socketizer/client.h>
+#include <DatabaseCommands.h>
 #include <string>
 
 class DatabaseClient : public socketizer::client
@@ -20,7 +21,7 @@ private:
 	
 	HANDLE m_resultReceivedEvent;
 	HANDLE m_connectionClosedEvent;
-	int m_expectedResultCode;
+	DatabaseCommands m_expectedResultCode;
 	BinaryDataObjectPtr m_commandResult;
 protected:
 	void OnDisconnect(socketizer::connection *connection);
@@ -29,7 +30,15 @@ protected:
 public:
 	DatabaseClient(std::string hostname, unsigned __int16 port);
 	~DatabaseClient(void);
-
-	BinaryDataObjectPtr ExecuteCommand(BinaryDataObjectPtr& command, int resultCode);
+	
+	void ExecuteCommand(BinaryDataObjectPtr& command, bool async) { 
+		if (async) {
+			send(command);
+		} else {
+			ExecuteCommand(command); 
+		}
+	}
+	BinaryDataObjectPtr ExecuteCommand(BinaryDataObjectPtr& command) { return ExecuteCommand(command, *(DatabaseCommands *) command->getInfoRef()); }
+	BinaryDataObjectPtr ExecuteCommand(BinaryDataObjectPtr& command, DatabaseCommands resultCode);
 };
 

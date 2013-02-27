@@ -18,11 +18,15 @@ namespace Ida {
 		}
 
 		Database^ Database::Open(String^ path) {			
-			::Database *database = ::Database::Open(CString(path));
+			::Database *database = ::Database::Open(std::string(CString(path)));
 			if (database == nullptr) {
 				throw gcnew System::ArgumentException(String::Format("Can't open database for {0}", path));
 			}
 			return gcnew Database(database);
+		}
+
+		bool Database::Wait() {
+			return m_database->Wait();
 		}
 
 		void Database::Close() {

@@ -40,8 +40,10 @@ namespace Ida {
 			virtual IEnumerator<Ida::Client::Enumeration^>^ GetEnumerator();
 			Enumeration^ New(String^ name) { return New(name, false); } 
 			Enumeration^ New(String^ name, bool isBitfield);
-			bool Persist(Enumeration^ enumeration);
-			bool Delete(Enumeration^ enumeration);
+			bool Persist(Enumeration^ enumeration) { return Persist(enumeration, false); }
+			bool Persist(Enumeration^ enumeration, bool async);
+			bool Delete(Enumeration^ enumeration) { return Delete(enumeration, false); }
+			bool Delete(Enumeration^ enumeration, bool async);
 		};
 	}
 }

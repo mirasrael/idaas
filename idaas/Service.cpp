@@ -3,6 +3,7 @@
 #include <diskio.hpp>
 #include <idp.hpp>
 #include <loader.hpp>
+#include <auto.hpp>
 #pragma warning(default: 4996)
 #include "Logging.h"
 #include "TcpServer.h"

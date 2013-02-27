@@ -53,17 +53,23 @@ namespace IDA.Client.Test
             Assert.That(unknownScheme, Is.Not.Null);                            
         }
 
+        private string GenerateUUID()
+        {
+            return "_" + Guid.NewGuid().ToString("N");
+        }
+
         [Test]
         public void ItShouldBatchCreateEnumerations()
         {
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 100; i++)
             {
-                var @enum = _database.Enumerations.New(Guid.NewGuid().ToString("N"));
-                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 1});
-                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 2 });
-                @enum.Constants.Add(new EnumerationConstant { Name = Guid.NewGuid().ToString("N"), Value = 3 });
-                _database.Enumerations.Persist(@enum);
+                var @enum = _database.Enumerations.New(GenerateUUID());
+                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 1 });
+                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 2 });
+                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 3 });
+                _database.Enumerations.Persist(@enum, true);
             }
+            _database.Wait();
         }
 
         [Test]

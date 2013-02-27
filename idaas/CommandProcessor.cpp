@@ -1,5 +1,6 @@
 #include "CommandProcessor.h"
 #include <enum.hpp>
+#include <auto.hpp>
 
 CommandProcessor::CommandProcessor(void)
 {
@@ -124,6 +125,9 @@ int CommandProcessor::Handle(BinaryDataObjectPtr& input, BinaryDataObjectPtr &ou
 		break;
 	case DatabaseCommands::DeleteEnumeration:
 		result = HandleDeleteEnumeration(reader, builder);
+		break;
+	case DatabaseCommands::Wait:		
+		result = autoWait();
 		break;
 	case DatabaseCommands::Exit:								
 		return TERMINATE_CODE;		

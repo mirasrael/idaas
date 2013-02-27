@@ -19,7 +19,7 @@ void DatabaseClient::OnMessageReceive(shared_ptr<socketizer::connection> connect
 	}
 }
 
-BinaryDataObjectPtr DatabaseClient::ExecuteCommand(BinaryDataObjectPtr& command, int resultCode) {	
+BinaryDataObjectPtr DatabaseClient::ExecuteCommand(BinaryDataObjectPtr& command, DatabaseCommands resultCode) {
 	m_expectedResultCode = resultCode;		
 	ResetEvent(m_resultReceivedEvent);
 	send(command);	
