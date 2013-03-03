@@ -1,6 +1,10 @@
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "boost/thread.hpp"
 
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
+
 #include "Database.h"
 #include <string>
 #include <fstream>
@@ -73,8 +77,8 @@ shared_ptr<IdaEnumeration> EnumerationsReader::Read() {
 
 shared_ptr<EnumerationsReader> Database::GetEnumerationsReader() {
 	if (!m_client->is_connected())
-		throw "Client is not connected";
-
+		throw "Client is not connected";		
+	
 	unsigned __int32 command = DatabaseCommands::EnumerationsList;	
 
 	BinaryDataObjectBuilder builder;

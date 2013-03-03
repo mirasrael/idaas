@@ -39,14 +39,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;D:\projects\idaas\libida-core;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\projects\third-party\thrift-0.9.0\lib\cpp\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\projects\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\projects\socketizer;D:\projects\BinaryData;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;D:\projects\idaas\libida-core;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\projects\third-party\thrift-0.9.0\lib\cpp\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,9 +58,17 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ida.lib;pro.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\projects\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ida.lib;pro.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(THIRD_PARTY)\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)
+$(THIRD_PARTY)\thrift\thrift-0.9.0.exe --gen cpp idaas.thrift
+del gen-cpp\*.skeleton.cpp /Q
+copy gen-cpp\*.cpp $(ProjectDir)
+copy gen-cpp\*.h $(ProjectDir)
+rmdir gen-cpp /Q /S</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -75,21 +85,34 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ida.lib;pro.lib;Ws2_32.lib</AdditionalDependencies>
       <AdditionalOptions>/EXPORT:PLUGIN %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>D:\projects\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(THIRD_PARTY)\boost\boost_1_53_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy $(TargetPath) d:\soft\ida61\plugins\ /Y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)
+$(THIRD_PARTY)\thrift\thrift-0.9.0.exe --gen cpp idaas.thrift
+del gen-cpp\*.skeleton.cpp /Q
+copy gen-cpp\*.cpp $(ProjectDir)
+copy gen-cpp\*.h $(ProjectDir)
+rmdir gen-cpp /Q /S</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandProcessor.cpp" />
+    <ClCompile Include="Database.cpp" />
+    <ClCompile Include="idaas_constants.cpp" />
+    <ClCompile Include="idaas_types.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="TcpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandProcessor.h" />
-    <ClInclude Include="DatabaseCommands.h" />
+    <ClInclude Include="Database.h" />
+    <ClInclude Include="idaas_constants.h" />
+    <ClInclude Include="idaas_types.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="TcpServer.h" />
   </ItemGroup>
@@ -99,6 +122,12 @@
     </ProjectReference>
     <ProjectReference Include="..\..\socketizer\socketizer.vcxproj">
       <Project>{ddee73d7-9674-4e8a-94f6-4bc1fcfd521d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\third-party\thrift\thrift-0.9.0\lib\cpp\libthrift.vcxproj">
+      <Project>{dd26f57e-60f2-4f37-a616-d219a9bf338f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\third-party\thrift\thrift-0.9.0\lib\cpp\libthriftnb.vcxproj">
+      <Project>{d8696cce-7d46-4659-b432-91754a41deb0}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
