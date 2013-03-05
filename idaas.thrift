@@ -1,4 +1,5 @@
 namespace cpp idaas
+namespace csharp Idaas
 
 struct ida_enum {
 	1: i32 id

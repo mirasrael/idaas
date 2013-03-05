@@ -69,6 +69,10 @@ copy gen-cpp\*.cpp $(ProjectDir)
 copy gen-cpp\*.h $(ProjectDir)
 rmdir gen-cpp /Q /S</Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -91,17 +95,18 @@ rmdir gen-cpp /Q /S</Command>
       <Command>copy $(TargetPath) d:\soft\ida61\plugins\ /Y</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)
-$(THIRD_PARTY)\thrift\thrift-0.9.0.exe --gen cpp idaas.thrift
-del gen-cpp\*.skeleton.cpp /Q
-copy gen-cpp\*.cpp $(ProjectDir)
-copy gen-cpp\*.h $(ProjectDir)
-rmdir gen-cpp /Q /S</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandProcessor.cpp" />
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="DatabaseHandler.cpp" />
     <ClCompile Include="idaas_constants.cpp" />
     <ClCompile Include="idaas_types.cpp" />
     <ClCompile Include="Logging.cpp" />
@@ -111,6 +116,7 @@ rmdir gen-cpp /Q /S</Command>
   <ItemGroup>
     <ClInclude Include="CommandProcessor.h" />
     <ClInclude Include="Database.h" />
+    <ClInclude Include="DatabaseHandler.h" />
     <ClInclude Include="idaas_constants.h" />
     <ClInclude Include="idaas_types.h" />
     <ClInclude Include="Logging.h" />

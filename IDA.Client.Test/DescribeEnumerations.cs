@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Ida.Client;
 using NUnit.Framework;
+using Ida.Client;
 
 namespace IDA.Client.Test
 {
@@ -10,13 +10,13 @@ namespace IDA.Client.Test
     class DescribeEnumerations
     {
         private const string DatabaseName = @"d:\games\WoWExt\Wow_5.1.0_16357.idb";
-        private Database _database;
+        private Ida.Client.Database _database;
 
         [SetUp]
         public void Connect()
         {
-            Database.IdaHome = @"d:\soft\ida61";
-            _database = Database.Open(DatabaseName);
+            Ida.Client.Database.IdaHome = @"d:\soft\ida61";
+            _database = Ida.Client.Database.Open(DatabaseName);
             Assume.That(_database, Is.Not.Null);
         }
 
@@ -26,7 +26,7 @@ namespace IDA.Client.Test
             {
                 _database.Dispose();
             }
-            _database = Database.Open(DatabaseName);
+            _database = Ida.Client.Database.Open(DatabaseName);
         }
 
         [TearDown]
@@ -39,7 +39,7 @@ namespace IDA.Client.Test
         }
 
         [Test]
-        public void ItShouldEnumEnumerations()
+        public void ItShouldGetEnumerationsList()
         {            
             Assert.That(_database, Is.Not.Null);            
             var internetScheme = _database.Enumerations.First(e => e.Name == "INTERNET_SCHEME");
@@ -50,7 +50,10 @@ namespace IDA.Client.Test
             var partialScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_PARTIAL");
             Assert.That(partialScheme, Is.Not.Null);
             var unknownScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_UNKNOWN");
-            Assert.That(unknownScheme, Is.Not.Null);                            
+            Assert.That(unknownScheme, Is.Not.Null);
+
+            var database = new IDA.Client.Database();
+            database.Test();
         }
 
         private string GenerateUUID()
@@ -71,7 +74,7 @@ namespace IDA.Client.Test
             }
             _database.Wait();
         }
-
+        
         [Test]
         public void ItShouldCreateEnumeration()
         {            

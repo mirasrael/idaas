@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MSBuild.Extension.Pack</id>
+    <version>1.1.0</version>
+    <title>MSBuild.Extension.Pack</title>
+    <authors>Mike Fourie, Sayed Hashimi, Jozsef Fejes, Justin Saunders</authors>
+    <owners>Mike Fourie, Sayed Hashimi, Jozsef Fejes, Justin Saunders</owners>
+    <licenseUrl>http://msbuildextensionpack.codeplex.com/license</licenseUrl>
+    <projectUrl>http://msbuildextensionpack.codeplex.com/</projectUrl>
+    <iconUrl>http://msbuildextensionpack.com/msbuildlogo.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The MSBuild Extension Pack provides a collection of over 475 MSBuild Tasks, MSBuild Loggers and MSBuild TaskFactories.</description>
+    <releaseNotes>October 2012</releaseNotes>
+    <copyright>Copyright 2012 MSBuild Extension Pack</copyright>
+    <language />
+    <tags>MSBuild Task Tasks</tags>
+    <references>
+      <reference file="Interop.COMAdmin.dll" />
+      <reference file="Interop.IWshRuntimeLibrary.dll" />
+      <reference file="Ionic.Zip.dll" />
+      <reference file="MSBuild.ExtensionPack.BizTalk.dll" />
+      <reference file="MSBuild.ExtensionPack.dll" />
+      <reference file="MSBuild.ExtensionPack.Iis7.dll" />
+      <reference file="MSBuild.ExtensionPack.Sql2005.dll" />
+      <reference file="MSBuild.ExtensionPack.Sql2008.dll" />
+      <reference file="MSBuild.ExtensionPack.Sql2012.dll" />
+      <reference file="MSBuild.ExtensionPack.StyleCop.dll" />
+      <reference file="MSBuild.ExtensionPack.Sync.dll" />
+      <reference file="MSBuild.ExtensionPack.Tfs.dll" />
+      <reference file="MSBuild.ExtensionPack.Tfs2010.dll" />
+      <reference file="MSBuild.ExtensionPack.WindowsVirtualPC.dll" />
+      <reference file="MSBuild.ExtensionPack.Loggers.dll" />
+      <reference file="MSBuild.ExtensionPack.TaskFactory.Dlr.dll" />
+      <reference file="MSBuild.ExtensionPack.TaskFactory.PowerShell.dll" />
+      <reference file="MSBuild.ExtensionPack.Tfs2012.dll" />
+    </references>
+  </metadata>
+</package>

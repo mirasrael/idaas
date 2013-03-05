@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Thrift</id>
+    <version>0.9.0.0</version>
+    <title>Thrift</title>
+    <authors>The Apache Software Foundation</authors>
+    <owners>The Apache Software Foundation</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>http://thrift.apache.org/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# bindings for the Apache Thrift RPC system</description>
+    <releaseNotes>Version from this commit : https://github.com/brugidou/thrift/commit/c9e368018cb94e13dbfa000998b54dddb9a0d589</releaseNotes>
+    <copyright />
+    <language />
+    <tags>Thrift</tags>
+    <references>
+      <reference file="Thrift.dll" />
+    </references>
+  </metadata>
+</package>

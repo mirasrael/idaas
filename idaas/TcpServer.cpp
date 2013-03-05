@@ -2,18 +2,43 @@
 #include <WS2tcpip.h>
 #include <BinaryDataObjectReader.h>
 
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/server/TSimpleServer.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TBufferTransports.h>
+#include <thrift/concurrency/BoostThreadFactory.h>
+
+#include "DatabaseHandler.h"
+
 #include "TcpServer.h"
 #include "Logging.h"
 #include "CommandProcessor.h"
 
 #include <socketizer/server.h>
-#include <boost/thread.hpp>
-#include <boost/thread/condition_variable.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
+#include <boost/thread.hpp>
+
+using namespace ::apache::thrift;
+using namespace ::apache::thrift::protocol;
+using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
+using namespace ::apache::thrift::concurrency;
+
+using namespace ::idaas;
 
 char *DEFAULT_PORT = "13044";
 
 socketizer::server* tcpServer = 0;
+
+
+boost::shared_ptr<DatabaseHandler> handler(new DatabaseHandler());
+boost::shared_ptr<TProcessor> processor(new DatabaseProcessor(handler));
+boost::shared_ptr<TServerTransport> serverTransport;
+boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+boost::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
+boost::shared_ptr<TServer> databaseServer;
+boost::shared_ptr<Thread> databaseServerThread;
 
 typedef struct
 {
@@ -55,7 +80,7 @@ void __stdcall onMessageReceived(shared_ptr<socketizer::connection> connection, 
 	command.message = message;
 	command.connection = connection;
 	commands.push(command);
-	execute_sync(execute_commands, MFF_WRITE | MFF_NOWAIT);	
+	execute_sync(execute_commands, MFF_WRITE);
 }
 
 void __stdcall logerror(const char *error) {
@@ -76,7 +101,25 @@ void __stdcall onConnectionAccepted(shared_ptr<socketizer::connection> connectio
 	connection->add_close_callback(onConnectionClosed, 0);
 }
 
-int idaapi CreateConnection() {		
+void c_log(const char *message) {
+	logmsg(message);
+}
+
+int idaapi CreateConnection() {
+	int port = atoi(DEFAULT_PORT);
+
+	if (0 != databaseServer) {
+		databaseServer->stop();
+	}	
+
+	GlobalOutput.setOutputFunction(c_log);
+
+	serverTransport = boost::shared_ptr<TServerTransport>(new TServerSocket(port + 1));
+	databaseServer = boost::shared_ptr<TServer>(new TSimpleServer(processor, serverTransport, transportFactory, protocolFactory));
+	//databaseServer->serve();
+	databaseServerThread = BoostThreadFactory().newThread(databaseServer);
+	databaseServerThread->start();
+	
 	if (tcpServer != 0) {
 		CloseConnection();
 	}
@@ -95,6 +138,10 @@ int idaapi CloseConnection() {
 		tcpServer->stop();		
 		delete tcpServer;
 		tcpServer = 0;		
-	}	
+	}
+	if (0 != databaseServer) {
+		databaseServer->stop();
+		databaseServerThread->join();
+	}
 	return 0;
 }
