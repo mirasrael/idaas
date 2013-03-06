@@ -53,6 +53,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IDA.Client.Thrift, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\IDA.Client\bin\IDA.Client.Thrift.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\MSBuild.Extension.Pack.1.1.0\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>

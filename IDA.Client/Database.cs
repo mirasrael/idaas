@@ -1,25 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Idaas;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Threading;
 using Thrift.Protocol;
 using Thrift.Transport;
 
 namespace IDA.Client
 {
-    public class Database
+    public class Database : IDisposable
     {
-        public void Test()
-        {
-            var transport = new TSocket("localhost", 13045);
-            var proto = new TBinaryProtocol(transport);
-            var client = new Idaas.Database.Client(proto);
-            transport.Open();
+        private static string _idaExecutablePath;
+        private Idaas.Database.Client _client;
+        private TTransport _transport;
 
-            client.listEnums();
-            client.storeEnum(new ida_enum {Id = 1, IsBitfield = true, Name = "ololo"});
+        public static string IdaHome
+        {
+            set { _idaExecutablePath = Path.Combine(value, "idag.exe"); }
+        }
+
+        public static Database Open(String path)
+        {
+            string infFilePath = string.Format("{0}.idaas", path);
+	        if (!File.Exists(infFilePath))
+	        {
+	            if (_idaExecutablePath != null)
+	            {
+	                Process.Start(_idaExecutablePath, path);
+	                DateTime start = DateTime.Now;	                
+	                while (!File.Exists(infFilePath) && (DateTime.Now - start).Seconds < 10)
+	                {
+	                    Thread.Sleep(100);
+	                }
+	            }
+                if (!File.Exists(infFilePath))
+                {
+                    return null;
+                }
+	        }
+            var port = int.Parse(File.ReadAllText(infFilePath));
+            var database = new Database();
+            if (!database.Connect(new IPEndPoint(IPAddress.Loopback, port + 1)))
+            {
+                return null;
+            }
+            return database;		
+        }
+
+        protected bool Connect(IPEndPoint endPoint)
+        {
+            _transport = new TSocket(endPoint.Address.ToString(), endPoint.Port);
+            var proto = new TBinaryProtocol(_transport);
+            _client = new Idaas.Database.Client(proto);
+            Enumerations = new Enumerations(_client);
+
+            _transport.Open();
+            return true;
+        }
+
+        public Enumerations Enumerations { get; private set; }
+        public void Dispose()
+        {
+            _transport.Close();
         }
     }
 }

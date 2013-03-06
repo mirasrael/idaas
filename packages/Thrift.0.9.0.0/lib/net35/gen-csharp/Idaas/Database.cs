@@ -19,10 +19,10 @@ namespace Idaas
 {
   public partial class Database {
     public interface Iface {
-      void listEnums();
+      List<ida_enum> listEnums();
       #if SILVERLIGHT
       IAsyncResult Begin_listEnums(AsyncCallback callback, object state, );
-      void End_listEnums(IAsyncResult asyncResult);
+      List<ida_enum> End_listEnums(IAsyncResult asyncResult);
       #endif
       void storeEnum(ida_enum _enum);
       #if SILVERLIGHT
@@ -68,23 +68,23 @@ namespace Idaas
         return send_listEnums(callback, state);
       }
 
-      public void End_listEnums(IAsyncResult asyncResult)
+      public List<ida_enum> End_listEnums(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_listEnums();
+        return recv_listEnums();
       }
 
       #endif
 
-      public void listEnums()
+      public List<ida_enum> listEnums()
       {
         #if !SILVERLIGHT
         send_listEnums();
-        recv_listEnums();
+        return recv_listEnums();
 
         #else
         var asyncResult = Begin_listEnums(null, null, );
-        End_listEnums(asyncResult);
+        return End_listEnums(asyncResult);
 
         #endif
       }
@@ -105,7 +105,7 @@ namespace Idaas
         #endif
       }
 
-      public void recv_listEnums()
+      public List<ida_enum> recv_listEnums()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -116,7 +116,10 @@ namespace Idaas
         listEnums_result result = new listEnums_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
-        return;
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "listEnums failed: unknown result");
       }
 
       
@@ -283,7 +286,7 @@ namespace Idaas
         args.Read(iprot);
         iprot.ReadMessageEnd();
         listEnums_result result = new listEnums_result();
-        iface_.listEnums();
+        result.Success = iface_.listEnums();
         oprot.WriteMessageBegin(new TMessage("listEnums", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -370,6 +373,29 @@ namespace Idaas
     #endif
     public partial class listEnums_result : TBase
     {
+      private List<ida_enum> _success;
+
+      public List<ida_enum> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
 
       public listEnums_result() {
       }
@@ -386,6 +412,24 @@ namespace Idaas
           }
           switch (field.ID)
           {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<ida_enum>();
+                  TList _list4 = iprot.ReadListBegin();
+                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                  {
+                    ida_enum _elem6 = new ida_enum();
+                    _elem6 = new ida_enum();
+                    _elem6.Read(iprot);
+                    Success.Add(_elem6);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -398,13 +442,33 @@ namespace Idaas
       public void Write(TProtocol oprot) {
         TStruct struc = new TStruct("listEnums_result");
         oprot.WriteStructBegin(struc);
+        TField field = new TField();
 
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (ida_enum _iter7 in Success)
+              {
+                _iter7.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("listEnums_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
         sb.Append(")");
         return sb.ToString();
       }

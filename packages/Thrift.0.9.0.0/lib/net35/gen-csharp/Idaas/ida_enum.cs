@@ -26,6 +26,7 @@ namespace Idaas
     private int _id;
     private string _name;
     private bool _isBitfield;
+    private List<ida_enum_const> _constants;
 
     public int Id
     {
@@ -66,6 +67,19 @@ namespace Idaas
       }
     }
 
+    public List<ida_enum_const> Constants
+    {
+      get
+      {
+        return _constants;
+      }
+      set
+      {
+        __isset.constants = true;
+        this._constants = value;
+      }
+    }
+
 
     public Isset __isset;
     #if !SILVERLIGHT
@@ -75,6 +89,7 @@ namespace Idaas
       public bool id;
       public bool name;
       public bool isBitfield;
+      public bool constants;
     }
 
     public ida_enum() {
@@ -109,6 +124,24 @@ namespace Idaas
           case 3:
             if (field.Type == TType.Bool) {
               IsBitfield = iprot.ReadBool();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 4:
+            if (field.Type == TType.List) {
+              {
+                Constants = new List<ida_enum_const>();
+                TList _list0 = iprot.ReadListBegin();
+                for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
+                {
+                  ida_enum_const _elem2 = new ida_enum_const();
+                  _elem2 = new ida_enum_const();
+                  _elem2.Read(iprot);
+                  Constants.Add(_elem2);
+                }
+                iprot.ReadListEnd();
+              }
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -150,6 +183,21 @@ namespace Idaas
         oprot.WriteBool(IsBitfield);
         oprot.WriteFieldEnd();
       }
+      if (Constants != null && __isset.constants) {
+        field.Name = "constants";
+        field.Type = TType.List;
+        field.ID = 4;
+        oprot.WriteFieldBegin(field);
+        {
+          oprot.WriteListBegin(new TList(TType.Struct, Constants.Count));
+          foreach (ida_enum_const _iter3 in Constants)
+          {
+            _iter3.Write(oprot);
+          }
+          oprot.WriteListEnd();
+        }
+        oprot.WriteFieldEnd();
+      }
       oprot.WriteFieldStop();
       oprot.WriteStructEnd();
     }
@@ -162,6 +210,8 @@ namespace Idaas
       sb.Append(Name);
       sb.Append(",IsBitfield: ");
       sb.Append(IsBitfield);
+      sb.Append(",Constants: ");
+      sb.Append(Constants);
       sb.Append(")");
       return sb.ToString();
     }

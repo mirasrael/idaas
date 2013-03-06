@@ -6,7 +6,7 @@ class DatabaseHandler : virtual public idaas::DatabaseIf {
 public:
 	DatabaseHandler();
 
-	void listEnums();
+	void listEnums(std::vector<idaas::ida_enum> & _return);
 
 	void storeEnum(const idaas::ida_enum& _enum);
 

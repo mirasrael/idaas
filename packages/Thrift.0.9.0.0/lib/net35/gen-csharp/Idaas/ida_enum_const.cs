@@ -27,7 +27,7 @@ namespace Idaas
     private string _name;
     private int _value;
     private byte _serial;
-    private bool _mask;
+    private int _mask;
 
     public int Id
     {
@@ -81,7 +81,7 @@ namespace Idaas
       }
     }
 
-    public bool Mask
+    public int Mask
     {
       get
       {
@@ -151,8 +151,8 @@ namespace Idaas
             }
             break;
           case 5:
-            if (field.Type == TType.Bool) {
-              Mask = iprot.ReadBool();
+            if (field.Type == TType.I32) {
+              Mask = iprot.ReadI32();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -204,10 +204,10 @@ namespace Idaas
       }
       if (__isset.mask) {
         field.Name = "mask";
-        field.Type = TType.Bool;
+        field.Type = TType.I32;
         field.ID = 5;
         oprot.WriteFieldBegin(field);
-        oprot.WriteBool(Mask);
+        oprot.WriteI32(Mask);
         oprot.WriteFieldEnd();
       }
       oprot.WriteFieldStop();

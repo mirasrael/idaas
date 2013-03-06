@@ -71,7 +71,32 @@ uint32_t Database_listEnums_result::read(::apache::thrift::protocol::TProtocol* 
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size6;
+            ::apache::thrift::protocol::TType _etype9;
+            xfer += iprot->readListBegin(_etype9, _size6);
+            this->success.resize(_size6);
+            uint32_t _i10;
+            for (_i10 = 0; _i10 < _size6; ++_i10)
+            {
+              xfer += this->success[_i10].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -86,6 +111,19 @@ uint32_t Database_listEnums_result::write(::apache::thrift::protocol::TProtocol*
 
   xfer += oprot->writeStructBegin("Database_listEnums_result");
 
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
+      std::vector<ida_enum> ::const_iterator _iter11;
+      for (_iter11 = this->success.begin(); _iter11 != this->success.end(); ++_iter11)
+      {
+        xfer += (*_iter11).write(oprot);
+      }
+      xfer += oprot->writeListEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -109,7 +147,32 @@ uint32_t Database_listEnums_presult::read(::apache::thrift::protocol::TProtocol*
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size12;
+            ::apache::thrift::protocol::TType _etype15;
+            xfer += iprot->readListBegin(_etype15, _size12);
+            (*(this->success)).resize(_size12);
+            uint32_t _i16;
+            for (_i16 = 0; _i16 < _size12; ++_i16)
+            {
+              xfer += (*(this->success))[_i16].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -380,10 +443,10 @@ uint32_t Database_deleteEnum_presult::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-void DatabaseClient::listEnums()
+void DatabaseClient::listEnums(std::vector<ida_enum> & _return)
 {
   send_listEnums();
-  recv_listEnums();
+  recv_listEnums(_return);
 }
 
 void DatabaseClient::send_listEnums()
@@ -399,7 +462,7 @@ void DatabaseClient::send_listEnums()
   oprot_->getTransport()->flush();
 }
 
-void DatabaseClient::recv_listEnums()
+void DatabaseClient::recv_listEnums(std::vector<ida_enum> & _return)
 {
 
   int32_t rseqid = 0;
@@ -425,11 +488,16 @@ void DatabaseClient::recv_listEnums()
     iprot_->getTransport()->readEnd();
   }
   Database_listEnums_presult result;
+  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  return;
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listEnums failed: unknown result");
 }
 
 void DatabaseClient::storeEnum(const ida_enum& _enum)
@@ -580,7 +648,8 @@ void DatabaseProcessor::process_listEnums(int32_t seqid, ::apache::thrift::proto
 
   Database_listEnums_result result;
   try {
-    iface_->listEnums();
+    iface_->listEnums(result.success);
+    result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "Database.listEnums");

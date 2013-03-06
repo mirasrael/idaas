@@ -15,7 +15,7 @@ namespace idaas {
 class DatabaseIf {
  public:
   virtual ~DatabaseIf() {}
-  virtual void listEnums() = 0;
+  virtual void listEnums(std::vector<ida_enum> & _return) = 0;
   virtual void storeEnum(const ida_enum& _enum) = 0;
   virtual void deleteEnum(const int32_t id) = 0;
 };
@@ -47,7 +47,7 @@ class DatabaseIfSingletonFactory : virtual public DatabaseIfFactory {
 class DatabaseNull : virtual public DatabaseIf {
  public:
   virtual ~DatabaseNull() {}
-  void listEnums() {
+  void listEnums(std::vector<ida_enum> & /* _return */) {
     return;
   }
   void storeEnum(const ida_enum& /* _enum */) {
@@ -95,6 +95,10 @@ class Database_listEnums_pargs {
 
 };
 
+typedef struct _Database_listEnums_result__isset {
+  _Database_listEnums_result__isset() : success(false) {}
+  bool success;
+} _Database_listEnums_result__isset;
 
 class Database_listEnums_result {
  public:
@@ -104,9 +108,18 @@ class Database_listEnums_result {
 
   virtual ~Database_listEnums_result() throw() {}
 
+  std::vector<ida_enum>  success;
 
-  bool operator == (const Database_listEnums_result & /* rhs */) const
+  _Database_listEnums_result__isset __isset;
+
+  void __set_success(const std::vector<ida_enum> & val) {
+    success = val;
+  }
+
+  bool operator == (const Database_listEnums_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     return true;
   }
   bool operator != (const Database_listEnums_result &rhs) const {
@@ -120,6 +133,10 @@ class Database_listEnums_result {
 
 };
 
+typedef struct _Database_listEnums_presult__isset {
+  _Database_listEnums_presult__isset() : success(false) {}
+  bool success;
+} _Database_listEnums_presult__isset;
 
 class Database_listEnums_presult {
  public:
@@ -127,6 +144,9 @@ class Database_listEnums_presult {
 
   virtual ~Database_listEnums_presult() throw() {}
 
+  std::vector<ida_enum> * success;
+
+  _Database_listEnums_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -328,9 +348,9 @@ class DatabaseClient : virtual public DatabaseIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void listEnums();
+  void listEnums(std::vector<ida_enum> & _return);
   void send_listEnums();
-  void recv_listEnums();
+  void recv_listEnums(std::vector<ida_enum> & _return);
   void storeEnum(const ida_enum& _enum);
   void send_storeEnum(const ida_enum& _enum);
   void recv_storeEnum();
@@ -389,13 +409,14 @@ class DatabaseMultiface : virtual public DatabaseIf {
     ifaces_.push_back(iface);
   }
  public:
-  void listEnums() {
+  void listEnums(std::vector<ida_enum> & _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listEnums();
+      ifaces_[i]->listEnums(_return);
     }
-    ifaces_[i]->listEnums();
+    ifaces_[i]->listEnums(_return);
+    return;
   }
 
   void storeEnum(const ida_enum& _enum) {
