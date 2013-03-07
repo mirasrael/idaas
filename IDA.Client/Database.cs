@@ -40,7 +40,7 @@ namespace IDA.Client
 	        }
             var port = int.Parse(File.ReadAllText(infFilePath));
             var database = new Database();
-            if (!database.Connect(new IPEndPoint(IPAddress.Loopback, port + 1)))
+            if (!database.Connect(new IPEndPoint(IPAddress.Loopback, port)))
             {
                 return null;
             }
