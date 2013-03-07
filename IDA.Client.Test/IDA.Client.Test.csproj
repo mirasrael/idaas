@@ -60,7 +60,6 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\MSBuild.Extension.Pack.1.1.0\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -90,10 +89,6 @@
     <ProjectReference Include="..\IDA.Client\IDA.Client.csproj">
       <Project>{7750a724-b9f3-4017-a332-331c05b56c23}</Project>
       <Name>IDA.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\libidaclient.wrapper\libidaclient.wrapper.vcxproj">
-      <Project>{be40795d-0181-4b03-8e25-95055d21f1ee}</Project>
-      <Name>libidaclient.wrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

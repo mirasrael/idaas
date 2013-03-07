@@ -2,6 +2,7 @@
 #include "Logging.h"
 #include <pro.h>
 #include <enum.hpp>
+#include <auto.hpp>
 
 using namespace idaas;
 
@@ -42,9 +43,15 @@ void run_in_main_thread(void (_This::*func)(A0&), _This* obj, A0& arg0) {
 	execute_sync(request, MFF_WRITE);
 };
 
+template<class _This, class A0>
+void run_in_main_thread(void (_This::*func)(A0), _This* obj, A0 arg0) {
+	sync_request_t<DatabaseHandler> request;
+	request.command = boost::bind(func, obj, arg0);
+	execute_sync(request, MFF_WRITE);
+};
+
 #define RUN_IN_MAIN_THREAD(...)\
 	if (!is_main_thread()) {\
-		logmsg("pass to main thread\n");\
 		run_in_main_thread(##__VA_ARGS__);\
 		return;\
 	}\
@@ -93,22 +100,42 @@ void enumeration_list_copier::copy_to(std::vector<ida_enum>& _result) {
 
 void DatabaseHandler::listEnums(std::vector<ida_enum> & _return)
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::listEnums, this, _return)
-	logmsg("listEnums with elements\n");
-
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::listEnums, this, _return)	
 	enumeration_list_copier copier;
 	copier.copy_to(_return);	
 }
 
-void DatabaseHandler::storeEnum( const ida_enum& _enum )
-{
+struct delete_enum_members : public enum_member_visitor_t {
+	virtual int idaapi visit_enum_member(const_t cid, uval_t value) {
+		del_enum_member(get_enum_member_enum(cid), value, get_enum_member_serial(cid), get_enum_member_bmask(cid));
+		return 0;
+	}
+};
 
-	// Your implementation goes here
-	logmsg("storeEnum\n");
+void DatabaseHandler::storeEnum( const ida_enum& _enum )
+{	
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::storeEnum, this, _enum)
+	enum_t id = _enum.id;
+	if (id != -1) {		
+		set_enum_name(id, _enum.name.c_str());
+		for_all_enum_members(id, delete_enum_members());		
+	} else {
+		id = add_enum(BADADDR, _enum.name.c_str(), 0);		
+	}
+	set_enum_bf(id, _enum.isBitfield);		
+	for (std::vector<ida_enum_const>::const_iterator it = _enum.constants.begin(); it != _enum.constants.end(); it++) {		
+		add_enum_member(id, it->name.c_str(), it->value, it->mask);
+	}	
 }
 
 void DatabaseHandler::deleteEnum( const int32_t id )
 {
-	// Your implementation goes here
-	logmsg("deleteEnum\n");
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::deleteEnum, this, id)
+	del_enum(id);
+}
+
+void DatabaseHandler::waitBackgroundTaks()
+{
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::waitBackgroundTaks, this)
+	autoWait();
 }

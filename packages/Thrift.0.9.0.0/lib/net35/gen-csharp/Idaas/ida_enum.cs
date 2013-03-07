@@ -93,6 +93,7 @@ namespace Idaas
     }
 
     public ida_enum() {
+      this._id = -1;
     }
 
     public void Read (TProtocol iprot)

@@ -58,6 +58,11 @@ namespace IDA.Client
             return true;
         }
 
+        public void Wait()
+        {
+            _client.waitBackgroundTaks();
+        }
+
         public Enumerations Enumerations { get; private set; }
         public void Dispose()
         {

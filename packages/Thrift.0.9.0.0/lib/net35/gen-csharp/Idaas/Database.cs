@@ -34,6 +34,11 @@ namespace Idaas
       IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, int id);
       void End_deleteEnum(IAsyncResult asyncResult);
       #endif
+      void waitBackgroundTaks();
+      #if SILVERLIGHT
+      IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, );
+      void End_waitBackgroundTaks(IAsyncResult asyncResult);
+      #endif
     }
 
     public class Client : Iface {
@@ -240,6 +245,64 @@ namespace Idaas
         return;
       }
 
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, )
+      {
+        return send_waitBackgroundTaks(callback, state);
+      }
+
+      public void End_waitBackgroundTaks(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        recv_waitBackgroundTaks();
+      }
+
+      #endif
+
+      public void waitBackgroundTaks()
+      {
+        #if !SILVERLIGHT
+        send_waitBackgroundTaks();
+        recv_waitBackgroundTaks();
+
+        #else
+        var asyncResult = Begin_waitBackgroundTaks(null, null, );
+        End_waitBackgroundTaks(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_waitBackgroundTaks(AsyncCallback callback, object state, )
+      #else
+      public void send_waitBackgroundTaks()
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("waitBackgroundTaks", TMessageType.Call, seqid_));
+        waitBackgroundTaks_args args = new waitBackgroundTaks_args();
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public void recv_waitBackgroundTaks()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        waitBackgroundTaks_result result = new waitBackgroundTaks_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        return;
+      }
+
     }
     public class Processor : TProcessor {
       public Processor(Iface iface)
@@ -248,6 +311,7 @@ namespace Idaas
         processMap_["listEnums"] = listEnums_Process;
         processMap_["storeEnum"] = storeEnum_Process;
         processMap_["deleteEnum"] = deleteEnum_Process;
+        processMap_["waitBackgroundTaks"] = waitBackgroundTaks_Process;
       }
 
       protected delegate void ProcessFunction(int seqid, TProtocol iprot, TProtocol oprot);
@@ -314,6 +378,19 @@ namespace Idaas
         deleteEnum_result result = new deleteEnum_result();
         iface_.deleteEnum(args.Id);
         oprot.WriteMessageBegin(new TMessage("deleteEnum", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void waitBackgroundTaks_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        waitBackgroundTaks_args args = new waitBackgroundTaks_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        waitBackgroundTaks_result result = new waitBackgroundTaks_result();
+        iface_.waitBackgroundTaks();
+        oprot.WriteMessageBegin(new TMessage("waitBackgroundTaks", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -738,6 +815,99 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("deleteEnum_result(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class waitBackgroundTaks_args : TBase
+    {
+
+      public waitBackgroundTaks_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("waitBackgroundTaks_args");
+        oprot.WriteStructBegin(struc);
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("waitBackgroundTaks_args(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class waitBackgroundTaks_result : TBase
+    {
+
+      public waitBackgroundTaks_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("waitBackgroundTaks_result");
+        oprot.WriteStructBegin(struc);
+
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("waitBackgroundTaks_result(");
         sb.Append(")");
         return sb.ToString();
       }

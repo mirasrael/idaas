@@ -68,12 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libidaclient.wrapper\libidaclient.wrapper.vcxproj">
-      <Project>{be40795d-0181-4b03-8e25-95055d21f1ee}</Project>
-      <Name>libidaclient.wrapper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

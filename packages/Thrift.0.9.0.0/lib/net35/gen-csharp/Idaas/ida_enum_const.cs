@@ -108,6 +108,8 @@ namespace Idaas
     }
 
     public ida_enum_const() {
+      this._id = -1;
+      this._mask = -1;
     }
 
     public void Read (TProtocol iprot)

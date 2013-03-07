@@ -17,7 +17,7 @@
 namespace idaas {
 
 typedef struct _ida_enum_const__isset {
-  _ida_enum_const__isset() : id(false), name(false), value(false), serial(false), mask(false) {}
+  _ida_enum_const__isset() : id(true), name(false), value(false), serial(false), mask(true) {}
   bool id;
   bool name;
   bool value;
@@ -31,7 +31,7 @@ class ida_enum_const {
   static const char* ascii_fingerprint; // = "9EE5A5E70DAA20144C7D83B8D2568FFF";
   static const uint8_t binary_fingerprint[16]; // = {0x9E,0xE5,0xA5,0xE7,0x0D,0xAA,0x20,0x14,0x4C,0x7D,0x83,0xB8,0xD2,0x56,0x8F,0xFF};
 
-  ida_enum_const() : id(0), name(), value(0), serial(0), mask(0) {
+  ida_enum_const() : id(-1), name(), value(0), serial(0), mask(-1) {
   }
 
   virtual ~ida_enum_const() throw() {}
@@ -92,7 +92,7 @@ class ida_enum_const {
 void swap(ida_enum_const &a, ida_enum_const &b);
 
 typedef struct _ida_enum__isset {
-  _ida_enum__isset() : id(false), name(false), isBitfield(false), constants(false) {}
+  _ida_enum__isset() : id(true), name(false), isBitfield(false), constants(false) {}
   bool id;
   bool name;
   bool isBitfield;
@@ -105,7 +105,7 @@ class ida_enum {
   static const char* ascii_fingerprint; // = "BD5486D740F03067C1D7FE53AE3F6204";
   static const uint8_t binary_fingerprint[16]; // = {0xBD,0x54,0x86,0xD7,0x40,0xF0,0x30,0x67,0xC1,0xD7,0xFE,0x53,0xAE,0x3F,0x62,0x04};
 
-  ida_enum() : id(0), name(), isBitfield(0) {
+  ida_enum() : id(-1), name(), isBitfield(0) {
   }
 
   virtual ~ida_enum() throw() {}

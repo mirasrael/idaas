@@ -35,12 +35,38 @@ namespace IDA.Client
             _client = client;
         }
 
-//			Enumeration^ New(String^ name) { return New(name, false); } 
-//			Enumeration^ New(String^ name, bool isBitfield);
-//			bool Persist(Enumeration^ enumeration) { return Persist(enumeration, false); }
-//			bool Persist(Enumeration^ enumeration, bool async);
-//			bool Delete(Enumeration^ enumeration) { return Delete(enumeration, false); }
-//			bool Delete(Enumeration^ enumeration, bool async);
+		public ida_enum New(string name)
+		{
+		    return New(name, false);
+		}
+
+        public ida_enum New(string name, bool isBitfield)
+		{
+		    var @enum = this.FirstOrDefault(e => e.Name == name);
+            if (@enum == null)
+            {            
+               @enum = new ida_enum {Name = name};
+               _items.Add(@enum);
+            }
+            @enum.Constants = new List<ida_enum_const>();
+		    @enum.IsBitfield = isBitfield;            
+		    return @enum;
+		}
+
+        public bool Store(ida_enum @enum)
+        {
+            _client.storeEnum(@enum);
+            return true;
+        }        
+
+        public void Delete(ida_enum @enum)
+        {
+            if (@enum.Id != 0)
+            {
+                _client.send_deleteEnum(@enum.Id);
+            }
+        }        
+
         public IEnumerator<ida_enum> GetEnumerator()
         {
             return Items.GetEnumerator();

@@ -1,48 +1,37 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using Idaas;
 using NUnit.Framework;
-using Ida.Client;
 
 namespace IDA.Client.Test
 {
     [TestFixture]
     class DescribeEnumerations
     {
-        private const string DatabaseName = @"d:\games\WoWExt\Wow_5.1.0_16357.idb";
-        private Ida.Client.Database _oldDatabaseAPI;
-        private IDA.Client.Database _database;
+        private const string DatabaseName = @"d:\games\WoWExt\Wow_5.1.0_16357.idb";        
+        private Database _database;
 
         [SetUp]
         public void Connect()
         {
-            Ida.Client.Database.IdaHome = @"d:\soft\ida61";
-            _oldDatabaseAPI = Ida.Client.Database.Open(DatabaseName);
-            _database = IDA.Client.Database.Open(DatabaseName);
-            Assume.That(_oldDatabaseAPI, Is.Not.Null);
+            Database.IdaHome = @"d:\soft\ida61";
+            _database = Database.Open(DatabaseName);
+            Assume.That(_database, Is.Not.Null);
         }
 
         void Reconnect()
-        {
-            if (_oldDatabaseAPI != null)
-            {
-                _oldDatabaseAPI.Dispose();
-            }
+        {            
             if (_database != null)
             {
                 _database.Dispose();                
             }
-            _oldDatabaseAPI = Ida.Client.Database.Open(DatabaseName);
-            _database = IDA.Client.Database.Open(DatabaseName);
+            _database = Database.Open(DatabaseName);
         }
 
         [TearDown]
         public void ReleaseConnection()
-        {
-            if (_oldDatabaseAPI != null)
-            {
-                _oldDatabaseAPI.Dispose();
-            }
+        {            
             if (_database != null)
             {
                 _database.Dispose();
@@ -72,46 +61,56 @@ namespace IDA.Client.Test
         [Test]
         public void ItShouldBatchCreateEnumerations()
         {
-            for (var i = 0; i < 100; i++)
+            var batchSize = 1000;
+            var constantsCount = 3;
+            var initialEnumsCount = _database.Enumerations.Count();
+            var initialConstantsCount = _database.Enumerations.Aggregate(0, (cnt, e) => cnt + e.Constants.Count);
+            var start = DateTime.Now;
+            for (var i = 0; i < batchSize; i++)
             {
-                var @enum = _oldDatabaseAPI.Enumerations.New(GenerateUUID());
-                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 1 });
-                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 2 });
-                @enum.Constants.Add(new EnumerationConstant { Name = GenerateUUID(), Value = 3 });
-                _oldDatabaseAPI.Enumerations.Persist(@enum, true);
+                var @enum = _database.Enumerations.New(GenerateUUID());
+                for (var contantIndex = 0; contantIndex < constantsCount; contantIndex++)
+                {
+                    @enum.Constants.Add(new ida_enum_const { Name = GenerateUUID(), Value = contantIndex });
+                }                                    
+                _database.Enumerations.Store(@enum);
             }
-            _oldDatabaseAPI.Wait();
+            Console.WriteLine("Time gained: {0} ms", (DateTime.Now - start).TotalMilliseconds);
+            _database.Wait();            
+            Reconnect();
+            Assert.That(_database.Enumerations.Count(), Is.EqualTo(initialEnumsCount + batchSize));
+            Assert.That(_database.Enumerations.Aggregate(0, (cnt, e) => cnt + e.Constants.Count), Is.EqualTo(initialConstantsCount + batchSize * constantsCount));
         }
         
         [Test]
         public void ItShouldCreateEnumeration()
         {            
-            var testEnumeration = _oldDatabaseAPI.Enumerations.FirstOrDefault(e => e.Name == "Test");
+            var testEnumeration = _database.Enumerations.FirstOrDefault(e => e.Name == "Test");
             if (testEnumeration != null)
             {
-                _oldDatabaseAPI.Enumerations.Delete(testEnumeration);                
+                _database.Enumerations.Delete(testEnumeration);                
             }
 
-            testEnumeration = _oldDatabaseAPI.Enumerations.New("Test");
-            testEnumeration.Constants.Add(new EnumerationConstant { Name = "Test1", Value = 1 });
-            Assert.That(_oldDatabaseAPI.Enumerations, Has.Member(testEnumeration));
-            Assert.That(_oldDatabaseAPI.Enumerations.Persist(testEnumeration), Is.True);
+            testEnumeration = _database.Enumerations.New("Test");
+            testEnumeration.Constants.Add(new ida_enum_const { Name = "Test1", Value = 1 });
+            Assert.That(_database.Enumerations, Has.Member(testEnumeration));
+            Assert.That(_database.Enumerations.Store(testEnumeration), Is.True);
             
             Reconnect();
 
-            testEnumeration = _oldDatabaseAPI.Enumerations.FirstOrDefault(e => e.Name == "Test");
+            testEnumeration = _database.Enumerations.FirstOrDefault(e => e.Name == "Test");
             Assert.That(testEnumeration, Is.Not.Null);
             Debug.Assert(testEnumeration != null, "testEnumeration != null");
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test1"), Is.Not.Null);
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test2"), Is.Null);
             
-            testEnumeration = _oldDatabaseAPI.Enumerations.New("Test");
-            testEnumeration.Constants.Add(new EnumerationConstant { Name = "Test2", Value = 2 });
-            Assert.That(_oldDatabaseAPI.Enumerations.Persist(testEnumeration), Is.True);
+            testEnumeration = _database.Enumerations.New("Test");
+            testEnumeration.Constants.Add(new ida_enum_const { Name = "Test2", Value = 2 });
+            Assert.That(_database.Enumerations.Store(testEnumeration), Is.True);
 
             Reconnect();
 
-            testEnumeration = _oldDatabaseAPI.Enumerations.FirstOrDefault(e => e.Name == "Test");
+            testEnumeration = _database.Enumerations.FirstOrDefault(e => e.Name == "Test");
             Debug.Assert(testEnumeration != null, "testEnumeration != null");
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test1"), Is.Null);
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test2"), Is.Not.Null);

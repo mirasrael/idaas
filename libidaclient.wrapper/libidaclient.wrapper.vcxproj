@@ -92,16 +92,6 @@
   <ItemGroup>
     <ResourceCompile Include="libidaclient.wrapper.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libidaclient\libidaclient.vcxproj">
-      <Project>{9a18be5c-bdb4-448b-bb91-22a0215e16a6}</Project>
-      <Private>false</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

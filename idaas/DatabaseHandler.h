@@ -11,4 +11,6 @@ public:
 	void storeEnum(const idaas::ida_enum& _enum);
 
 	void deleteEnum(const int32_t id);
+
+	void waitBackgroundTaks();
 };

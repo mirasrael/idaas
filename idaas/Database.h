@@ -18,6 +18,7 @@ class DatabaseIf {
   virtual void listEnums(std::vector<ida_enum> & _return) = 0;
   virtual void storeEnum(const ida_enum& _enum) = 0;
   virtual void deleteEnum(const int32_t id) = 0;
+  virtual void waitBackgroundTaks() = 0;
 };
 
 class DatabaseIfFactory {
@@ -54,6 +55,9 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void deleteEnum(const int32_t /* id */) {
+    return;
+  }
+  void waitBackgroundTaks() {
     return;
   }
 };
@@ -328,6 +332,80 @@ class Database_deleteEnum_presult {
 
 };
 
+
+class Database_waitBackgroundTaks_args {
+ public:
+
+  Database_waitBackgroundTaks_args() {
+  }
+
+  virtual ~Database_waitBackgroundTaks_args() throw() {}
+
+
+  bool operator == (const Database_waitBackgroundTaks_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_waitBackgroundTaks_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_waitBackgroundTaks_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTaks_pargs {
+ public:
+
+
+  virtual ~Database_waitBackgroundTaks_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTaks_result {
+ public:
+
+  Database_waitBackgroundTaks_result() {
+  }
+
+  virtual ~Database_waitBackgroundTaks_result() throw() {}
+
+
+  bool operator == (const Database_waitBackgroundTaks_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_waitBackgroundTaks_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_waitBackgroundTaks_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTaks_presult {
+ public:
+
+
+  virtual ~Database_waitBackgroundTaks_presult() throw() {}
+
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class DatabaseClient : virtual public DatabaseIf {
  public:
   DatabaseClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) :
@@ -357,6 +435,9 @@ class DatabaseClient : virtual public DatabaseIf {
   void deleteEnum(const int32_t id);
   void send_deleteEnum(const int32_t id);
   void recv_deleteEnum();
+  void waitBackgroundTaks();
+  void send_waitBackgroundTaks();
+  void recv_waitBackgroundTaks();
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -375,12 +456,14 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_listEnums(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_storeEnum(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_deleteEnum(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_waitBackgroundTaks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   DatabaseProcessor(boost::shared_ptr<DatabaseIf> iface) :
     iface_(iface) {
     processMap_["listEnums"] = &DatabaseProcessor::process_listEnums;
     processMap_["storeEnum"] = &DatabaseProcessor::process_storeEnum;
     processMap_["deleteEnum"] = &DatabaseProcessor::process_deleteEnum;
+    processMap_["waitBackgroundTaks"] = &DatabaseProcessor::process_waitBackgroundTaks;
   }
 
   virtual ~DatabaseProcessor() {}
@@ -435,6 +518,15 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->deleteEnum(id);
     }
     ifaces_[i]->deleteEnum(id);
+  }
+
+  void waitBackgroundTaks() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->waitBackgroundTaks();
+    }
+    ifaces_[i]->waitBackgroundTaks();
   }
 
 };
