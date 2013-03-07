@@ -39,13 +39,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;$(SolutionDir)\libidaas.thrift;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
     <SourcePath>D:\projects\third-party\thrift-0.9.0\lib\cpp\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(THIRD_PARTY)\boost\boost_1_53_0;D:\soft\idasdk61\include;$(THIRD_PARTY)\thrift\thrift-0.9.0\lib\cpp\src;$(SolutionDir)\libidaas.thrift;$(IncludePath)</IncludePath>
     <TargetExt>.plw</TargetExt>
     <LibraryPath>d:\soft\idasdk61\lib\x86_win_vc_32;$(LibraryPath)</LibraryPath>
     <SourcePath>D:\projects\third-party\thrift-0.9.0\lib\cpp\src;$(SourcePath)</SourcePath>
@@ -104,28 +104,19 @@ rmdir gen-cpp /Q /S</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseHandler.cpp" />
-    <ClCompile Include="idaas_constants.cpp" />
-    <ClCompile Include="idaas_types.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="TcpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseHandler.h" />
-    <ClInclude Include="idaas_constants.h" />
-    <ClInclude Include="idaas_types.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="TcpServer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\third-party\thrift\thrift-0.9.0\lib\cpp\libthrift.vcxproj">
-      <Project>{dd26f57e-60f2-4f37-a616-d219a9bf338f}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\third-party\thrift\thrift-0.9.0\lib\cpp\libthriftnb.vcxproj">
-      <Project>{d8696cce-7d46-4659-b432-91754a41deb0}</Project>
+    <ProjectReference Include="..\libidaas.thrift\libidaas.thrift.vcxproj">
+      <Project>{71f26f77-0475-43e3-8aed-3865f6104634}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
