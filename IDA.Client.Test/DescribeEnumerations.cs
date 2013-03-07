@@ -4,7 +4,7 @@ using System.Linq;
 using Idaas;
 using NUnit.Framework;
 
-namespace IDA.Client.Test
+namespace Ida.Client.Test
 {
     [TestFixture]
     class DescribeEnumerations

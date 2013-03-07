@@ -7,7 +7,7 @@
     <ProjectGuid>{7750A724-B9F3-4017-A332-331C05B56C23}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDA.Client</RootNamespace>
+    <RootNamespace>Ida.Client</RootNamespace>
     <AssemblyName>IDA.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

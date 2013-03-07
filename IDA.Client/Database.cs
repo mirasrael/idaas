@@ -6,7 +6,7 @@ using System.Threading;
 using Thrift.Protocol;
 using Thrift.Transport;
 
-namespace IDA.Client
+namespace Ida.Client
 {
     public class Database : IDisposable
     {

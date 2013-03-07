@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Idaas;
 
-namespace IDA.Client
+namespace Ida.Client
 {
     public enum ItemState
     {
@@ -17,8 +14,7 @@ namespace IDA.Client
     public class Enumerations : IEnumerable<ida_enum>
     {
         private readonly Idaas.Database.Client _client;
-        private List<ida_enum> _items;
-        private Dictionary<ida_enum, ItemState> _itemStates;
+        private List<ida_enum> _items;        
 
         private List<ida_enum> Items
         {
