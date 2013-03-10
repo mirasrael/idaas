@@ -10,19 +10,19 @@ using namespace idaas;
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
-template<class T>
-struct sync_request_t_with_result : exec_request_t {
-	T result;
-	T (*command)();
+template<class _Ret>
+struct sync_request_with_result_t : exec_request_t {
+	_Ret result;
+	boost::function<_Ret()> command;
 
 	int idaapi execute() {
 		result = command();
+		return 0;
 	}
 };
 
-template<class T>
 struct sync_request_t : exec_request_t {	
-	boost::function<void()> command;	
+	boost::function<void()> command;
 
 	int idaapi execute() {
 		command();
@@ -30,31 +30,44 @@ struct sync_request_t : exec_request_t {
 	}
 };
 
-template<class _This>
-void run_in_main_thread(void (_This::*func)(), _This* obj) {
-	sync_request_t<DatabaseHandler> request;
-	request.command = boost::bind(func, obj);
+inline void run_in_main_thread(boost::function<void()> &func) {
+	sync_request_t request;
+	request.command = func;
 	execute_sync(request, MFF_WRITE);
+}
+
+template<typename _Ret>
+inline _Ret run_in_main_thread(boost::function<_Ret()> &func) {
+	sync_request_with_result_t<_Ret> request;
+	request.command = func;
+	execute_sync(request, MFF_WRITE);	
+	return request.result;
+}
+
+template<class _Ret, class _This>
+_Ret run_in_main_thread(_Ret (_This::*func)(), _This* obj) {	
+	return (_Ret) run_in_main_thread(boost::function<_Ret()>(
+		boost::bind(func, obj)
+		));
 };
 
-template<class _This, class A0>
-void run_in_main_thread(void (_This::*func)(A0&), _This* obj, A0& arg0) {	
-	sync_request_t<DatabaseHandler> request;
-	request.command = boost::bind(func, obj, boost::ref(arg0));
-	execute_sync(request, MFF_WRITE);
+template<class _Ret, class _This, class A0>
+_Ret run_in_main_thread(_Ret (_This::*func)(A0&), _This* obj, A0& arg0) {	
+	return (_Ret) run_in_main_thread(boost::function<_Ret()>(
+		boost::bind(func, obj, boost::ref(arg0))
+		));
 };
 
-template<class _This, class A0>
-void run_in_main_thread(void (_This::*func)(A0), _This* obj, A0 arg0) {
-	sync_request_t<DatabaseHandler> request;
-	request.command = boost::bind(func, obj, arg0);
-	execute_sync(request, MFF_WRITE);
+template<class _Ret, class _This, class A0>
+_Ret run_in_main_thread(_Ret (_This::*func)(A0), _This* obj, A0 arg0) {
+	return (_Ret) run_in_main_thread(boost::function<_Ret()>(
+		boost::bind(func, obj, arg0)
+		));
 };
 
-#define RUN_IN_MAIN_THREAD(...)\
+#define RUN_IN_MAIN_THREAD(RET, ...)\
 	if (!is_main_thread()) {\
-		run_in_main_thread(##__VA_ARGS__);\
-		return;\
+	return (RET)run_in_main_thread(##__VA_ARGS__);\
 	}\
 
 DatabaseHandler::DatabaseHandler()
@@ -96,20 +109,20 @@ void enumeration_list_copier::copy_to(std::vector<ida_enum>& _result) {
 		current->constants.resize(get_enum_size(id));
 		constantsIt = current->constants.begin();
 		for_all_enum_members(id, *this);
-	}		
+	}	
 }
 
 class struct_list_copier {
 private:
 	char buffer[MAXNAMESIZE];	
 	std::vector<ida_struct_member>::iterator membersIt;
-	void copy_struc(const struc_t *from, ida_struct& const to);
-	void copy_member(const member_t *from, ida_struct_member& const to);
+	void copy_struc(const struc_t *from, ida_struct& to);
+	void copy_member(const member_t *from, ida_struct_member& to);
 public:	
-	void copy_to(std::vector<ida_struct>& const _result);	
+	void copy_to(std::vector<ida_struct>& _result);	
 };
 
-void struct_list_copier::copy_to(std::vector<ida_struct>& const  _result) {
+void struct_list_copier::copy_to(std::vector<ida_struct>&  _result) {
 	size_t count = get_struc_qty();
 	_result.resize(count);
 	for (size_t idx = 0; idx < count; idx++) {
@@ -119,7 +132,7 @@ void struct_list_copier::copy_to(std::vector<ida_struct>& const  _result) {
 	}
 }
 
-void struct_list_copier::copy_struc(const struc_t *from, ida_struct& const to) {
+void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {
 	to.id = from->id;
 	get_struc_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
@@ -131,7 +144,7 @@ void struct_list_copier::copy_struc(const struc_t *from, ida_struct& const to) {
 	}	
 }
 
-void struct_list_copier::copy_member(const member_t *from, ida_struct_member& const to) {
+void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to) {
 	to.id = from->id;	
 	get_member_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;	
@@ -139,7 +152,7 @@ void struct_list_copier::copy_member(const member_t *from, ida_struct_member& co
 
 void DatabaseHandler::listEnums(std::vector<ida_enum> & _return)
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::listEnums, this, _return)	
+	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::listEnums, this, _return);
 	enumeration_list_copier copier;
 	copier.copy_to(_return);	
 }
@@ -151,9 +164,9 @@ struct delete_enum_members : public enum_member_visitor_t {
 	}
 };
 
-void DatabaseHandler::storeEnum( const ida_enum& _enum )
+int32_t DatabaseHandler::storeEnum( const ida_enum& _enum )
 {	
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::storeEnum, this, _enum)
+	RUN_IN_MAIN_THREAD(int32_t, &DatabaseHandler::storeEnum, this, _enum);
 	enum_t id = _enum.id;
 	if (id != -1) {		
 		set_enum_name(id, _enum.name.c_str());
@@ -164,36 +177,53 @@ void DatabaseHandler::storeEnum( const ida_enum& _enum )
 	set_enum_bf(id, _enum.isBitfield);		
 	for (std::vector<ida_enum_const>::const_iterator it = _enum.constants.begin(); it != _enum.constants.end(); it++) {		
 		add_enum_member(id, it->name.c_str(), it->value, it->mask);
-	}	
+	}
+	return id;
 }
 
 void DatabaseHandler::deleteEnum( const int32_t id )
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::deleteEnum, this, id)
+	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::deleteEnum, this, id);
 	del_enum(id);
 }
 
 void DatabaseHandler::waitBackgroundTasks()
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::waitBackgroundTasks, this)
+	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::waitBackgroundTasks, this);
 	autoWait();
 }
 
 void DatabaseHandler::listStructures( std::vector<ida_struct> & _return )
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::listStructures, this, _return)
+	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::listStructures, this, _return);
 	struct_list_copier copier;
 	copier.copy_to(_return);
 }
 
-void DatabaseHandler::storeStructure( const ida_struct& _struct )
+int32_t DatabaseHandler::storeStructure( const ida_struct& _struct )
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::storeStructure, this, _struct)
+	RUN_IN_MAIN_THREAD(int32_t, &DatabaseHandler::storeStructure, this, _struct);
+	tid_t id = _struct.id;	
+	struc_t *struc;
+	if (id != -1) {
+		struc = get_struc(id);
+		set_struc_name(id, _struct.name.c_str());
+		del_struc_members(struc, 0, get_struc_size(struc));
+	} else {
+		id = add_struc(BADADDR, _struct.name.c_str());
+		struc = get_struc(id);
+	}	
+	for (std::vector<ida_struct_member>::const_iterator it = _struct.members.begin(); it != _struct.members.end(); it++)
+	{
+		add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 1);		
+	}	
+	return id;
 }
 
 void DatabaseHandler::deleteStruct( const int32_t id )
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::deleteStruct, this, id)
+	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::deleteStruct, this, id);
+	del_struc(get_struc(id));
 }
 
 

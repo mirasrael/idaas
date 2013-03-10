@@ -265,7 +265,20 @@ uint32_t Database_storeEnum_result::read(::apache::thrift::protocol::TProtocol* 
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -280,6 +293,11 @@ uint32_t Database_storeEnum_result::write(::apache::thrift::protocol::TProtocol*
 
   xfer += oprot->writeStructBegin("Database_storeEnum_result");
 
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -303,7 +321,20 @@ uint32_t Database_storeEnum_presult::read(::apache::thrift::protocol::TProtocol*
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -700,7 +731,20 @@ uint32_t Database_storeStructure_result::read(::apache::thrift::protocol::TProto
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -715,6 +759,11 @@ uint32_t Database_storeStructure_result::write(::apache::thrift::protocol::TProt
 
   xfer += oprot->writeStructBegin("Database_storeStructure_result");
 
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -738,7 +787,20 @@ uint32_t Database_storeStructure_presult::read(::apache::thrift::protocol::TProt
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -1045,10 +1107,10 @@ void DatabaseClient::recv_listEnums(std::vector<ida_enum> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listEnums failed: unknown result");
 }
 
-void DatabaseClient::storeEnum(const ida_enum& _enum)
+int32_t DatabaseClient::storeEnum(const ida_enum& _enum)
 {
   send_storeEnum(_enum);
-  recv_storeEnum();
+  return recv_storeEnum();
 }
 
 void DatabaseClient::send_storeEnum(const ida_enum& _enum)
@@ -1065,7 +1127,7 @@ void DatabaseClient::send_storeEnum(const ida_enum& _enum)
   oprot_->getTransport()->flush();
 }
 
-void DatabaseClient::recv_storeEnum()
+int32_t DatabaseClient::recv_storeEnum()
 {
 
   int32_t rseqid = 0;
@@ -1090,12 +1152,17 @@ void DatabaseClient::recv_storeEnum()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
+  int32_t _return;
   Database_storeEnum_presult result;
+  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  return;
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "storeEnum failed: unknown result");
 }
 
 void DatabaseClient::deleteEnum(const int32_t id)
@@ -1208,10 +1275,10 @@ void DatabaseClient::recv_listStructures(std::vector<ida_struct> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listStructures failed: unknown result");
 }
 
-void DatabaseClient::storeStructure(const ida_struct& _struct)
+int32_t DatabaseClient::storeStructure(const ida_struct& _struct)
 {
   send_storeStructure(_struct);
-  recv_storeStructure();
+  return recv_storeStructure();
 }
 
 void DatabaseClient::send_storeStructure(const ida_struct& _struct)
@@ -1228,7 +1295,7 @@ void DatabaseClient::send_storeStructure(const ida_struct& _struct)
   oprot_->getTransport()->flush();
 }
 
-void DatabaseClient::recv_storeStructure()
+int32_t DatabaseClient::recv_storeStructure()
 {
 
   int32_t rseqid = 0;
@@ -1253,12 +1320,17 @@ void DatabaseClient::recv_storeStructure()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
+  int32_t _return;
   Database_storeStructure_presult result;
+  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  return;
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "storeStructure failed: unknown result");
 }
 
 void DatabaseClient::deleteStruct(const int32_t id)
@@ -1462,7 +1534,8 @@ void DatabaseProcessor::process_storeEnum(int32_t seqid, ::apache::thrift::proto
 
   Database_storeEnum_result result;
   try {
-    iface_->storeEnum(args._enum);
+    result.success = iface_->storeEnum(args._enum);
+    result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "Database.storeEnum");
@@ -1622,7 +1695,8 @@ void DatabaseProcessor::process_storeStructure(int32_t seqid, ::apache::thrift::
 
   Database_storeStructure_result result;
   try {
-    iface_->storeStructure(args._struct);
+    result.success = iface_->storeStructure(args._struct);
+    result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "Database.storeStructure");

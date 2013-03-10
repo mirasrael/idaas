@@ -8,13 +8,13 @@ public:
 
 	void listEnums(std::vector<idaas::ida_enum> & _return);
 
-	void storeEnum(const idaas::ida_enum& _enum);
+	int32_t storeEnum(const idaas::ida_enum& _enum);
 
 	void deleteEnum(const int32_t id);
 
 	void listStructures(std::vector<idaas::ida_struct> & _return);
 
-	void storeStructure(const idaas::ida_struct& _struct);
+	int32_t storeStructure(const idaas::ida_struct& _struct);
 
 	void deleteStruct(const int32_t id);
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using Idaas;
 using Thrift.Protocol;
 using Thrift.Transport;
 
@@ -67,6 +68,16 @@ namespace Ida.Client
         public Enumerations Enumerations { get; private set; }
 
         public Structures Structures { get; private set; }
+
+        public void Store(ida_struct @struct)
+        {
+            Structures.Store(@struct);
+        }
+
+        public void Store(ida_enum @enum)
+        {
+            Enumerations.Store(@enum);
+        }
 
         public void Dispose()
         {

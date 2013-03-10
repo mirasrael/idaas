@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Ida.Client.Test
 {
@@ -31,6 +32,11 @@ namespace Ida.Client.Test
             {
                 Database.Dispose();
             }
+        }
+
+        protected string GenerateUniqName()
+        {
+            return "_" + Guid.NewGuid().ToString("N");
         }
     }
 }

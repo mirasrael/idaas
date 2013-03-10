@@ -8,12 +8,7 @@ namespace Ida.Client.Test
 {
     [TestFixture]
     internal class DescribeEnumerations : DatabaseSpec
-    {
-        private string GenerateUUID()
-        {
-            return "_" + Guid.NewGuid().ToString("N");
-        }
-
+    {        
         [Test]
         public void ItShouldBatchCreateEnumerations()
         {
@@ -24,10 +19,10 @@ namespace Ida.Client.Test
             DateTime start = DateTime.Now;
             for (int i = 0; i < batchSize; i++)
             {
-                ida_enum @enum = Database.Enumerations.New(GenerateUUID());
+                ida_enum @enum = Database.Enumerations.New(GenerateUniqName());
                 for (int contantIndex = 0; contantIndex < constantsCount; contantIndex++)
                 {
-                    @enum.Constants.Add(new ida_enum_const {Name = GenerateUUID(), Value = contantIndex});
+                    @enum.Constants.Add(new ida_enum_const {Name = GenerateUniqName(), Value = contantIndex});
                 }
                 Database.Enumerations.Store(@enum);
             }
@@ -49,9 +44,11 @@ namespace Ida.Client.Test
             }
 
             testEnumeration = Database.Enumerations.New("Test");
-            testEnumeration.Constants.Add(new ida_enum_const {Name = "Test1", Value = 1});
+            testEnumeration.Constants.Add(new ida_enum_const {Name = "Test1", Value = 1});            
+            Assert.That(testEnumeration.Id, Is.EqualTo(-1));
             Assert.That(Database.Enumerations, Has.Member(testEnumeration));
             Assert.That(Database.Enumerations.Store(testEnumeration), Is.True);
+            Assert.That(testEnumeration.Id, Is.Not.EqualTo(-1));
 
             Reconnect();
 
@@ -72,6 +69,20 @@ namespace Ida.Client.Test
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test1"), Is.Null);
             Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test2"), Is.Not.Null);
             Assert.That(testEnumeration, Is.Not.Null);
+        }
+
+        [Test]
+        public void ItShouldDeleteEnumeration()
+        {
+            var name = GenerateUniqName();
+            var testEnum = Database.Enumerations.New(name);
+            Database.Enumerations.Store(testEnum);
+            Database.Enumerations.Delete(testEnum);
+            Assert.That(Database.Enumerations, Has.No.Member(testEnum));
+
+            Reconnect();
+
+            Assert.That(Database.Enumerations, Has.No.Member(testEnum));
         }
 
         [Test]

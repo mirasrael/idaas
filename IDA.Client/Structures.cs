@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Idaas;
 
 namespace Ida.Client
@@ -32,6 +33,24 @@ namespace Ida.Client
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public ida_struct New(string name)
+        {
+            var @struct = this.FirstOrDefault(e => e.Name == name);
+            if (@struct == null)
+            {
+                @struct = new ida_struct { Name = name };
+                Items.Add(@struct);
+            }
+            @struct.Members = new List<ida_struct_member>();            
+            return @struct;
+        }
+
+        public bool Store(ida_struct @struct)
+        {
+            @struct.Id = _client.storeStructure(@struct);
+            return true;
         }
     }
 }

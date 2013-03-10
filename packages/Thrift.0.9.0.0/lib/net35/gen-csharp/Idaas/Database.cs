@@ -24,10 +24,10 @@ namespace Idaas
       IAsyncResult Begin_listEnums(AsyncCallback callback, object state, );
       List<ida_enum> End_listEnums(IAsyncResult asyncResult);
       #endif
-      void storeEnum(ida_enum _enum);
+      int storeEnum(ida_enum _enum);
       #if SILVERLIGHT
       IAsyncResult Begin_storeEnum(AsyncCallback callback, object state, ida_enum _enum);
-      void End_storeEnum(IAsyncResult asyncResult);
+      int End_storeEnum(IAsyncResult asyncResult);
       #endif
       void deleteEnum(int id);
       #if SILVERLIGHT
@@ -39,10 +39,10 @@ namespace Idaas
       IAsyncResult Begin_listStructures(AsyncCallback callback, object state, );
       List<ida_struct> End_listStructures(IAsyncResult asyncResult);
       #endif
-      void storeStructure(ida_struct _struct);
+      int storeStructure(ida_struct _struct);
       #if SILVERLIGHT
       IAsyncResult Begin_storeStructure(AsyncCallback callback, object state, ida_struct _struct);
-      void End_storeStructure(IAsyncResult asyncResult);
+      int End_storeStructure(IAsyncResult asyncResult);
       #endif
       void deleteStruct(int id);
       #if SILVERLIGHT
@@ -149,23 +149,23 @@ namespace Idaas
         return send_storeEnum(callback, state, _enum);
       }
 
-      public void End_storeEnum(IAsyncResult asyncResult)
+      public int End_storeEnum(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_storeEnum();
+        return recv_storeEnum();
       }
 
       #endif
 
-      public void storeEnum(ida_enum _enum)
+      public int storeEnum(ida_enum _enum)
       {
         #if !SILVERLIGHT
         send_storeEnum(_enum);
-        recv_storeEnum();
+        return recv_storeEnum();
 
         #else
         var asyncResult = Begin_storeEnum(null, null, _enum);
-        End_storeEnum(asyncResult);
+        return End_storeEnum(asyncResult);
 
         #endif
       }
@@ -187,7 +187,7 @@ namespace Idaas
         #endif
       }
 
-      public void recv_storeEnum()
+      public int recv_storeEnum()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -198,7 +198,10 @@ namespace Idaas
         storeEnum_result result = new storeEnum_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
-        return;
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "storeEnum failed: unknown result");
       }
 
       
@@ -328,23 +331,23 @@ namespace Idaas
         return send_storeStructure(callback, state, _struct);
       }
 
-      public void End_storeStructure(IAsyncResult asyncResult)
+      public int End_storeStructure(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_storeStructure();
+        return recv_storeStructure();
       }
 
       #endif
 
-      public void storeStructure(ida_struct _struct)
+      public int storeStructure(ida_struct _struct)
       {
         #if !SILVERLIGHT
         send_storeStructure(_struct);
-        recv_storeStructure();
+        return recv_storeStructure();
 
         #else
         var asyncResult = Begin_storeStructure(null, null, _struct);
-        End_storeStructure(asyncResult);
+        return End_storeStructure(asyncResult);
 
         #endif
       }
@@ -366,7 +369,7 @@ namespace Idaas
         #endif
       }
 
-      public void recv_storeStructure()
+      public int recv_storeStructure()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -377,7 +380,10 @@ namespace Idaas
         storeStructure_result result = new storeStructure_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
-        return;
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "storeStructure failed: unknown result");
       }
 
       
@@ -560,7 +566,7 @@ namespace Idaas
         args.Read(iprot);
         iprot.ReadMessageEnd();
         storeEnum_result result = new storeEnum_result();
-        iface_.storeEnum(args._enum);
+        result.Success = iface_.storeEnum(args._enum);
         oprot.WriteMessageBegin(new TMessage("storeEnum", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -599,7 +605,7 @@ namespace Idaas
         args.Read(iprot);
         iprot.ReadMessageEnd();
         storeStructure_result result = new storeStructure_result();
-        iface_.storeStructure(args._struct);
+        result.Success = iface_.storeStructure(args._struct);
         oprot.WriteMessageBegin(new TMessage("storeStructure", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -882,6 +888,29 @@ namespace Idaas
     #endif
     public partial class storeEnum_result : TBase
     {
+      private int _success;
+
+      public int Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
 
       public storeEnum_result() {
       }
@@ -898,6 +927,13 @@ namespace Idaas
           }
           switch (field.ID)
           {
+            case 0:
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -910,13 +946,24 @@ namespace Idaas
       public void Write(TProtocol oprot) {
         TStruct struc = new TStruct("storeEnum_result");
         oprot.WriteStructBegin(struc);
+        TField field = new TField();
 
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.I32;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Success);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("storeEnum_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
         sb.Append(")");
         return sb.ToString();
       }
@@ -1305,6 +1352,29 @@ namespace Idaas
     #endif
     public partial class storeStructure_result : TBase
     {
+      private int _success;
+
+      public int Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
 
       public storeStructure_result() {
       }
@@ -1321,6 +1391,13 @@ namespace Idaas
           }
           switch (field.ID)
           {
+            case 0:
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -1333,13 +1410,24 @@ namespace Idaas
       public void Write(TProtocol oprot) {
         TStruct struc = new TStruct("storeStructure_result");
         oprot.WriteStructBegin(struc);
+        TField field = new TField();
 
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.I32;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Success);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("storeStructure_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
         sb.Append(")");
         return sb.ToString();
       }

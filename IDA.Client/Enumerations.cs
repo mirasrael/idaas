@@ -42,7 +42,7 @@ namespace Ida.Client
             if (@enum == null)
             {            
                @enum = new ida_enum {Name = name};
-               _items.Add(@enum);
+               Items.Add(@enum);
             }
             @enum.Constants = new List<ida_enum_const>();
 		    @enum.IsBitfield = isBitfield;            
@@ -51,12 +51,16 @@ namespace Ida.Client
 
         public bool Store(ida_enum @enum)
         {
-            _client.storeEnum(@enum);
+            @enum.Id = _client.storeEnum(@enum);
             return true;
         }        
 
         public void Delete(ida_enum @enum)
         {
+            if (_items != null)
+            {
+                _items.Remove(@enum);
+            }
             if (@enum.Id != 0)
             {
                 _client.send_deleteEnum(@enum.Id);

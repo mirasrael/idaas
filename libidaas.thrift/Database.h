@@ -16,10 +16,10 @@ class DatabaseIf {
  public:
   virtual ~DatabaseIf() {}
   virtual void listEnums(std::vector<ida_enum> & _return) = 0;
-  virtual void storeEnum(const ida_enum& _enum) = 0;
+  virtual int32_t storeEnum(const ida_enum& _enum) = 0;
   virtual void deleteEnum(const int32_t id) = 0;
   virtual void listStructures(std::vector<ida_struct> & _return) = 0;
-  virtual void storeStructure(const ida_struct& _struct) = 0;
+  virtual int32_t storeStructure(const ida_struct& _struct) = 0;
   virtual void deleteStruct(const int32_t id) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
@@ -54,8 +54,9 @@ class DatabaseNull : virtual public DatabaseIf {
   void listEnums(std::vector<ida_enum> & /* _return */) {
     return;
   }
-  void storeEnum(const ida_enum& /* _enum */) {
-    return;
+  int32_t storeEnum(const ida_enum& /* _enum */) {
+    int32_t _return = 0;
+    return _return;
   }
   void deleteEnum(const int32_t /* id */) {
     return;
@@ -63,8 +64,9 @@ class DatabaseNull : virtual public DatabaseIf {
   void listStructures(std::vector<ida_struct> & /* _return */) {
     return;
   }
-  void storeStructure(const ida_struct& /* _struct */) {
-    return;
+  int32_t storeStructure(const ida_struct& /* _struct */) {
+    int32_t _return = 0;
+    return _return;
   }
   void deleteStruct(const int32_t /* id */) {
     return;
@@ -219,18 +221,31 @@ class Database_storeEnum_pargs {
 
 };
 
+typedef struct _Database_storeEnum_result__isset {
+  _Database_storeEnum_result__isset() : success(false) {}
+  bool success;
+} _Database_storeEnum_result__isset;
 
 class Database_storeEnum_result {
  public:
 
-  Database_storeEnum_result() {
+  Database_storeEnum_result() : success(0) {
   }
 
   virtual ~Database_storeEnum_result() throw() {}
 
+  int32_t success;
 
-  bool operator == (const Database_storeEnum_result & /* rhs */) const
+  _Database_storeEnum_result__isset __isset;
+
+  void __set_success(const int32_t val) {
+    success = val;
+  }
+
+  bool operator == (const Database_storeEnum_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     return true;
   }
   bool operator != (const Database_storeEnum_result &rhs) const {
@@ -244,6 +259,10 @@ class Database_storeEnum_result {
 
 };
 
+typedef struct _Database_storeEnum_presult__isset {
+  _Database_storeEnum_presult__isset() : success(false) {}
+  bool success;
+} _Database_storeEnum_presult__isset;
 
 class Database_storeEnum_presult {
  public:
@@ -251,6 +270,9 @@ class Database_storeEnum_presult {
 
   virtual ~Database_storeEnum_presult() throw() {}
 
+  int32_t* success;
+
+  _Database_storeEnum_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -489,18 +511,31 @@ class Database_storeStructure_pargs {
 
 };
 
+typedef struct _Database_storeStructure_result__isset {
+  _Database_storeStructure_result__isset() : success(false) {}
+  bool success;
+} _Database_storeStructure_result__isset;
 
 class Database_storeStructure_result {
  public:
 
-  Database_storeStructure_result() {
+  Database_storeStructure_result() : success(0) {
   }
 
   virtual ~Database_storeStructure_result() throw() {}
 
+  int32_t success;
 
-  bool operator == (const Database_storeStructure_result & /* rhs */) const
+  _Database_storeStructure_result__isset __isset;
+
+  void __set_success(const int32_t val) {
+    success = val;
+  }
+
+  bool operator == (const Database_storeStructure_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     return true;
   }
   bool operator != (const Database_storeStructure_result &rhs) const {
@@ -514,6 +549,10 @@ class Database_storeStructure_result {
 
 };
 
+typedef struct _Database_storeStructure_presult__isset {
+  _Database_storeStructure_presult__isset() : success(false) {}
+  bool success;
+} _Database_storeStructure_presult__isset;
 
 class Database_storeStructure_presult {
  public:
@@ -521,6 +560,9 @@ class Database_storeStructure_presult {
 
   virtual ~Database_storeStructure_presult() throw() {}
 
+  int32_t* success;
+
+  _Database_storeStructure_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -711,18 +753,18 @@ class DatabaseClient : virtual public DatabaseIf {
   void listEnums(std::vector<ida_enum> & _return);
   void send_listEnums();
   void recv_listEnums(std::vector<ida_enum> & _return);
-  void storeEnum(const ida_enum& _enum);
+  int32_t storeEnum(const ida_enum& _enum);
   void send_storeEnum(const ida_enum& _enum);
-  void recv_storeEnum();
+  int32_t recv_storeEnum();
   void deleteEnum(const int32_t id);
   void send_deleteEnum(const int32_t id);
   void recv_deleteEnum();
   void listStructures(std::vector<ida_struct> & _return);
   void send_listStructures();
   void recv_listStructures(std::vector<ida_struct> & _return);
-  void storeStructure(const ida_struct& _struct);
+  int32_t storeStructure(const ida_struct& _struct);
   void send_storeStructure(const ida_struct& _struct);
-  void recv_storeStructure();
+  int32_t recv_storeStructure();
   void deleteStruct(const int32_t id);
   void send_deleteStruct(const int32_t id);
   void recv_deleteStruct();
@@ -799,13 +841,13 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return;
   }
 
-  void storeEnum(const ida_enum& _enum) {
+  int32_t storeEnum(const ida_enum& _enum) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
       ifaces_[i]->storeEnum(_enum);
     }
-    ifaces_[i]->storeEnum(_enum);
+    return ifaces_[i]->storeEnum(_enum);
   }
 
   void deleteEnum(const int32_t id) {
@@ -827,13 +869,13 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return;
   }
 
-  void storeStructure(const ida_struct& _struct) {
+  int32_t storeStructure(const ida_struct& _struct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
       ifaces_[i]->storeStructure(_struct);
     }
-    ifaces_[i]->storeStructure(_struct);
+    return ifaces_[i]->storeStructure(_struct);
   }
 
   void deleteStruct(const int32_t id) {

@@ -29,11 +29,11 @@ struct ida_struct {
 
 service Database {
 	list<ida_enum> listEnums(),
-	void storeEnum(1: ida_enum _enum),
+	i32 storeEnum(1: ida_enum _enum),
 	void deleteEnum(1: i32 id)	
 
 	list<ida_struct> listStructures()
-	void storeStructure(1: ida_struct _struct)
+	i32 storeStructure(1: ida_struct _struct)
 	void deleteStruct(1: i32 id)
 
 	void waitBackgroundTasks()
