@@ -25,6 +25,7 @@ namespace Idaas
   {
     private int _id;
     private string _name;
+    private List<ida_struct_member> _members;
 
     public int Id
     {
@@ -52,6 +53,19 @@ namespace Idaas
       }
     }
 
+    public List<ida_struct_member> Members
+    {
+      get
+      {
+        return _members;
+      }
+      set
+      {
+        __isset.members = true;
+        this._members = value;
+      }
+    }
+
 
     public Isset __isset;
     #if !SILVERLIGHT
@@ -60,6 +74,7 @@ namespace Idaas
     public struct Isset {
       public bool id;
       public bool name;
+      public bool members;
     }
 
     public ida_struct() {
@@ -88,6 +103,24 @@ namespace Idaas
           case 2:
             if (field.Type == TType.String) {
               Name = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 3:
+            if (field.Type == TType.List) {
+              {
+                Members = new List<ida_struct_member>();
+                TList _list4 = iprot.ReadListBegin();
+                for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                {
+                  ida_struct_member _elem6 = new ida_struct_member();
+                  _elem6 = new ida_struct_member();
+                  _elem6.Read(iprot);
+                  Members.Add(_elem6);
+                }
+                iprot.ReadListEnd();
+              }
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -121,6 +154,21 @@ namespace Idaas
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
       }
+      if (Members != null && __isset.members) {
+        field.Name = "members";
+        field.Type = TType.List;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        {
+          oprot.WriteListBegin(new TList(TType.Struct, Members.Count));
+          foreach (ida_struct_member _iter7 in Members)
+          {
+            _iter7.Write(oprot);
+          }
+          oprot.WriteListEnd();
+        }
+        oprot.WriteFieldEnd();
+      }
       oprot.WriteFieldStop();
       oprot.WriteStructEnd();
     }
@@ -131,6 +179,8 @@ namespace Idaas
       sb.Append(Id);
       sb.Append(",Name: ");
       sb.Append(Name);
+      sb.Append(",Members: ");
+      sb.Append(Members);
       sb.Append(")");
       return sb.ToString();
     }

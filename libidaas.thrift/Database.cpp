@@ -77,14 +77,14 @@ uint32_t Database_listEnums_result::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size6;
-            ::apache::thrift::protocol::TType _etype9;
-            xfer += iprot->readListBegin(_etype9, _size6);
-            this->success.resize(_size6);
-            uint32_t _i10;
-            for (_i10 = 0; _i10 < _size6; ++_i10)
+            uint32_t _size12;
+            ::apache::thrift::protocol::TType _etype15;
+            xfer += iprot->readListBegin(_etype15, _size12);
+            this->success.resize(_size12);
+            uint32_t _i16;
+            for (_i16 = 0; _i16 < _size12; ++_i16)
             {
-              xfer += this->success[_i10].read(iprot);
+              xfer += this->success[_i16].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -115,10 +115,10 @@ uint32_t Database_listEnums_result::write(::apache::thrift::protocol::TProtocol*
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ida_enum> ::const_iterator _iter11;
-      for (_iter11 = this->success.begin(); _iter11 != this->success.end(); ++_iter11)
+      std::vector<ida_enum> ::const_iterator _iter17;
+      for (_iter17 = this->success.begin(); _iter17 != this->success.end(); ++_iter17)
       {
-        xfer += (*_iter11).write(oprot);
+        xfer += (*_iter17).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -153,14 +153,14 @@ uint32_t Database_listEnums_presult::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size12;
-            ::apache::thrift::protocol::TType _etype15;
-            xfer += iprot->readListBegin(_etype15, _size12);
-            (*(this->success)).resize(_size12);
-            uint32_t _i16;
-            for (_i16 = 0; _i16 < _size12; ++_i16)
+            uint32_t _size18;
+            ::apache::thrift::protocol::TType _etype21;
+            xfer += iprot->readListBegin(_etype21, _size18);
+            (*(this->success)).resize(_size18);
+            uint32_t _i22;
+            for (_i22 = 0; _i22 < _size18; ++_i22)
             {
-              xfer += (*(this->success))[_i16].read(iprot);
+              xfer += (*(this->success))[_i22].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -512,14 +512,14 @@ uint32_t Database_listStructures_result::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size17;
-            ::apache::thrift::protocol::TType _etype20;
-            xfer += iprot->readListBegin(_etype20, _size17);
-            this->success.resize(_size17);
-            uint32_t _i21;
-            for (_i21 = 0; _i21 < _size17; ++_i21)
+            uint32_t _size23;
+            ::apache::thrift::protocol::TType _etype26;
+            xfer += iprot->readListBegin(_etype26, _size23);
+            this->success.resize(_size23);
+            uint32_t _i27;
+            for (_i27 = 0; _i27 < _size23; ++_i27)
             {
-              xfer += this->success[_i21].read(iprot);
+              xfer += this->success[_i27].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -550,10 +550,10 @@ uint32_t Database_listStructures_result::write(::apache::thrift::protocol::TProt
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ida_struct> ::const_iterator _iter22;
-      for (_iter22 = this->success.begin(); _iter22 != this->success.end(); ++_iter22)
+      std::vector<ida_struct> ::const_iterator _iter28;
+      for (_iter28 = this->success.begin(); _iter28 != this->success.end(); ++_iter28)
       {
-        xfer += (*_iter22).write(oprot);
+        xfer += (*_iter28).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -588,14 +588,14 @@ uint32_t Database_listStructures_presult::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size23;
-            ::apache::thrift::protocol::TType _etype26;
-            xfer += iprot->readListBegin(_etype26, _size23);
-            (*(this->success)).resize(_size23);
-            uint32_t _i27;
-            for (_i27 = 0; _i27 < _size23; ++_i27)
+            uint32_t _size29;
+            ::apache::thrift::protocol::TType _etype32;
+            xfer += iprot->readListBegin(_etype32, _size29);
+            (*(this->success)).resize(_size29);
+            uint32_t _i33;
+            for (_i33 = 0; _i33 < _size29; ++_i33)
             {
-              xfer += (*(this->success))[_i27].read(iprot);
+              xfer += (*(this->success))[_i33].read(iprot);
             }
             xfer += iprot->readListEnd();
           }

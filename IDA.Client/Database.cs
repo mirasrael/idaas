@@ -61,7 +61,7 @@ namespace Ida.Client
 
         public void Wait()
         {
-            _client.waitBackgroundTaks();
+            _client.waitBackgroundTasks();
         }
 
         public Enumerations Enumerations { get; private set; }

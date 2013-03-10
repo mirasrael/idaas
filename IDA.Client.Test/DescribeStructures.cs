@@ -11,7 +11,8 @@ namespace Ida.Client.Test
         {
             Assert.That(Database, Is.Not.Null);
             var devInfo = Database.Structures.First(s => s.Name == "_SP_DEVINFO_DATA");
-            Assert.That(devInfo, Is.Not.Null);            
+            Assert.That(devInfo, Is.Not.Null);
+            Assert.That(devInfo.Members.FirstOrDefault(m => m.Name == "ClassGuid"), Is.Not.Null);
         }
     }
 }

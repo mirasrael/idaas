@@ -210,16 +210,17 @@ class ida_struct_member {
 void swap(ida_struct_member &a, ida_struct_member &b);
 
 typedef struct _ida_struct__isset {
-  _ida_struct__isset() : id(true), name(false) {}
+  _ida_struct__isset() : id(true), name(false), members(false) {}
   bool id;
   bool name;
+  bool members;
 } _ida_struct__isset;
 
 class ida_struct {
  public:
 
-  static const char* ascii_fingerprint; // = "3F5FC93B338687BC7235B1AB103F47B3";
-  static const uint8_t binary_fingerprint[16]; // = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+  static const char* ascii_fingerprint; // = "5340BFE386E031FD4F5DB9D9CA84BDD1";
+  static const uint8_t binary_fingerprint[16]; // = {0x53,0x40,0xBF,0xE3,0x86,0xE0,0x31,0xFD,0x4F,0x5D,0xB9,0xD9,0xCA,0x84,0xBD,0xD1};
 
   ida_struct() : id(-1), name() {
   }
@@ -228,6 +229,7 @@ class ida_struct {
 
   int32_t id;
   std::string name;
+  std::vector<ida_struct_member>  members;
 
   _ida_struct__isset __isset;
 
@@ -239,11 +241,17 @@ class ida_struct {
     name = val;
   }
 
+  void __set_members(const std::vector<ida_struct_member> & val) {
+    members = val;
+  }
+
   bool operator == (const ida_struct & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(name == rhs.name))
+      return false;
+    if (!(members == rhs.members))
       return false;
     return true;
   }

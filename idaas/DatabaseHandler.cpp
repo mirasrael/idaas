@@ -2,6 +2,7 @@
 #include "Logging.h"
 #include <pro.h>
 #include <enum.hpp>
+#include <struct.hpp>
 #include <auto.hpp>
 
 using namespace idaas;
@@ -98,6 +99,44 @@ void enumeration_list_copier::copy_to(std::vector<ida_enum>& _result) {
 	}		
 }
 
+class struct_list_copier {
+private:
+	char buffer[MAXNAMESIZE];	
+	std::vector<ida_struct_member>::iterator membersIt;
+	void copy_struc(const struc_t *from, ida_struct& const to);
+	void copy_member(const member_t *from, ida_struct_member& const to);
+public:	
+	void copy_to(std::vector<ida_struct>& const _result);	
+};
+
+void struct_list_copier::copy_to(std::vector<ida_struct>& const  _result) {
+	size_t count = get_struc_qty();
+	_result.resize(count);
+	for (size_t idx = 0; idx < count; idx++) {
+		tid_t id = get_struc_by_idx(idx);
+		struc_t *s = get_struc(id);
+		copy_struc(s, _result.at(idx));
+	}
+}
+
+void struct_list_copier::copy_struc(const struc_t *from, ida_struct& const to) {
+	to.id = from->id;
+	get_struc_name(from->id, buffer, sizeof(buffer));
+	to.name = buffer;
+
+	size_t membersCount = from->memqty;
+	to.members.resize(membersCount);
+	for (size_t memberIdx = 0; memberIdx < membersCount; memberIdx++) {
+		copy_member(&from->members[memberIdx], to.members[memberIdx]);
+	}	
+}
+
+void struct_list_copier::copy_member(const member_t *from, ida_struct_member& const to) {
+	to.id = from->id;	
+	get_member_name(from->id, buffer, sizeof(buffer));
+	to.name = buffer;	
+}
+
 void DatabaseHandler::listEnums(std::vector<ida_enum> & _return)
 {
 	RUN_IN_MAIN_THREAD(&DatabaseHandler::listEnums, this, _return)	
@@ -143,6 +182,8 @@ void DatabaseHandler::waitBackgroundTasks()
 void DatabaseHandler::listStructures( std::vector<ida_struct> & _return )
 {
 	RUN_IN_MAIN_THREAD(&DatabaseHandler::listStructures, this, _return)
+	struct_list_copier copier;
+	copier.copy_to(_return);
 }
 
 void DatabaseHandler::storeStructure( const ida_struct& _struct )

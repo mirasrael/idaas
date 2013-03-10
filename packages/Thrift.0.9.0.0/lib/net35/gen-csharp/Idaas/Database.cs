@@ -49,10 +49,10 @@ namespace Idaas
       IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, int id);
       void End_deleteStruct(IAsyncResult asyncResult);
       #endif
-      void waitBackgroundTaks();
+      void waitBackgroundTasks();
       #if SILVERLIGHT
-      IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, );
-      void End_waitBackgroundTaks(IAsyncResult asyncResult);
+      IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, );
+      void End_waitBackgroundTasks(IAsyncResult asyncResult);
       #endif
     }
 
@@ -441,39 +441,39 @@ namespace Idaas
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, )
+      public IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, )
       {
-        return send_waitBackgroundTaks(callback, state);
+        return send_waitBackgroundTasks(callback, state);
       }
 
-      public void End_waitBackgroundTaks(IAsyncResult asyncResult)
+      public void End_waitBackgroundTasks(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_waitBackgroundTaks();
+        recv_waitBackgroundTasks();
       }
 
       #endif
 
-      public void waitBackgroundTaks()
+      public void waitBackgroundTasks()
       {
         #if !SILVERLIGHT
-        send_waitBackgroundTaks();
-        recv_waitBackgroundTaks();
+        send_waitBackgroundTasks();
+        recv_waitBackgroundTasks();
 
         #else
-        var asyncResult = Begin_waitBackgroundTaks(null, null, );
-        End_waitBackgroundTaks(asyncResult);
+        var asyncResult = Begin_waitBackgroundTasks(null, null, );
+        End_waitBackgroundTasks(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_waitBackgroundTaks(AsyncCallback callback, object state, )
+      public IAsyncResult send_waitBackgroundTasks(AsyncCallback callback, object state, )
       #else
-      public void send_waitBackgroundTaks()
+      public void send_waitBackgroundTasks()
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("waitBackgroundTaks", TMessageType.Call, seqid_));
-        waitBackgroundTaks_args args = new waitBackgroundTaks_args();
+        oprot_.WriteMessageBegin(new TMessage("waitBackgroundTasks", TMessageType.Call, seqid_));
+        waitBackgroundTasks_args args = new waitBackgroundTasks_args();
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -483,7 +483,7 @@ namespace Idaas
         #endif
       }
 
-      public void recv_waitBackgroundTaks()
+      public void recv_waitBackgroundTasks()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -491,7 +491,7 @@ namespace Idaas
           iprot_.ReadMessageEnd();
           throw x;
         }
-        waitBackgroundTaks_result result = new waitBackgroundTaks_result();
+        waitBackgroundTasks_result result = new waitBackgroundTasks_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         return;
@@ -508,7 +508,7 @@ namespace Idaas
         processMap_["listStructures"] = listStructures_Process;
         processMap_["storeStructure"] = storeStructure_Process;
         processMap_["deleteStruct"] = deleteStruct_Process;
-        processMap_["waitBackgroundTaks"] = waitBackgroundTaks_Process;
+        processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
 
       protected delegate void ProcessFunction(int seqid, TProtocol iprot, TProtocol oprot);
@@ -619,14 +619,14 @@ namespace Idaas
         oprot.Transport.Flush();
       }
 
-      public void waitBackgroundTaks_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void waitBackgroundTasks_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        waitBackgroundTaks_args args = new waitBackgroundTaks_args();
+        waitBackgroundTasks_args args = new waitBackgroundTasks_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        waitBackgroundTaks_result result = new waitBackgroundTaks_result();
-        iface_.waitBackgroundTaks();
-        oprot.WriteMessageBegin(new TMessage("waitBackgroundTaks", TMessageType.Reply, seqid)); 
+        waitBackgroundTasks_result result = new waitBackgroundTasks_result();
+        iface_.waitBackgroundTasks();
+        oprot.WriteMessageBegin(new TMessage("waitBackgroundTasks", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -729,13 +729,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_enum>();
-                  TList _list4 = iprot.ReadListBegin();
-                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                  TList _list8 = iprot.ReadListBegin();
+                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
                   {
-                    ida_enum _elem6 = new ida_enum();
-                    _elem6 = new ida_enum();
-                    _elem6.Read(iprot);
-                    Success.Add(_elem6);
+                    ida_enum _elem10 = new ida_enum();
+                    _elem10 = new ida_enum();
+                    _elem10.Read(iprot);
+                    Success.Add(_elem10);
                   }
                   iprot.ReadListEnd();
                 }
@@ -765,9 +765,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_enum _iter7 in Success)
+              foreach (ida_enum _iter11 in Success)
               {
-                _iter7.Write(oprot);
+                _iter11.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -1152,13 +1152,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_struct>();
-                  TList _list8 = iprot.ReadListBegin();
-                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
+                  TList _list12 = iprot.ReadListBegin();
+                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
                   {
-                    ida_struct _elem10 = new ida_struct();
-                    _elem10 = new ida_struct();
-                    _elem10.Read(iprot);
-                    Success.Add(_elem10);
+                    ida_struct _elem14 = new ida_struct();
+                    _elem14 = new ida_struct();
+                    _elem14.Read(iprot);
+                    Success.Add(_elem14);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1188,9 +1188,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_struct _iter11 in Success)
+              foreach (ida_struct _iter15 in Success)
               {
-                _iter11.Write(oprot);
+                _iter15.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -1484,10 +1484,10 @@ namespace Idaas
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class waitBackgroundTaks_args : TBase
+    public partial class waitBackgroundTasks_args : TBase
     {
 
-      public waitBackgroundTaks_args() {
+      public waitBackgroundTasks_args() {
       }
 
       public void Read (TProtocol iprot)
@@ -1512,14 +1512,14 @@ namespace Idaas
       }
 
       public void Write(TProtocol oprot) {
-        TStruct struc = new TStruct("waitBackgroundTaks_args");
+        TStruct struc = new TStruct("waitBackgroundTasks_args");
         oprot.WriteStructBegin(struc);
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
-        StringBuilder sb = new StringBuilder("waitBackgroundTaks_args(");
+        StringBuilder sb = new StringBuilder("waitBackgroundTasks_args(");
         sb.Append(")");
         return sb.ToString();
       }
@@ -1530,10 +1530,10 @@ namespace Idaas
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class waitBackgroundTaks_result : TBase
+    public partial class waitBackgroundTasks_result : TBase
     {
 
-      public waitBackgroundTaks_result() {
+      public waitBackgroundTasks_result() {
       }
 
       public void Read (TProtocol iprot)
@@ -1558,7 +1558,7 @@ namespace Idaas
       }
 
       public void Write(TProtocol oprot) {
-        TStruct struc = new TStruct("waitBackgroundTaks_result");
+        TStruct struc = new TStruct("waitBackgroundTasks_result");
         oprot.WriteStructBegin(struc);
 
         oprot.WriteFieldStop();
@@ -1566,7 +1566,7 @@ namespace Idaas
       }
 
       public override string ToString() {
-        StringBuilder sb = new StringBuilder("waitBackgroundTaks_result(");
+        StringBuilder sb = new StringBuilder("waitBackgroundTasks_result(");
         sb.Append(")");
         return sb.ToString();
       }

@@ -24,6 +24,7 @@ struct ida_struct_member {
 struct ida_struct {
 	1: i32 id = -1
 	2: string name
+	3: list<ida_struct_member> members
 }
 
 service Database {

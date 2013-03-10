@@ -320,8 +320,8 @@ void swap(ida_struct_member &a, ida_struct_member &b) {
   swap(a.__isset, b.__isset);
 }
 
-const char* ida_struct::ascii_fingerprint = "3F5FC93B338687BC7235B1AB103F47B3";
-const uint8_t ida_struct::binary_fingerprint[16] = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+const char* ida_struct::ascii_fingerprint = "5340BFE386E031FD4F5DB9D9CA84BDD1";
+const uint8_t ida_struct::binary_fingerprint[16] = {0x53,0x40,0xBF,0xE3,0x86,0xE0,0x31,0xFD,0x4F,0x5D,0xB9,0xD9,0xCA,0x84,0xBD,0xD1};
 
 uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -359,6 +359,26 @@ uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->members.clear();
+            uint32_t _size6;
+            ::apache::thrift::protocol::TType _etype9;
+            xfer += iprot->readListBegin(_etype9, _size6);
+            this->members.resize(_size6);
+            uint32_t _i10;
+            for (_i10 = 0; _i10 < _size6; ++_i10)
+            {
+              xfer += this->members[_i10].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.members = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -383,6 +403,18 @@ uint32_t ida_struct::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("members", ::apache::thrift::protocol::T_LIST, 3);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->members.size()));
+    std::vector<ida_struct_member> ::const_iterator _iter11;
+    for (_iter11 = this->members.begin(); _iter11 != this->members.end(); ++_iter11)
+    {
+      xfer += (*_iter11).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -392,6 +424,7 @@ void swap(ida_struct &a, ida_struct &b) {
   using ::std::swap;
   swap(a.id, b.id);
   swap(a.name, b.name);
+  swap(a.members, b.members);
   swap(a.__isset, b.__isset);
 }
 
