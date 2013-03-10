@@ -77,8 +77,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseSpec.cs" />
     <Compile Include="DescribeEnumerations.cs" />
     <Compile Include="DescribeFunctions.cs" />
+    <Compile Include="DescribeStructures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DescribeEndpoint.cs" />
   </ItemGroup>

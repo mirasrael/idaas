@@ -158,6 +158,108 @@ class ida_enum {
 
 void swap(ida_enum &a, ida_enum &b);
 
+typedef struct _ida_struct_member__isset {
+  _ida_struct_member__isset() : id(true), name(false) {}
+  bool id;
+  bool name;
+} _ida_struct_member__isset;
+
+class ida_struct_member {
+ public:
+
+  static const char* ascii_fingerprint; // = "3F5FC93B338687BC7235B1AB103F47B3";
+  static const uint8_t binary_fingerprint[16]; // = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+
+  ida_struct_member() : id(-1), name() {
+  }
+
+  virtual ~ida_struct_member() throw() {}
+
+  int32_t id;
+  std::string name;
+
+  _ida_struct_member__isset __isset;
+
+  void __set_id(const int32_t val) {
+    id = val;
+  }
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  bool operator == (const ida_struct_member & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const ida_struct_member &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ida_struct_member & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(ida_struct_member &a, ida_struct_member &b);
+
+typedef struct _ida_struct__isset {
+  _ida_struct__isset() : id(true), name(false) {}
+  bool id;
+  bool name;
+} _ida_struct__isset;
+
+class ida_struct {
+ public:
+
+  static const char* ascii_fingerprint; // = "3F5FC93B338687BC7235B1AB103F47B3";
+  static const uint8_t binary_fingerprint[16]; // = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+
+  ida_struct() : id(-1), name() {
+  }
+
+  virtual ~ida_struct() throw() {}
+
+  int32_t id;
+  std::string name;
+
+  _ida_struct__isset __isset;
+
+  void __set_id(const int32_t val) {
+    id = val;
+  }
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  bool operator == (const ida_struct & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const ida_struct &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ida_struct & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(ida_struct &a, ida_struct &b);
+
 } // namespace
 
 #endif

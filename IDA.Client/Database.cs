@@ -53,6 +53,7 @@ namespace Ida.Client
             var proto = new TBinaryProtocol(_transport);
             _client = new Idaas.Database.Client(proto);
             Enumerations = new Enumerations(_client);
+            Structures = new Structures(_client);
 
             _transport.Open();
             return true;
@@ -64,6 +65,9 @@ namespace Ida.Client
         }
 
         public Enumerations Enumerations { get; private set; }
+
+        public Structures Structures { get; private set; }
+
         public void Dispose()
         {
             _transport.Close();

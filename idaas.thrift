@@ -16,9 +16,24 @@ struct ida_enum {
 	4: list<ida_enum_const> constants
 }
 
+struct ida_struct_member {
+	1: i32 id = -1
+	2: string name
+}
+
+struct ida_struct {
+	1: i32 id = -1
+	2: string name
+}
+
 service Database {
 	list<ida_enum> listEnums(),
 	void storeEnum(1: ida_enum _enum),
-	void deleteEnum(1: i32 id)
-	void waitBackgroundTaks()
+	void deleteEnum(1: i32 id)	
+
+	list<ida_struct> listStructures()
+	void storeStructure(1: ida_struct _struct)
+	void deleteStruct(1: i32 id)
+
+	void waitBackgroundTasks()
 }

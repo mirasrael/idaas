@@ -18,7 +18,10 @@ class DatabaseIf {
   virtual void listEnums(std::vector<ida_enum> & _return) = 0;
   virtual void storeEnum(const ida_enum& _enum) = 0;
   virtual void deleteEnum(const int32_t id) = 0;
-  virtual void waitBackgroundTaks() = 0;
+  virtual void listStructures(std::vector<ida_struct> & _return) = 0;
+  virtual void storeStructure(const ida_struct& _struct) = 0;
+  virtual void deleteStruct(const int32_t id) = 0;
+  virtual void waitBackgroundTasks() = 0;
 };
 
 class DatabaseIfFactory {
@@ -57,7 +60,16 @@ class DatabaseNull : virtual public DatabaseIf {
   void deleteEnum(const int32_t /* id */) {
     return;
   }
-  void waitBackgroundTaks() {
+  void listStructures(std::vector<ida_struct> & /* _return */) {
+    return;
+  }
+  void storeStructure(const ida_struct& /* _struct */) {
+    return;
+  }
+  void deleteStruct(const int32_t /* id */) {
+    return;
+  }
+  void waitBackgroundTasks() {
     return;
   }
 };
@@ -333,24 +345,24 @@ class Database_deleteEnum_presult {
 };
 
 
-class Database_waitBackgroundTaks_args {
+class Database_listStructures_args {
  public:
 
-  Database_waitBackgroundTaks_args() {
+  Database_listStructures_args() {
   }
 
-  virtual ~Database_waitBackgroundTaks_args() throw() {}
+  virtual ~Database_listStructures_args() throw() {}
 
 
-  bool operator == (const Database_waitBackgroundTaks_args & /* rhs */) const
+  bool operator == (const Database_listStructures_args & /* rhs */) const
   {
     return true;
   }
-  bool operator != (const Database_waitBackgroundTaks_args &rhs) const {
+  bool operator != (const Database_listStructures_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Database_waitBackgroundTaks_args & ) const;
+  bool operator < (const Database_listStructures_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -358,36 +370,106 @@ class Database_waitBackgroundTaks_args {
 };
 
 
-class Database_waitBackgroundTaks_pargs {
+class Database_listStructures_pargs {
  public:
 
 
-  virtual ~Database_waitBackgroundTaks_pargs() throw() {}
+  virtual ~Database_listStructures_pargs() throw() {}
 
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
+typedef struct _Database_listStructures_result__isset {
+  _Database_listStructures_result__isset() : success(false) {}
+  bool success;
+} _Database_listStructures_result__isset;
 
-class Database_waitBackgroundTaks_result {
+class Database_listStructures_result {
  public:
 
-  Database_waitBackgroundTaks_result() {
+  Database_listStructures_result() {
   }
 
-  virtual ~Database_waitBackgroundTaks_result() throw() {}
+  virtual ~Database_listStructures_result() throw() {}
 
+  std::vector<ida_struct>  success;
 
-  bool operator == (const Database_waitBackgroundTaks_result & /* rhs */) const
+  _Database_listStructures_result__isset __isset;
+
+  void __set_success(const std::vector<ida_struct> & val) {
+    success = val;
+  }
+
+  bool operator == (const Database_listStructures_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     return true;
   }
-  bool operator != (const Database_waitBackgroundTaks_result &rhs) const {
+  bool operator != (const Database_listStructures_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Database_waitBackgroundTaks_result & ) const;
+  bool operator < (const Database_listStructures_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_listStructures_presult__isset {
+  _Database_listStructures_presult__isset() : success(false) {}
+  bool success;
+} _Database_listStructures_presult__isset;
+
+class Database_listStructures_presult {
+ public:
+
+
+  virtual ~Database_listStructures_presult() throw() {}
+
+  std::vector<ida_struct> * success;
+
+  _Database_listStructures_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _Database_storeStructure_args__isset {
+  _Database_storeStructure_args__isset() : _struct(false) {}
+  bool _struct;
+} _Database_storeStructure_args__isset;
+
+class Database_storeStructure_args {
+ public:
+
+  Database_storeStructure_args() {
+  }
+
+  virtual ~Database_storeStructure_args() throw() {}
+
+  ida_struct _struct;
+
+  _Database_storeStructure_args__isset __isset;
+
+  void __set__struct(const ida_struct& val) {
+    _struct = val;
+  }
+
+  bool operator == (const Database_storeStructure_args & rhs) const
+  {
+    if (!(_struct == rhs._struct))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_storeStructure_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_storeStructure_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -395,11 +477,211 @@ class Database_waitBackgroundTaks_result {
 };
 
 
-class Database_waitBackgroundTaks_presult {
+class Database_storeStructure_pargs {
  public:
 
 
-  virtual ~Database_waitBackgroundTaks_presult() throw() {}
+  virtual ~Database_storeStructure_pargs() throw() {}
+
+  const ida_struct* _struct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_storeStructure_result {
+ public:
+
+  Database_storeStructure_result() {
+  }
+
+  virtual ~Database_storeStructure_result() throw() {}
+
+
+  bool operator == (const Database_storeStructure_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_storeStructure_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_storeStructure_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_storeStructure_presult {
+ public:
+
+
+  virtual ~Database_storeStructure_presult() throw() {}
+
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _Database_deleteStruct_args__isset {
+  _Database_deleteStruct_args__isset() : id(false) {}
+  bool id;
+} _Database_deleteStruct_args__isset;
+
+class Database_deleteStruct_args {
+ public:
+
+  Database_deleteStruct_args() : id(0) {
+  }
+
+  virtual ~Database_deleteStruct_args() throw() {}
+
+  int32_t id;
+
+  _Database_deleteStruct_args__isset __isset;
+
+  void __set_id(const int32_t val) {
+    id = val;
+  }
+
+  bool operator == (const Database_deleteStruct_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_deleteStruct_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_deleteStruct_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_deleteStruct_pargs {
+ public:
+
+
+  virtual ~Database_deleteStruct_pargs() throw() {}
+
+  const int32_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_deleteStruct_result {
+ public:
+
+  Database_deleteStruct_result() {
+  }
+
+  virtual ~Database_deleteStruct_result() throw() {}
+
+
+  bool operator == (const Database_deleteStruct_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_deleteStruct_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_deleteStruct_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_deleteStruct_presult {
+ public:
+
+
+  virtual ~Database_deleteStruct_presult() throw() {}
+
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class Database_waitBackgroundTasks_args {
+ public:
+
+  Database_waitBackgroundTasks_args() {
+  }
+
+  virtual ~Database_waitBackgroundTasks_args() throw() {}
+
+
+  bool operator == (const Database_waitBackgroundTasks_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_waitBackgroundTasks_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_waitBackgroundTasks_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTasks_pargs {
+ public:
+
+
+  virtual ~Database_waitBackgroundTasks_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTasks_result {
+ public:
+
+  Database_waitBackgroundTasks_result() {
+  }
+
+  virtual ~Database_waitBackgroundTasks_result() throw() {}
+
+
+  bool operator == (const Database_waitBackgroundTasks_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_waitBackgroundTasks_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_waitBackgroundTasks_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_waitBackgroundTasks_presult {
+ public:
+
+
+  virtual ~Database_waitBackgroundTasks_presult() throw() {}
 
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
@@ -435,9 +717,18 @@ class DatabaseClient : virtual public DatabaseIf {
   void deleteEnum(const int32_t id);
   void send_deleteEnum(const int32_t id);
   void recv_deleteEnum();
-  void waitBackgroundTaks();
-  void send_waitBackgroundTaks();
-  void recv_waitBackgroundTaks();
+  void listStructures(std::vector<ida_struct> & _return);
+  void send_listStructures();
+  void recv_listStructures(std::vector<ida_struct> & _return);
+  void storeStructure(const ida_struct& _struct);
+  void send_storeStructure(const ida_struct& _struct);
+  void recv_storeStructure();
+  void deleteStruct(const int32_t id);
+  void send_deleteStruct(const int32_t id);
+  void recv_deleteStruct();
+  void waitBackgroundTasks();
+  void send_waitBackgroundTasks();
+  void recv_waitBackgroundTasks();
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -456,14 +747,20 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_listEnums(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_storeEnum(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_deleteEnum(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_waitBackgroundTaks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_listStructures(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_storeStructure(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_deleteStruct(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   DatabaseProcessor(boost::shared_ptr<DatabaseIf> iface) :
     iface_(iface) {
     processMap_["listEnums"] = &DatabaseProcessor::process_listEnums;
     processMap_["storeEnum"] = &DatabaseProcessor::process_storeEnum;
     processMap_["deleteEnum"] = &DatabaseProcessor::process_deleteEnum;
-    processMap_["waitBackgroundTaks"] = &DatabaseProcessor::process_waitBackgroundTaks;
+    processMap_["listStructures"] = &DatabaseProcessor::process_listStructures;
+    processMap_["storeStructure"] = &DatabaseProcessor::process_storeStructure;
+    processMap_["deleteStruct"] = &DatabaseProcessor::process_deleteStruct;
+    processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
   }
 
   virtual ~DatabaseProcessor() {}
@@ -520,13 +817,41 @@ class DatabaseMultiface : virtual public DatabaseIf {
     ifaces_[i]->deleteEnum(id);
   }
 
-  void waitBackgroundTaks() {
+  void listStructures(std::vector<ida_struct> & _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->waitBackgroundTaks();
+      ifaces_[i]->listStructures(_return);
     }
-    ifaces_[i]->waitBackgroundTaks();
+    ifaces_[i]->listStructures(_return);
+    return;
+  }
+
+  void storeStructure(const ida_struct& _struct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->storeStructure(_struct);
+    }
+    ifaces_[i]->storeStructure(_struct);
+  }
+
+  void deleteStruct(const int32_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->deleteStruct(id);
+    }
+    ifaces_[i]->deleteStruct(id);
+  }
+
+  void waitBackgroundTasks() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->waitBackgroundTasks();
+    }
+    ifaces_[i]->waitBackgroundTasks();
   }
 
 };

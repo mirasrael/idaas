@@ -34,6 +34,21 @@ namespace Idaas
       IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, int id);
       void End_deleteEnum(IAsyncResult asyncResult);
       #endif
+      List<ida_struct> listStructures();
+      #if SILVERLIGHT
+      IAsyncResult Begin_listStructures(AsyncCallback callback, object state, );
+      List<ida_struct> End_listStructures(IAsyncResult asyncResult);
+      #endif
+      void storeStructure(ida_struct _struct);
+      #if SILVERLIGHT
+      IAsyncResult Begin_storeStructure(AsyncCallback callback, object state, ida_struct _struct);
+      void End_storeStructure(IAsyncResult asyncResult);
+      #endif
+      void deleteStruct(int id);
+      #if SILVERLIGHT
+      IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, int id);
+      void End_deleteStruct(IAsyncResult asyncResult);
+      #endif
       void waitBackgroundTaks();
       #if SILVERLIGHT
       IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, );
@@ -247,6 +262,185 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_listStructures(AsyncCallback callback, object state, )
+      {
+        return send_listStructures(callback, state);
+      }
+
+      public List<ida_struct> End_listStructures(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_listStructures();
+      }
+
+      #endif
+
+      public List<ida_struct> listStructures()
+      {
+        #if !SILVERLIGHT
+        send_listStructures();
+        return recv_listStructures();
+
+        #else
+        var asyncResult = Begin_listStructures(null, null, );
+        return End_listStructures(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_listStructures(AsyncCallback callback, object state, )
+      #else
+      public void send_listStructures()
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("listStructures", TMessageType.Call, seqid_));
+        listStructures_args args = new listStructures_args();
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public List<ida_struct> recv_listStructures()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        listStructures_result result = new listStructures_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "listStructures failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_storeStructure(AsyncCallback callback, object state, ida_struct _struct)
+      {
+        return send_storeStructure(callback, state, _struct);
+      }
+
+      public void End_storeStructure(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        recv_storeStructure();
+      }
+
+      #endif
+
+      public void storeStructure(ida_struct _struct)
+      {
+        #if !SILVERLIGHT
+        send_storeStructure(_struct);
+        recv_storeStructure();
+
+        #else
+        var asyncResult = Begin_storeStructure(null, null, _struct);
+        End_storeStructure(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_storeStructure(AsyncCallback callback, object state, ida_struct _struct)
+      #else
+      public void send_storeStructure(ida_struct _struct)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("storeStructure", TMessageType.Call, seqid_));
+        storeStructure_args args = new storeStructure_args();
+        args._struct = _struct;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public void recv_storeStructure()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        storeStructure_result result = new storeStructure_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        return;
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, int id)
+      {
+        return send_deleteStruct(callback, state, id);
+      }
+
+      public void End_deleteStruct(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        recv_deleteStruct();
+      }
+
+      #endif
+
+      public void deleteStruct(int id)
+      {
+        #if !SILVERLIGHT
+        send_deleteStruct(id);
+        recv_deleteStruct();
+
+        #else
+        var asyncResult = Begin_deleteStruct(null, null, id);
+        End_deleteStruct(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_deleteStruct(AsyncCallback callback, object state, int id)
+      #else
+      public void send_deleteStruct(int id)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("deleteStruct", TMessageType.Call, seqid_));
+        deleteStruct_args args = new deleteStruct_args();
+        args.Id = id;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public void recv_deleteStruct()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        deleteStruct_result result = new deleteStruct_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        return;
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_waitBackgroundTaks(AsyncCallback callback, object state, )
       {
         return send_waitBackgroundTaks(callback, state);
@@ -311,6 +505,9 @@ namespace Idaas
         processMap_["listEnums"] = listEnums_Process;
         processMap_["storeEnum"] = storeEnum_Process;
         processMap_["deleteEnum"] = deleteEnum_Process;
+        processMap_["listStructures"] = listStructures_Process;
+        processMap_["storeStructure"] = storeStructure_Process;
+        processMap_["deleteStruct"] = deleteStruct_Process;
         processMap_["waitBackgroundTaks"] = waitBackgroundTaks_Process;
       }
 
@@ -378,6 +575,45 @@ namespace Idaas
         deleteEnum_result result = new deleteEnum_result();
         iface_.deleteEnum(args.Id);
         oprot.WriteMessageBegin(new TMessage("deleteEnum", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void listStructures_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        listStructures_args args = new listStructures_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        listStructures_result result = new listStructures_result();
+        result.Success = iface_.listStructures();
+        oprot.WriteMessageBegin(new TMessage("listStructures", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void storeStructure_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        storeStructure_args args = new storeStructure_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        storeStructure_result result = new storeStructure_result();
+        iface_.storeStructure(args._struct);
+        oprot.WriteMessageBegin(new TMessage("storeStructure", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void deleteStruct_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        deleteStruct_args args = new deleteStruct_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        deleteStruct_result result = new deleteStruct_result();
+        iface_.deleteStruct(args.Id);
+        oprot.WriteMessageBegin(new TMessage("deleteStruct", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -815,6 +1051,429 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("deleteEnum_result(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listStructures_args : TBase
+    {
+
+      public listStructures_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listStructures_args");
+        oprot.WriteStructBegin(struc);
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listStructures_args(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listStructures_result : TBase
+    {
+      private List<ida_struct> _success;
+
+      public List<ida_struct> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public listStructures_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<ida_struct>();
+                  TList _list8 = iprot.ReadListBegin();
+                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
+                  {
+                    ida_struct _elem10 = new ida_struct();
+                    _elem10 = new ida_struct();
+                    _elem10.Read(iprot);
+                    Success.Add(_elem10);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listStructures_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (ida_struct _iter11 in Success)
+              {
+                _iter11.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listStructures_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class storeStructure_args : TBase
+    {
+      private ida_struct __struct;
+
+      public ida_struct _struct
+      {
+        get
+        {
+          return __struct;
+        }
+        set
+        {
+          __isset._struct = true;
+          this.__struct = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool _struct;
+      }
+
+      public storeStructure_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                _struct = new ida_struct();
+                _struct.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeStructure_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (_struct != null && __isset._struct) {
+          field.Name = "_struct";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          _struct.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeStructure_args(");
+        sb.Append("_struct: ");
+        sb.Append(_struct== null ? "<null>" : _struct.ToString());
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class storeStructure_result : TBase
+    {
+
+      public storeStructure_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeStructure_result");
+        oprot.WriteStructBegin(struc);
+
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeStructure_result(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class deleteStruct_args : TBase
+    {
+      private int _id;
+
+      public int Id
+      {
+        get
+        {
+          return _id;
+        }
+        set
+        {
+          __isset.id = true;
+          this._id = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool id;
+      }
+
+      public deleteStruct_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                Id = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("deleteStruct_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (__isset.id) {
+          field.Name = "id";
+          field.Type = TType.I32;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Id);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("deleteStruct_args(");
+        sb.Append("Id: ");
+        sb.Append(Id);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class deleteStruct_result : TBase
+    {
+
+      public deleteStruct_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("deleteStruct_result");
+        oprot.WriteStructBegin(struc);
+
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("deleteStruct_result(");
         sb.Append(")");
         return sb.ToString();
       }

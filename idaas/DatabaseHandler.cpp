@@ -134,8 +134,25 @@ void DatabaseHandler::deleteEnum( const int32_t id )
 	del_enum(id);
 }
 
-void DatabaseHandler::waitBackgroundTaks()
+void DatabaseHandler::waitBackgroundTasks()
 {
-	RUN_IN_MAIN_THREAD(&DatabaseHandler::waitBackgroundTaks, this)
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::waitBackgroundTasks, this)
 	autoWait();
 }
+
+void DatabaseHandler::listStructures( std::vector<ida_struct> & _return )
+{
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::listStructures, this, _return)
+}
+
+void DatabaseHandler::storeStructure( const ida_struct& _struct )
+{
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::storeStructure, this, _struct)
+}
+
+void DatabaseHandler::deleteStruct( const int32_t id )
+{
+	RUN_IN_MAIN_THREAD(&DatabaseHandler::deleteStruct, this, id)
+}
+
+

@@ -12,5 +12,11 @@ public:
 
 	void deleteEnum(const int32_t id);
 
-	void waitBackgroundTaks();
+	void listStructures(std::vector<idaas::ida_struct> & _return);
+
+	void storeStructure(const idaas::ida_struct& _struct);
+
+	void deleteStruct(const int32_t id);
+
+	void waitBackgroundTasks();
 };
