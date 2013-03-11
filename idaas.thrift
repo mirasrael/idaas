@@ -19,6 +19,7 @@ struct ida_enum {
 struct ida_struct_member {
 	1: i32 id = -1
 	2: string name
+	3: string type	
 }
 
 struct ida_struct {

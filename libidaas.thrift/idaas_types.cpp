@@ -245,8 +245,8 @@ void swap(ida_enum &a, ida_enum &b) {
   swap(a.__isset, b.__isset);
 }
 
-const char* ida_struct_member::ascii_fingerprint = "3F5FC93B338687BC7235B1AB103F47B3";
-const uint8_t ida_struct_member::binary_fingerprint[16] = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+const char* ida_struct_member::ascii_fingerprint = "3368C2F81F2FEF71F11EDACDB2A3ECEF";
+const uint8_t ida_struct_member::binary_fingerprint[16] = {0x33,0x68,0xC2,0xF8,0x1F,0x2F,0xEF,0x71,0xF1,0x1E,0xDA,0xCD,0xB2,0xA3,0xEC,0xEF};
 
 uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -284,6 +284,14 @@ uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->type);
+          this->__isset.type = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -308,6 +316,10 @@ uint32_t ida_struct_member::write(::apache::thrift::protocol::TProtocol* oprot) 
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->type);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -317,11 +329,12 @@ void swap(ida_struct_member &a, ida_struct_member &b) {
   using ::std::swap;
   swap(a.id, b.id);
   swap(a.name, b.name);
+  swap(a.type, b.type);
   swap(a.__isset, b.__isset);
 }
 
-const char* ida_struct::ascii_fingerprint = "5340BFE386E031FD4F5DB9D9CA84BDD1";
-const uint8_t ida_struct::binary_fingerprint[16] = {0x53,0x40,0xBF,0xE3,0x86,0xE0,0x31,0xFD,0x4F,0x5D,0xB9,0xD9,0xCA,0x84,0xBD,0xD1};
+const char* ida_struct::ascii_fingerprint = "0320D9EFA4022F6D8B77B06E0DBBE8F5";
+const uint8_t ida_struct::binary_fingerprint[16] = {0x03,0x20,0xD9,0xEF,0xA4,0x02,0x2F,0x6D,0x8B,0x77,0xB0,0x6E,0x0D,0xBB,0xE8,0xF5};
 
 uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 

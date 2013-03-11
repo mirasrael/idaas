@@ -159,24 +159,26 @@ class ida_enum {
 void swap(ida_enum &a, ida_enum &b);
 
 typedef struct _ida_struct_member__isset {
-  _ida_struct_member__isset() : id(true), name(false) {}
+  _ida_struct_member__isset() : id(true), name(false), type(false) {}
   bool id;
   bool name;
+  bool type;
 } _ida_struct_member__isset;
 
 class ida_struct_member {
  public:
 
-  static const char* ascii_fingerprint; // = "3F5FC93B338687BC7235B1AB103F47B3";
-  static const uint8_t binary_fingerprint[16]; // = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+  static const char* ascii_fingerprint; // = "3368C2F81F2FEF71F11EDACDB2A3ECEF";
+  static const uint8_t binary_fingerprint[16]; // = {0x33,0x68,0xC2,0xF8,0x1F,0x2F,0xEF,0x71,0xF1,0x1E,0xDA,0xCD,0xB2,0xA3,0xEC,0xEF};
 
-  ida_struct_member() : id(-1), name() {
+  ida_struct_member() : id(-1), name(), type() {
   }
 
   virtual ~ida_struct_member() throw() {}
 
   int32_t id;
   std::string name;
+  std::string type;
 
   _ida_struct_member__isset __isset;
 
@@ -188,11 +190,17 @@ class ida_struct_member {
     name = val;
   }
 
+  void __set_type(const std::string& val) {
+    type = val;
+  }
+
   bool operator == (const ida_struct_member & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(name == rhs.name))
+      return false;
+    if (!(type == rhs.type))
       return false;
     return true;
   }
@@ -219,8 +227,8 @@ typedef struct _ida_struct__isset {
 class ida_struct {
  public:
 
-  static const char* ascii_fingerprint; // = "5340BFE386E031FD4F5DB9D9CA84BDD1";
-  static const uint8_t binary_fingerprint[16]; // = {0x53,0x40,0xBF,0xE3,0x86,0xE0,0x31,0xFD,0x4F,0x5D,0xB9,0xD9,0xCA,0x84,0xBD,0xD1};
+  static const char* ascii_fingerprint; // = "0320D9EFA4022F6D8B77B06E0DBBE8F5";
+  static const uint8_t binary_fingerprint[16]; // = {0x03,0x20,0xD9,0xEF,0xA4,0x02,0x2F,0x6D,0x8B,0x77,0xB0,0x6E,0x0D,0xBB,0xE8,0xF5};
 
   ida_struct() : id(-1), name() {
   }

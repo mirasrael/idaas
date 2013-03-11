@@ -69,14 +69,14 @@ namespace Ida.Client
 
         public Structures Structures { get; private set; }
 
-        public void Store(ida_struct @struct)
+        public bool Store(ida_struct @struct)
         {
-            Structures.Store(@struct);
+            return Structures.Store(@struct);
         }
 
-        public void Store(ida_enum @enum)
+        public bool Store(ida_enum @enum)
         {
-            Enumerations.Store(@enum);
+            return Enumerations.Store(@enum);
         }
 
         public void Dispose()

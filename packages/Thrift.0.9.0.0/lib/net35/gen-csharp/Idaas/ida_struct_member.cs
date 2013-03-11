@@ -25,6 +25,7 @@ namespace Idaas
   {
     private int _id;
     private string _name;
+    private string _type;
 
     public int Id
     {
@@ -52,6 +53,19 @@ namespace Idaas
       }
     }
 
+    public string Type
+    {
+      get
+      {
+        return _type;
+      }
+      set
+      {
+        __isset.type = true;
+        this._type = value;
+      }
+    }
+
 
     public Isset __isset;
     #if !SILVERLIGHT
@@ -60,6 +74,7 @@ namespace Idaas
     public struct Isset {
       public bool id;
       public bool name;
+      public bool type;
     }
 
     public ida_struct_member() {
@@ -88,6 +103,13 @@ namespace Idaas
           case 2:
             if (field.Type == TType.String) {
               Name = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 3:
+            if (field.Type == TType.String) {
+              Type = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -121,6 +143,14 @@ namespace Idaas
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
       }
+      if (Type != null && __isset.type) {
+        field.Name = "type";
+        field.Type = TType.String;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(Type);
+        oprot.WriteFieldEnd();
+      }
       oprot.WriteFieldStop();
       oprot.WriteStructEnd();
     }
@@ -131,6 +161,8 @@ namespace Idaas
       sb.Append(Id);
       sb.Append(",Name: ");
       sb.Append(Name);
+      sb.Append(",Type: ");
+      sb.Append(Type);
       sb.Append(")");
       return sb.ToString();
     }

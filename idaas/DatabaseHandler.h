@@ -1,8 +1,11 @@
 #pragma once
 
-#include "Database.h"
+#include <Database.h>
+#include "StructureHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
+private:
+	StructureHandler structureHandler;
 public:
 	DatabaseHandler();
 
