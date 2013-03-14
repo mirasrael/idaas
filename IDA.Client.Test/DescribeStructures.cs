@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Idaas;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -97,6 +99,12 @@ namespace Ida.Client.Test
             ida_struct devInfo = Database.Structures.First(s => s.Name == "_SP_DEVINFO_DATA");
             Assert.That(devInfo, Is.Not.Null);
             Assert.That(devInfo.Members.FirstOrDefault(m => m.Name == "ClassGuid"), Is.Not.Null);
+            var output = new MemoryStream();
+            Database.Structures.SaveTo(output);
+            output.Seek(0, SeekOrigin.Begin);
+            Console.WriteLine(new StreamReader(output).ReadToEnd());
+            output.Seek(0, SeekOrigin.Begin);
+            Database.Structures.LoadFrom(output);
         }
 
         [Test]
