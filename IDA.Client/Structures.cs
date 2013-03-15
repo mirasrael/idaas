@@ -56,7 +56,10 @@ namespace Ida.Client
 
         public void SaveTo(Stream output)
         {
-            XmlWriter writer = XmlWriter.Create(output);
+            XmlWriter writer = XmlWriter.Create(output, new XmlWriterSettings
+                {
+                    Indent = true
+                });
             writer.WriteStartElement("Structures");
             foreach (ida_struct item in Items)
             {
@@ -76,32 +79,37 @@ namespace Ida.Client
         }
 
         public void LoadFrom(Stream input)
-        {
-            _items = new List<ida_struct>();
+        {            
             XmlReader reader = XmlReader.Create(input);
             reader.ReadToFollowing("Structures");
+            var loadedStructures = new List<ida_struct>();
             for (bool hasStructure = reader.ReadToDescendant("Structure");
                  hasStructure;
                  hasStructure = reader.ReadToNextSibling("Structure"))
             {
-                var @structure = new ida_struct
-                    {
-                        Name = reader.GetAttribute("Name"),
-                        Members = new List<ida_struct_member>()
-                    };
+                var @structure = New(reader.GetAttribute("Name"));                    
                 for (bool hasField = reader.ReadToDescendant("Field");
                      hasField;
                      hasField = reader.ReadToNextSibling("Field"))
-                {
+                {                    
                     @structure.Members.Add(new ida_struct_member
                         {
                             Name = reader.GetAttribute("Name"),
                             Type = reader.GetAttribute("Type")
                         });                                        
-                }
-                _items.Add(@structure);
+                }                
+                loadedStructures.Add(@structure);
             }
             reader.Close();
+            StoreAll(loadedStructures);
+        }
+
+        public void StoreAll(IEnumerable<ida_struct> structures)
+        {
+            foreach (var @structure in structures)
+            {
+                Store(@structure);
+            }
         }
     }
 }

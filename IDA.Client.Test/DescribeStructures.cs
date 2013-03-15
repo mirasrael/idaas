@@ -102,7 +102,25 @@ namespace Ida.Client.Test
             output.Seek(0, SeekOrigin.Begin);
             Console.WriteLine(new StreamReader(output).ReadToEnd());
             output.Seek(0, SeekOrigin.Begin);
-            Database.Structures.LoadFrom(output);
+            //Database.Structures.LoadFrom(output);
+        }
+
+        [Test]
+        public void ItShouldCreateStructuresWithSpecialSymbols()
+        {
+            var fieldTypeName = "_MY_SYSTEM_INFO::$1593C2ABA4C275C0FBEC2498FA3B0937::$2";
+            var fieldType = Database.Structures.New(fieldTypeName);
+            fieldType.Members.Add(new ida_struct_member { Name = "SubMember1", Type = "int" });
+            Assert.That(Database.Store(fieldType), Is.True);
+
+            var ownerName = "_MY_SYSTEM_INFO::$1593C2ABA4C275C0FBEC2498FA3B0937";
+            var owner = Database.Structures.New(ownerName);            
+            owner.Members.Add(new ida_struct_member { Name = "Member1", Type = fieldType.Name });
+            Assert.That(Database.Store(owner), Is.True);
+
+            Reconnect();
+
+            Assert.That(Database.Structures.First(s => s.Name == ownerName).Members.FirstOrDefault(m => m.Name == "Member1"), Is.Not.Null);
         }
 
         [Test]

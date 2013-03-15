@@ -1,6 +1,12 @@
 #include "StructureHandler.h"
-#include <struct.hpp>
+
+#include "Logging.h"
+
 #include <typeinf.hpp>
+
+#include <boost/algorithm/string/replace.hpp>
+
+const std::regex StructureHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
 
 class struct_list_copier {
 private:
@@ -68,18 +74,23 @@ bool StructureHandler::store( const ida_struct &_struct )
 	qstring name;
 	qtype type;
 	qtype fields;
-
+		
+	std::vector<std::pair<tid_t, std::string>> escapedTypes;
 	for (std::vector<ida_struct_member>::const_iterator it = _struct.members.begin(); it != _struct.members.end(); it++)
 	{		
 		add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
-		member_t *member = get_member(struc, get_struc_last_offset(struc));
+		member_t *member = get_member(struc, get_struc_last_offset(struc));		
 
-		std::string fullType(it->type);
+		std::string fullType(escapeTypes(it->type, escapedTypes));
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
+		}			
+
+		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, PT_SIL)) {
+			return false;
 		}
-		parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0);
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);
+		restoreTypes(escapedTypes);
 	}	
 	return true;
 }
@@ -93,4 +104,38 @@ void StructureHandler::list( std::vector<ida_struct> &_return )
 void StructureHandler::_delete( const std::string& name )
 {
 	del_struc(get_struc(get_struc_id(name.c_str())));
+}
+
+std::string StructureHandler::escapeTypes( const std::string& decl, std::vector<std::pair<tid_t, std::string>>& escapedTypes ) {
+	std::smatch match;
+	std::string s(decl);
+	std::string output;
+	output.reserve(s.size());
+	while (std::regex_search(s, match, invalidIdentifier)) {
+		std::string escapedName(match.str());
+		boost::replace_all(escapedName, "::", "__");
+
+		tid_t sid = get_struc_id(match.str().c_str());
+		set_struc_name(sid, escapedName.c_str());
+
+		output.append(match.suffix());
+		output.append(escapedName);
+
+		escapedTypes.push_back(std::pair<tid_t, std::string>(sid, match.str()));
+
+		s = match.suffix();
+	}
+	output.append(s);
+	logmsg("%s\n", output.c_str());
+	return output;
+}
+
+void StructureHandler::restoreTypes( std::vector<std::pair<tid_t, std::string>>& escapedTypes )
+{
+	if (!escapedTypes.empty()) {
+		for (std::vector<std::pair<tid_t, std::string>>::iterator it = escapedTypes.begin(); it != escapedTypes.end(); it++) {
+			set_struc_name(it->first, it->second.c_str());
+		}
+		escapedTypes.clear();
+	}
 }
