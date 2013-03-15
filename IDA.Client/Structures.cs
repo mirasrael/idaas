@@ -50,9 +50,8 @@ namespace Ida.Client
         }
 
         public bool Store(ida_struct @struct)
-        {
-            @struct.Id = _client.storeStructure(@struct);
-            return true;
+        {            
+            return _client.storeStructure(@struct);
         }
 
         public void SaveTo(Stream output)

@@ -24,14 +24,14 @@ namespace Idaas
       IAsyncResult Begin_listEnums(AsyncCallback callback, object state, );
       List<ida_enum> End_listEnums(IAsyncResult asyncResult);
       #endif
-      int storeEnum(ida_enum _enum);
+      bool storeEnum(ida_enum _enum);
       #if SILVERLIGHT
       IAsyncResult Begin_storeEnum(AsyncCallback callback, object state, ida_enum _enum);
-      int End_storeEnum(IAsyncResult asyncResult);
+      bool End_storeEnum(IAsyncResult asyncResult);
       #endif
-      void deleteEnum(int id);
+      void deleteEnum(string name);
       #if SILVERLIGHT
-      IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, int id);
+      IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, string name);
       void End_deleteEnum(IAsyncResult asyncResult);
       #endif
       List<ida_struct> listStructures();
@@ -39,14 +39,14 @@ namespace Idaas
       IAsyncResult Begin_listStructures(AsyncCallback callback, object state, );
       List<ida_struct> End_listStructures(IAsyncResult asyncResult);
       #endif
-      int storeStructure(ida_struct _struct);
+      bool storeStructure(ida_struct _struct);
       #if SILVERLIGHT
       IAsyncResult Begin_storeStructure(AsyncCallback callback, object state, ida_struct _struct);
-      int End_storeStructure(IAsyncResult asyncResult);
+      bool End_storeStructure(IAsyncResult asyncResult);
       #endif
-      void deleteStruct(int id);
+      void deleteStruct(string name);
       #if SILVERLIGHT
-      IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, int id);
+      IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, string name);
       void End_deleteStruct(IAsyncResult asyncResult);
       #endif
       void waitBackgroundTasks();
@@ -149,7 +149,7 @@ namespace Idaas
         return send_storeEnum(callback, state, _enum);
       }
 
-      public int End_storeEnum(IAsyncResult asyncResult)
+      public bool End_storeEnum(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
         return recv_storeEnum();
@@ -157,7 +157,7 @@ namespace Idaas
 
       #endif
 
-      public int storeEnum(ida_enum _enum)
+      public bool storeEnum(ida_enum _enum)
       {
         #if !SILVERLIGHT
         send_storeEnum(_enum);
@@ -187,7 +187,7 @@ namespace Idaas
         #endif
       }
 
-      public int recv_storeEnum()
+      public bool recv_storeEnum()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -206,9 +206,9 @@ namespace Idaas
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, int id)
+      public IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, string name)
       {
-        return send_deleteEnum(callback, state, id);
+        return send_deleteEnum(callback, state, name);
       }
 
       public void End_deleteEnum(IAsyncResult asyncResult)
@@ -219,27 +219,27 @@ namespace Idaas
 
       #endif
 
-      public void deleteEnum(int id)
+      public void deleteEnum(string name)
       {
         #if !SILVERLIGHT
-        send_deleteEnum(id);
+        send_deleteEnum(name);
         recv_deleteEnum();
 
         #else
-        var asyncResult = Begin_deleteEnum(null, null, id);
+        var asyncResult = Begin_deleteEnum(null, null, name);
         End_deleteEnum(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_deleteEnum(AsyncCallback callback, object state, int id)
+      public IAsyncResult send_deleteEnum(AsyncCallback callback, object state, string name)
       #else
-      public void send_deleteEnum(int id)
+      public void send_deleteEnum(string name)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("deleteEnum", TMessageType.Call, seqid_));
         deleteEnum_args args = new deleteEnum_args();
-        args.Id = id;
+        args.Name = name;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -331,7 +331,7 @@ namespace Idaas
         return send_storeStructure(callback, state, _struct);
       }
 
-      public int End_storeStructure(IAsyncResult asyncResult)
+      public bool End_storeStructure(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
         return recv_storeStructure();
@@ -339,7 +339,7 @@ namespace Idaas
 
       #endif
 
-      public int storeStructure(ida_struct _struct)
+      public bool storeStructure(ida_struct _struct)
       {
         #if !SILVERLIGHT
         send_storeStructure(_struct);
@@ -369,7 +369,7 @@ namespace Idaas
         #endif
       }
 
-      public int recv_storeStructure()
+      public bool recv_storeStructure()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -388,9 +388,9 @@ namespace Idaas
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, int id)
+      public IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, string name)
       {
-        return send_deleteStruct(callback, state, id);
+        return send_deleteStruct(callback, state, name);
       }
 
       public void End_deleteStruct(IAsyncResult asyncResult)
@@ -401,27 +401,27 @@ namespace Idaas
 
       #endif
 
-      public void deleteStruct(int id)
+      public void deleteStruct(string name)
       {
         #if !SILVERLIGHT
-        send_deleteStruct(id);
+        send_deleteStruct(name);
         recv_deleteStruct();
 
         #else
-        var asyncResult = Begin_deleteStruct(null, null, id);
+        var asyncResult = Begin_deleteStruct(null, null, name);
         End_deleteStruct(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_deleteStruct(AsyncCallback callback, object state, int id)
+      public IAsyncResult send_deleteStruct(AsyncCallback callback, object state, string name)
       #else
-      public void send_deleteStruct(int id)
+      public void send_deleteStruct(string name)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("deleteStruct", TMessageType.Call, seqid_));
         deleteStruct_args args = new deleteStruct_args();
-        args.Id = id;
+        args.Name = name;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -579,7 +579,7 @@ namespace Idaas
         args.Read(iprot);
         iprot.ReadMessageEnd();
         deleteEnum_result result = new deleteEnum_result();
-        iface_.deleteEnum(args.Id);
+        iface_.deleteEnum(args.Name);
         oprot.WriteMessageBegin(new TMessage("deleteEnum", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -618,7 +618,7 @@ namespace Idaas
         args.Read(iprot);
         iprot.ReadMessageEnd();
         deleteStruct_result result = new deleteStruct_result();
-        iface_.deleteStruct(args.Id);
+        iface_.deleteStruct(args.Name);
         oprot.WriteMessageBegin(new TMessage("deleteStruct", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -888,9 +888,9 @@ namespace Idaas
     #endif
     public partial class storeEnum_result : TBase
     {
-      private int _success;
+      private bool _success;
 
-      public int Success
+      public bool Success
       {
         get
         {
@@ -928,8 +928,8 @@ namespace Idaas
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.I32) {
-                Success = iprot.ReadI32();
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -950,10 +950,10 @@ namespace Idaas
 
         if (this.__isset.success) {
           field.Name = "Success";
-          field.Type = TType.I32;
+          field.Type = TType.Bool;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Success);
+          oprot.WriteBool(Success);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -976,18 +976,18 @@ namespace Idaas
     #endif
     public partial class deleteEnum_args : TBase
     {
-      private int _id;
+      private string _name;
 
-      public int Id
+      public string Name
       {
         get
         {
-          return _id;
+          return _name;
         }
         set
         {
-          __isset.id = true;
-          this._id = value;
+          __isset.name = true;
+          this._name = value;
         }
       }
 
@@ -997,7 +997,7 @@ namespace Idaas
       [Serializable]
       #endif
       public struct Isset {
-        public bool id;
+        public bool name;
       }
 
       public deleteEnum_args() {
@@ -1016,8 +1016,8 @@ namespace Idaas
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32) {
-                Id = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                Name = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1035,12 +1035,12 @@ namespace Idaas
         TStruct struc = new TStruct("deleteEnum_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (__isset.id) {
-          field.Name = "id";
-          field.Type = TType.I32;
+        if (Name != null && __isset.name) {
+          field.Name = "name";
+          field.Type = TType.String;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Id);
+          oprot.WriteString(Name);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -1049,8 +1049,8 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("deleteEnum_args(");
-        sb.Append("Id: ");
-        sb.Append(Id);
+        sb.Append("Name: ");
+        sb.Append(Name);
         sb.Append(")");
         return sb.ToString();
       }
@@ -1352,9 +1352,9 @@ namespace Idaas
     #endif
     public partial class storeStructure_result : TBase
     {
-      private int _success;
+      private bool _success;
 
-      public int Success
+      public bool Success
       {
         get
         {
@@ -1392,8 +1392,8 @@ namespace Idaas
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.I32) {
-                Success = iprot.ReadI32();
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1414,10 +1414,10 @@ namespace Idaas
 
         if (this.__isset.success) {
           field.Name = "Success";
-          field.Type = TType.I32;
+          field.Type = TType.Bool;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Success);
+          oprot.WriteBool(Success);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -1440,18 +1440,18 @@ namespace Idaas
     #endif
     public partial class deleteStruct_args : TBase
     {
-      private int _id;
+      private string _name;
 
-      public int Id
+      public string Name
       {
         get
         {
-          return _id;
+          return _name;
         }
         set
         {
-          __isset.id = true;
-          this._id = value;
+          __isset.name = true;
+          this._name = value;
         }
       }
 
@@ -1461,7 +1461,7 @@ namespace Idaas
       [Serializable]
       #endif
       public struct Isset {
-        public bool id;
+        public bool name;
       }
 
       public deleteStruct_args() {
@@ -1480,8 +1480,8 @@ namespace Idaas
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32) {
-                Id = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                Name = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1499,12 +1499,12 @@ namespace Idaas
         TStruct struc = new TStruct("deleteStruct_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (__isset.id) {
-          field.Name = "id";
-          field.Type = TType.I32;
+        if (Name != null && __isset.name) {
+          field.Name = "name";
+          field.Type = TType.String;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Id);
+          oprot.WriteString(Name);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -1513,8 +1513,8 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("deleteStruct_args(");
-        sb.Append("Id: ");
-        sb.Append(Id);
+        sb.Append("Name: ");
+        sb.Append(Name);
         sb.Append(")");
         return sb.ToString();
       }

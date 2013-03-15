@@ -17,36 +17,26 @@
 namespace idaas {
 
 typedef struct _ida_enum_const__isset {
-  _ida_enum_const__isset() : id(true), name(false), value(false), serial(false), mask(true) {}
-  bool id;
-  bool name;
-  bool value;
-  bool serial;
+  _ida_enum_const__isset() : mask(true) {}
   bool mask;
 } _ida_enum_const__isset;
 
 class ida_enum_const {
  public:
 
-  static const char* ascii_fingerprint; // = "9EE5A5E70DAA20144C7D83B8D2568FFF";
-  static const uint8_t binary_fingerprint[16]; // = {0x9E,0xE5,0xA5,0xE7,0x0D,0xAA,0x20,0x14,0x4C,0x7D,0x83,0xB8,0xD2,0x56,0x8F,0xFF};
+  static const char* ascii_fingerprint; // = "28C2ECC89260BADB9C70330FBF47BFA8";
+  static const uint8_t binary_fingerprint[16]; // = {0x28,0xC2,0xEC,0xC8,0x92,0x60,0xBA,0xDB,0x9C,0x70,0x33,0x0F,0xBF,0x47,0xBF,0xA8};
 
-  ida_enum_const() : id(-1), name(), value(0), serial(0), mask(-1) {
+  ida_enum_const() : name(), value(0), mask(-1) {
   }
 
   virtual ~ida_enum_const() throw() {}
 
-  int32_t id;
   std::string name;
   int32_t value;
-  int8_t serial;
   int32_t mask;
 
   _ida_enum_const__isset __isset;
-
-  void __set_id(const int32_t val) {
-    id = val;
-  }
 
   void __set_name(const std::string& val) {
     name = val;
@@ -56,23 +46,15 @@ class ida_enum_const {
     value = val;
   }
 
-  void __set_serial(const int8_t val) {
-    serial = val;
-  }
-
   void __set_mask(const int32_t val) {
     mask = val;
   }
 
   bool operator == (const ida_enum_const & rhs) const
   {
-    if (!(id == rhs.id))
-      return false;
     if (!(name == rhs.name))
       return false;
     if (!(value == rhs.value))
-      return false;
-    if (!(serial == rhs.serial))
       return false;
     if (!(mask == rhs.mask))
       return false;
@@ -92,9 +74,7 @@ class ida_enum_const {
 void swap(ida_enum_const &a, ida_enum_const &b);
 
 typedef struct _ida_enum__isset {
-  _ida_enum__isset() : id(true), name(false), isBitfield(false), constants(false) {}
-  bool id;
-  bool name;
+  _ida_enum__isset() : isBitfield(true), constants(false) {}
   bool isBitfield;
   bool constants;
 } _ida_enum__isset;
@@ -102,24 +82,19 @@ typedef struct _ida_enum__isset {
 class ida_enum {
  public:
 
-  static const char* ascii_fingerprint; // = "BD5486D740F03067C1D7FE53AE3F6204";
-  static const uint8_t binary_fingerprint[16]; // = {0xBD,0x54,0x86,0xD7,0x40,0xF0,0x30,0x67,0xC1,0xD7,0xFE,0x53,0xAE,0x3F,0x62,0x04};
+  static const char* ascii_fingerprint; // = "5826940A67BB88BC946A74206572D8CB";
+  static const uint8_t binary_fingerprint[16]; // = {0x58,0x26,0x94,0x0A,0x67,0xBB,0x88,0xBC,0x94,0x6A,0x74,0x20,0x65,0x72,0xD8,0xCB};
 
-  ida_enum() : id(-1), name(), isBitfield(0) {
+  ida_enum() : name(), isBitfield(false) {
   }
 
   virtual ~ida_enum() throw() {}
 
-  int32_t id;
   std::string name;
   bool isBitfield;
   std::vector<ida_enum_const>  constants;
 
   _ida_enum__isset __isset;
-
-  void __set_id(const int32_t val) {
-    id = val;
-  }
 
   void __set_name(const std::string& val) {
     name = val;
@@ -135,8 +110,6 @@ class ida_enum {
 
   bool operator == (const ida_enum & rhs) const
   {
-    if (!(id == rhs.id))
-      return false;
     if (!(name == rhs.name))
       return false;
     if (!(isBitfield == rhs.isBitfield))
@@ -158,33 +131,20 @@ class ida_enum {
 
 void swap(ida_enum &a, ida_enum &b);
 
-typedef struct _ida_struct_member__isset {
-  _ida_struct_member__isset() : id(true), name(false), type(false) {}
-  bool id;
-  bool name;
-  bool type;
-} _ida_struct_member__isset;
 
 class ida_struct_member {
  public:
 
-  static const char* ascii_fingerprint; // = "3368C2F81F2FEF71F11EDACDB2A3ECEF";
-  static const uint8_t binary_fingerprint[16]; // = {0x33,0x68,0xC2,0xF8,0x1F,0x2F,0xEF,0x71,0xF1,0x1E,0xDA,0xCD,0xB2,0xA3,0xEC,0xEF};
+  static const char* ascii_fingerprint; // = "07A9615F837F7D0A952B595DD3020972";
+  static const uint8_t binary_fingerprint[16]; // = {0x07,0xA9,0x61,0x5F,0x83,0x7F,0x7D,0x0A,0x95,0x2B,0x59,0x5D,0xD3,0x02,0x09,0x72};
 
-  ida_struct_member() : id(-1), name(), type() {
+  ida_struct_member() : name(), type() {
   }
 
   virtual ~ida_struct_member() throw() {}
 
-  int32_t id;
   std::string name;
   std::string type;
-
-  _ida_struct_member__isset __isset;
-
-  void __set_id(const int32_t val) {
-    id = val;
-  }
 
   void __set_name(const std::string& val) {
     name = val;
@@ -196,8 +156,6 @@ class ida_struct_member {
 
   bool operator == (const ida_struct_member & rhs) const
   {
-    if (!(id == rhs.id))
-      return false;
     if (!(name == rhs.name))
       return false;
     if (!(type == rhs.type))
@@ -218,32 +176,25 @@ class ida_struct_member {
 void swap(ida_struct_member &a, ida_struct_member &b);
 
 typedef struct _ida_struct__isset {
-  _ida_struct__isset() : id(true), name(false), members(false) {}
-  bool id;
-  bool name;
+  _ida_struct__isset() : members(false) {}
   bool members;
 } _ida_struct__isset;
 
 class ida_struct {
  public:
 
-  static const char* ascii_fingerprint; // = "0320D9EFA4022F6D8B77B06E0DBBE8F5";
-  static const uint8_t binary_fingerprint[16]; // = {0x03,0x20,0xD9,0xEF,0xA4,0x02,0x2F,0x6D,0x8B,0x77,0xB0,0x6E,0x0D,0xBB,0xE8,0xF5};
+  static const char* ascii_fingerprint; // = "18B42A3192AED0589A6C59CA5782E811";
+  static const uint8_t binary_fingerprint[16]; // = {0x18,0xB4,0x2A,0x31,0x92,0xAE,0xD0,0x58,0x9A,0x6C,0x59,0xCA,0x57,0x82,0xE8,0x11};
 
-  ida_struct() : id(-1), name() {
+  ida_struct() : name() {
   }
 
   virtual ~ida_struct() throw() {}
 
-  int32_t id;
   std::string name;
   std::vector<ida_struct_member>  members;
 
   _ida_struct__isset __isset;
-
-  void __set_id(const int32_t val) {
-    id = val;
-  }
 
   void __set_name(const std::string& val) {
     name = val;
@@ -255,8 +206,6 @@ class ida_struct {
 
   bool operator == (const ida_struct & rhs) const
   {
-    if (!(id == rhs.id))
-      return false;
     if (!(name == rhs.name))
       return false;
     if (!(members == rhs.members))

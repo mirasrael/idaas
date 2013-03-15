@@ -11,15 +11,15 @@ public:
 
 	void listEnums(std::vector<idaas::ida_enum> & _return);
 
-	int32_t storeEnum(const idaas::ida_enum& _enum);
+	bool storeEnum(const idaas::ida_enum& _enum);
 
-	void deleteEnum(const int32_t id);
+	void deleteEnum(const std::string& name);
 
 	void listStructures(std::vector<idaas::ida_struct> & _return);
 
-	int32_t storeStructure(const idaas::ida_struct& _struct);
+	bool storeStructure(const idaas::ida_struct& _struct);
 
-	void deleteStruct(const int32_t id);
+	void deleteStruct(const std::string& name);
 
 	void waitBackgroundTasks();
 };

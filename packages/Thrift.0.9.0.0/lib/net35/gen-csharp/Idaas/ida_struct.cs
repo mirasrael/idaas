@@ -23,22 +23,8 @@ namespace Idaas
   #endif
   public partial class ida_struct : TBase
   {
-    private int _id;
     private string _name;
     private List<ida_struct_member> _members;
-
-    public int Id
-    {
-      get
-      {
-        return _id;
-      }
-      set
-      {
-        __isset.id = true;
-        this._id = value;
-      }
-    }
 
     public string Name
     {
@@ -72,13 +58,11 @@ namespace Idaas
     [Serializable]
     #endif
     public struct Isset {
-      public bool id;
       public bool name;
       public bool members;
     }
 
     public ida_struct() {
-      this._id = -1;
     }
 
     public void Read (TProtocol iprot)
@@ -94,20 +78,13 @@ namespace Idaas
         switch (field.ID)
         {
           case 1:
-            if (field.Type == TType.I32) {
-              Id = iprot.ReadI32();
-            } else { 
-              TProtocolUtil.Skip(iprot, field.Type);
-            }
-            break;
-          case 2:
             if (field.Type == TType.String) {
               Name = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 3:
+          case 2:
             if (field.Type == TType.List) {
               {
                 Members = new List<ida_struct_member>();
@@ -138,18 +115,10 @@ namespace Idaas
       TStruct struc = new TStruct("ida_struct");
       oprot.WriteStructBegin(struc);
       TField field = new TField();
-      if (__isset.id) {
-        field.Name = "id";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(Id);
-        oprot.WriteFieldEnd();
-      }
       if (Name != null && __isset.name) {
         field.Name = "name";
         field.Type = TType.String;
-        field.ID = 2;
+        field.ID = 1;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
@@ -157,7 +126,7 @@ namespace Idaas
       if (Members != null && __isset.members) {
         field.Name = "members";
         field.Type = TType.List;
-        field.ID = 3;
+        field.ID = 2;
         oprot.WriteFieldBegin(field);
         {
           oprot.WriteListBegin(new TList(TType.Struct, Members.Count));
@@ -175,9 +144,7 @@ namespace Idaas
 
     public override string ToString() {
       StringBuilder sb = new StringBuilder("ida_struct(");
-      sb.Append("Id: ");
-      sb.Append(Id);
-      sb.Append(",Name: ");
+      sb.Append("Name: ");
       sb.Append(Name);
       sb.Append(",Members: ");
       sb.Append(Members);

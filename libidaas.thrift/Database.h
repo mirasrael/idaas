@@ -16,11 +16,11 @@ class DatabaseIf {
  public:
   virtual ~DatabaseIf() {}
   virtual void listEnums(std::vector<ida_enum> & _return) = 0;
-  virtual int32_t storeEnum(const ida_enum& _enum) = 0;
-  virtual void deleteEnum(const int32_t id) = 0;
+  virtual bool storeEnum(const ida_enum& _enum) = 0;
+  virtual void deleteEnum(const std::string& name) = 0;
   virtual void listStructures(std::vector<ida_struct> & _return) = 0;
-  virtual int32_t storeStructure(const ida_struct& _struct) = 0;
-  virtual void deleteStruct(const int32_t id) = 0;
+  virtual bool storeStructure(const ida_struct& _struct) = 0;
+  virtual void deleteStruct(const std::string& name) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
 
@@ -54,21 +54,21 @@ class DatabaseNull : virtual public DatabaseIf {
   void listEnums(std::vector<ida_enum> & /* _return */) {
     return;
   }
-  int32_t storeEnum(const ida_enum& /* _enum */) {
-    int32_t _return = 0;
+  bool storeEnum(const ida_enum& /* _enum */) {
+    bool _return = false;
     return _return;
   }
-  void deleteEnum(const int32_t /* id */) {
+  void deleteEnum(const std::string& /* name */) {
     return;
   }
   void listStructures(std::vector<ida_struct> & /* _return */) {
     return;
   }
-  int32_t storeStructure(const ida_struct& /* _struct */) {
-    int32_t _return = 0;
+  bool storeStructure(const ida_struct& /* _struct */) {
+    bool _return = false;
     return _return;
   }
-  void deleteStruct(const int32_t /* id */) {
+  void deleteStruct(const std::string& /* name */) {
     return;
   }
   void waitBackgroundTasks() {
@@ -234,11 +234,11 @@ class Database_storeEnum_result {
 
   virtual ~Database_storeEnum_result() throw() {}
 
-  int32_t success;
+  bool success;
 
   _Database_storeEnum_result__isset __isset;
 
-  void __set_success(const int32_t val) {
+  void __set_success(const bool val) {
     success = val;
   }
 
@@ -270,7 +270,7 @@ class Database_storeEnum_presult {
 
   virtual ~Database_storeEnum_presult() throw() {}
 
-  int32_t* success;
+  bool* success;
 
   _Database_storeEnum_presult__isset __isset;
 
@@ -279,29 +279,29 @@ class Database_storeEnum_presult {
 };
 
 typedef struct _Database_deleteEnum_args__isset {
-  _Database_deleteEnum_args__isset() : id(false) {}
-  bool id;
+  _Database_deleteEnum_args__isset() : name(false) {}
+  bool name;
 } _Database_deleteEnum_args__isset;
 
 class Database_deleteEnum_args {
  public:
 
-  Database_deleteEnum_args() : id(0) {
+  Database_deleteEnum_args() : name() {
   }
 
   virtual ~Database_deleteEnum_args() throw() {}
 
-  int32_t id;
+  std::string name;
 
   _Database_deleteEnum_args__isset __isset;
 
-  void __set_id(const int32_t val) {
-    id = val;
+  void __set_name(const std::string& val) {
+    name = val;
   }
 
   bool operator == (const Database_deleteEnum_args & rhs) const
   {
-    if (!(id == rhs.id))
+    if (!(name == rhs.name))
       return false;
     return true;
   }
@@ -323,7 +323,7 @@ class Database_deleteEnum_pargs {
 
   virtual ~Database_deleteEnum_pargs() throw() {}
 
-  const int32_t* id;
+  const std::string* name;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -524,11 +524,11 @@ class Database_storeStructure_result {
 
   virtual ~Database_storeStructure_result() throw() {}
 
-  int32_t success;
+  bool success;
 
   _Database_storeStructure_result__isset __isset;
 
-  void __set_success(const int32_t val) {
+  void __set_success(const bool val) {
     success = val;
   }
 
@@ -560,7 +560,7 @@ class Database_storeStructure_presult {
 
   virtual ~Database_storeStructure_presult() throw() {}
 
-  int32_t* success;
+  bool* success;
 
   _Database_storeStructure_presult__isset __isset;
 
@@ -569,29 +569,29 @@ class Database_storeStructure_presult {
 };
 
 typedef struct _Database_deleteStruct_args__isset {
-  _Database_deleteStruct_args__isset() : id(false) {}
-  bool id;
+  _Database_deleteStruct_args__isset() : name(false) {}
+  bool name;
 } _Database_deleteStruct_args__isset;
 
 class Database_deleteStruct_args {
  public:
 
-  Database_deleteStruct_args() : id(0) {
+  Database_deleteStruct_args() : name() {
   }
 
   virtual ~Database_deleteStruct_args() throw() {}
 
-  int32_t id;
+  std::string name;
 
   _Database_deleteStruct_args__isset __isset;
 
-  void __set_id(const int32_t val) {
-    id = val;
+  void __set_name(const std::string& val) {
+    name = val;
   }
 
   bool operator == (const Database_deleteStruct_args & rhs) const
   {
-    if (!(id == rhs.id))
+    if (!(name == rhs.name))
       return false;
     return true;
   }
@@ -613,7 +613,7 @@ class Database_deleteStruct_pargs {
 
   virtual ~Database_deleteStruct_pargs() throw() {}
 
-  const int32_t* id;
+  const std::string* name;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -753,20 +753,20 @@ class DatabaseClient : virtual public DatabaseIf {
   void listEnums(std::vector<ida_enum> & _return);
   void send_listEnums();
   void recv_listEnums(std::vector<ida_enum> & _return);
-  int32_t storeEnum(const ida_enum& _enum);
+  bool storeEnum(const ida_enum& _enum);
   void send_storeEnum(const ida_enum& _enum);
-  int32_t recv_storeEnum();
-  void deleteEnum(const int32_t id);
-  void send_deleteEnum(const int32_t id);
+  bool recv_storeEnum();
+  void deleteEnum(const std::string& name);
+  void send_deleteEnum(const std::string& name);
   void recv_deleteEnum();
   void listStructures(std::vector<ida_struct> & _return);
   void send_listStructures();
   void recv_listStructures(std::vector<ida_struct> & _return);
-  int32_t storeStructure(const ida_struct& _struct);
+  bool storeStructure(const ida_struct& _struct);
   void send_storeStructure(const ida_struct& _struct);
-  int32_t recv_storeStructure();
-  void deleteStruct(const int32_t id);
-  void send_deleteStruct(const int32_t id);
+  bool recv_storeStructure();
+  void deleteStruct(const std::string& name);
+  void send_deleteStruct(const std::string& name);
   void recv_deleteStruct();
   void waitBackgroundTasks();
   void send_waitBackgroundTasks();
@@ -841,7 +841,7 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return;
   }
 
-  int32_t storeEnum(const ida_enum& _enum) {
+  bool storeEnum(const ida_enum& _enum) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -850,13 +850,13 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return ifaces_[i]->storeEnum(_enum);
   }
 
-  void deleteEnum(const int32_t id) {
+  void deleteEnum(const std::string& name) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->deleteEnum(id);
+      ifaces_[i]->deleteEnum(name);
     }
-    ifaces_[i]->deleteEnum(id);
+    ifaces_[i]->deleteEnum(name);
   }
 
   void listStructures(std::vector<ida_struct> & _return) {
@@ -869,7 +869,7 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return;
   }
 
-  int32_t storeStructure(const ida_struct& _struct) {
+  bool storeStructure(const ida_struct& _struct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -878,13 +878,13 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return ifaces_[i]->storeStructure(_struct);
   }
 
-  void deleteStruct(const int32_t id) {
+  void deleteStruct(const std::string& name) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->deleteStruct(id);
+      ifaces_[i]->deleteStruct(name);
     }
-    ifaces_[i]->deleteStruct(id);
+    ifaces_[i]->deleteStruct(name);
   }
 
   void waitBackgroundTasks() {

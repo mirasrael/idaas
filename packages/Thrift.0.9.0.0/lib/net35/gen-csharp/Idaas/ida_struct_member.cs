@@ -23,22 +23,8 @@ namespace Idaas
   #endif
   public partial class ida_struct_member : TBase
   {
-    private int _id;
     private string _name;
     private string _type;
-
-    public int Id
-    {
-      get
-      {
-        return _id;
-      }
-      set
-      {
-        __isset.id = true;
-        this._id = value;
-      }
-    }
 
     public string Name
     {
@@ -72,13 +58,11 @@ namespace Idaas
     [Serializable]
     #endif
     public struct Isset {
-      public bool id;
       public bool name;
       public bool type;
     }
 
     public ida_struct_member() {
-      this._id = -1;
     }
 
     public void Read (TProtocol iprot)
@@ -94,20 +78,13 @@ namespace Idaas
         switch (field.ID)
         {
           case 1:
-            if (field.Type == TType.I32) {
-              Id = iprot.ReadI32();
-            } else { 
-              TProtocolUtil.Skip(iprot, field.Type);
-            }
-            break;
-          case 2:
             if (field.Type == TType.String) {
               Name = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 3:
+          case 2:
             if (field.Type == TType.String) {
               Type = iprot.ReadString();
             } else { 
@@ -127,18 +104,10 @@ namespace Idaas
       TStruct struc = new TStruct("ida_struct_member");
       oprot.WriteStructBegin(struc);
       TField field = new TField();
-      if (__isset.id) {
-        field.Name = "id";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(Id);
-        oprot.WriteFieldEnd();
-      }
       if (Name != null && __isset.name) {
         field.Name = "name";
         field.Type = TType.String;
-        field.ID = 2;
+        field.ID = 1;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
@@ -146,7 +115,7 @@ namespace Idaas
       if (Type != null && __isset.type) {
         field.Name = "type";
         field.Type = TType.String;
-        field.ID = 3;
+        field.ID = 2;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Type);
         oprot.WriteFieldEnd();
@@ -157,9 +126,7 @@ namespace Idaas
 
     public override string ToString() {
       StringBuilder sb = new StringBuilder("ida_struct_member(");
-      sb.Append("Id: ");
-      sb.Append(Id);
-      sb.Append(",Name: ");
+      sb.Append("Name: ");
       sb.Append(Name);
       sb.Append(",Type: ");
       sb.Append(Type);

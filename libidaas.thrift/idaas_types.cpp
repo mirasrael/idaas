@@ -10,8 +10,8 @@
 
 namespace idaas {
 
-const char* ida_enum_const::ascii_fingerprint = "9EE5A5E70DAA20144C7D83B8D2568FFF";
-const uint8_t ida_enum_const::binary_fingerprint[16] = {0x9E,0xE5,0xA5,0xE7,0x0D,0xAA,0x20,0x14,0x4C,0x7D,0x83,0xB8,0xD2,0x56,0x8F,0xFF};
+const char* ida_enum_const::ascii_fingerprint = "28C2ECC89260BADB9C70330FBF47BFA8";
+const uint8_t ida_enum_const::binary_fingerprint[16] = {0x28,0xC2,0xEC,0xC8,0x92,0x60,0xBA,0xDB,0x9C,0x70,0x33,0x0F,0xBF,0x47,0xBF,0xA8};
 
 uint32_t ida_enum_const::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -24,6 +24,8 @@ uint32_t ida_enum_const::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   using ::apache::thrift::protocol::TProtocolException;
 
+  bool isset_name = false;
+  bool isset_value = false;
 
   while (true)
   {
@@ -34,38 +36,22 @@ uint32_t ida_enum_const::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->value);
+          isset_value = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->value);
-          this->__isset.value = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->serial);
-          this->__isset.serial = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->mask);
           this->__isset.mask = true;
@@ -82,6 +68,10 @@ uint32_t ida_enum_const::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_value)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -89,23 +79,15 @@ uint32_t ida_enum_const::write(::apache::thrift::protocol::TProtocol* oprot) con
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("ida_enum_const");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_I32, 2);
   xfer += oprot->writeI32(this->value);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("serial", ::apache::thrift::protocol::T_BYTE, 4);
-  xfer += oprot->writeByte(this->serial);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_I32, 3);
   xfer += oprot->writeI32(this->mask);
   xfer += oprot->writeFieldEnd();
 
@@ -116,16 +98,14 @@ uint32_t ida_enum_const::write(::apache::thrift::protocol::TProtocol* oprot) con
 
 void swap(ida_enum_const &a, ida_enum_const &b) {
   using ::std::swap;
-  swap(a.id, b.id);
   swap(a.name, b.name);
   swap(a.value, b.value);
-  swap(a.serial, b.serial);
   swap(a.mask, b.mask);
   swap(a.__isset, b.__isset);
 }
 
-const char* ida_enum::ascii_fingerprint = "BD5486D740F03067C1D7FE53AE3F6204";
-const uint8_t ida_enum::binary_fingerprint[16] = {0xBD,0x54,0x86,0xD7,0x40,0xF0,0x30,0x67,0xC1,0xD7,0xFE,0x53,0xAE,0x3F,0x62,0x04};
+const char* ida_enum::ascii_fingerprint = "5826940A67BB88BC946A74206572D8CB";
+const uint8_t ida_enum::binary_fingerprint[16] = {0x58,0x26,0x94,0x0A,0x67,0xBB,0x88,0xBC,0x94,0x6A,0x74,0x20,0x65,0x72,0xD8,0xCB};
 
 uint32_t ida_enum::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -138,6 +118,7 @@ uint32_t ida_enum::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   using ::apache::thrift::protocol::TProtocolException;
 
+  bool isset_name = false;
 
   while (true)
   {
@@ -148,22 +129,14 @@ uint32_t ida_enum::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->isBitfield);
           this->__isset.isBitfield = true;
@@ -171,7 +144,7 @@ uint32_t ida_enum::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->constants.clear();
@@ -200,6 +173,8 @@ uint32_t ida_enum::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -207,19 +182,15 @@ uint32_t ida_enum::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("ida_enum");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("isBitfield", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeFieldBegin("isBitfield", ::apache::thrift::protocol::T_BOOL, 2);
   xfer += oprot->writeBool(this->isBitfield);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("constants", ::apache::thrift::protocol::T_LIST, 4);
+  xfer += oprot->writeFieldBegin("constants", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->constants.size()));
     std::vector<ida_enum_const> ::const_iterator _iter5;
@@ -238,15 +209,14 @@ uint32_t ida_enum::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
 void swap(ida_enum &a, ida_enum &b) {
   using ::std::swap;
-  swap(a.id, b.id);
   swap(a.name, b.name);
   swap(a.isBitfield, b.isBitfield);
   swap(a.constants, b.constants);
   swap(a.__isset, b.__isset);
 }
 
-const char* ida_struct_member::ascii_fingerprint = "3368C2F81F2FEF71F11EDACDB2A3ECEF";
-const uint8_t ida_struct_member::binary_fingerprint[16] = {0x33,0x68,0xC2,0xF8,0x1F,0x2F,0xEF,0x71,0xF1,0x1E,0xDA,0xCD,0xB2,0xA3,0xEC,0xEF};
+const char* ida_struct_member::ascii_fingerprint = "07A9615F837F7D0A952B595DD3020972";
+const uint8_t ida_struct_member::binary_fingerprint[16] = {0x07,0xA9,0x61,0x5F,0x83,0x7F,0x7D,0x0A,0x95,0x2B,0x59,0x5D,0xD3,0x02,0x09,0x72};
 
 uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -259,6 +229,8 @@ uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   using ::apache::thrift::protocol::TProtocolException;
 
+  bool isset_name = false;
+  bool isset_type = false;
 
   while (true)
   {
@@ -269,25 +241,17 @@ uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->type);
-          this->__isset.type = true;
+          isset_type = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -301,6 +265,10 @@ uint32_t ida_struct_member::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_type)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -308,15 +276,11 @@ uint32_t ida_struct_member::write(::apache::thrift::protocol::TProtocol* oprot) 
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("ida_struct_member");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString(this->type);
   xfer += oprot->writeFieldEnd();
 
@@ -327,14 +291,12 @@ uint32_t ida_struct_member::write(::apache::thrift::protocol::TProtocol* oprot) 
 
 void swap(ida_struct_member &a, ida_struct_member &b) {
   using ::std::swap;
-  swap(a.id, b.id);
   swap(a.name, b.name);
   swap(a.type, b.type);
-  swap(a.__isset, b.__isset);
 }
 
-const char* ida_struct::ascii_fingerprint = "0320D9EFA4022F6D8B77B06E0DBBE8F5";
-const uint8_t ida_struct::binary_fingerprint[16] = {0x03,0x20,0xD9,0xEF,0xA4,0x02,0x2F,0x6D,0x8B,0x77,0xB0,0x6E,0x0D,0xBB,0xE8,0xF5};
+const char* ida_struct::ascii_fingerprint = "18B42A3192AED0589A6C59CA5782E811";
+const uint8_t ida_struct::binary_fingerprint[16] = {0x18,0xB4,0x2A,0x31,0x92,0xAE,0xD0,0x58,0x9A,0x6C,0x59,0xCA,0x57,0x82,0xE8,0x11};
 
 uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -347,6 +309,7 @@ uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   using ::apache::thrift::protocol::TProtocolException;
 
+  bool isset_name = false;
 
   while (true)
   {
@@ -357,22 +320,14 @@ uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->members.clear();
@@ -401,6 +356,8 @@ uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -408,15 +365,11 @@ uint32_t ida_struct::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("ida_struct");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("members", ::apache::thrift::protocol::T_LIST, 3);
+  xfer += oprot->writeFieldBegin("members", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->members.size()));
     std::vector<ida_struct_member> ::const_iterator _iter11;
@@ -435,7 +388,6 @@ uint32_t ida_struct::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
 void swap(ida_struct &a, ida_struct &b) {
   using ::std::swap;
-  swap(a.id, b.id);
   swap(a.name, b.name);
   swap(a.members, b.members);
   swap(a.__isset, b.__isset);

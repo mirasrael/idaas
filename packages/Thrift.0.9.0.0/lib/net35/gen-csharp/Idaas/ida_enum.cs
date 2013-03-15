@@ -23,23 +23,9 @@ namespace Idaas
   #endif
   public partial class ida_enum : TBase
   {
-    private int _id;
     private string _name;
     private bool _isBitfield;
     private List<ida_enum_const> _constants;
-
-    public int Id
-    {
-      get
-      {
-        return _id;
-      }
-      set
-      {
-        __isset.id = true;
-        this._id = value;
-      }
-    }
 
     public string Name
     {
@@ -86,14 +72,13 @@ namespace Idaas
     [Serializable]
     #endif
     public struct Isset {
-      public bool id;
       public bool name;
       public bool isBitfield;
       public bool constants;
     }
 
     public ida_enum() {
-      this._id = -1;
+      this._isBitfield = false;
     }
 
     public void Read (TProtocol iprot)
@@ -109,27 +94,20 @@ namespace Idaas
         switch (field.ID)
         {
           case 1:
-            if (field.Type == TType.I32) {
-              Id = iprot.ReadI32();
-            } else { 
-              TProtocolUtil.Skip(iprot, field.Type);
-            }
-            break;
-          case 2:
             if (field.Type == TType.String) {
               Name = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 3:
+          case 2:
             if (field.Type == TType.Bool) {
               IsBitfield = iprot.ReadBool();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 4:
+          case 3:
             if (field.Type == TType.List) {
               {
                 Constants = new List<ida_enum_const>();
@@ -160,18 +138,10 @@ namespace Idaas
       TStruct struc = new TStruct("ida_enum");
       oprot.WriteStructBegin(struc);
       TField field = new TField();
-      if (__isset.id) {
-        field.Name = "id";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(Id);
-        oprot.WriteFieldEnd();
-      }
       if (Name != null && __isset.name) {
         field.Name = "name";
         field.Type = TType.String;
-        field.ID = 2;
+        field.ID = 1;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
@@ -179,7 +149,7 @@ namespace Idaas
       if (__isset.isBitfield) {
         field.Name = "isBitfield";
         field.Type = TType.Bool;
-        field.ID = 3;
+        field.ID = 2;
         oprot.WriteFieldBegin(field);
         oprot.WriteBool(IsBitfield);
         oprot.WriteFieldEnd();
@@ -187,7 +157,7 @@ namespace Idaas
       if (Constants != null && __isset.constants) {
         field.Name = "constants";
         field.Type = TType.List;
-        field.ID = 4;
+        field.ID = 3;
         oprot.WriteFieldBegin(field);
         {
           oprot.WriteListBegin(new TList(TType.Struct, Constants.Count));
@@ -205,9 +175,7 @@ namespace Idaas
 
     public override string ToString() {
       StringBuilder sb = new StringBuilder("ida_enum(");
-      sb.Append("Id: ");
-      sb.Append(Id);
-      sb.Append(",Name: ");
+      sb.Append("Name: ");
       sb.Append(Name);
       sb.Append(",IsBitfield: ");
       sb.Append(IsBitfield);

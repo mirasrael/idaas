@@ -37,6 +37,7 @@ void __stdcall logerror(const char *error) {
 
 void c_log(const char *message) {
 	logmsg(message);
+	logmsg("\n");
 }
 
 int idaapi CreateConnection() {

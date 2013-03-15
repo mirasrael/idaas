@@ -268,8 +268,8 @@ uint32_t Database_storeEnum_result::read(::apache::thrift::protocol::TProtocol* 
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -294,8 +294,8 @@ uint32_t Database_storeEnum_result::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeStructBegin("Database_storeEnum_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -324,8 +324,8 @@ uint32_t Database_storeEnum_presult::read(::apache::thrift::protocol::TProtocol*
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -364,9 +364,9 @@ uint32_t Database_deleteEnum_args::read(::apache::thrift::protocol::TProtocol* i
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          this->__isset.name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -387,8 +387,8 @@ uint32_t Database_deleteEnum_args::write(::apache::thrift::protocol::TProtocol* 
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_deleteEnum_args");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -400,8 +400,8 @@ uint32_t Database_deleteEnum_pargs::write(::apache::thrift::protocol::TProtocol*
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_deleteEnum_pargs");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->id)));
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->name)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -734,8 +734,8 @@ uint32_t Database_storeStructure_result::read(::apache::thrift::protocol::TProto
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -760,8 +760,8 @@ uint32_t Database_storeStructure_result::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeStructBegin("Database_storeStructure_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -790,8 +790,8 @@ uint32_t Database_storeStructure_presult::read(::apache::thrift::protocol::TProt
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -830,9 +830,9 @@ uint32_t Database_deleteStruct_args::read(::apache::thrift::protocol::TProtocol*
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          this->__isset.name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -853,8 +853,8 @@ uint32_t Database_deleteStruct_args::write(::apache::thrift::protocol::TProtocol
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_deleteStruct_args");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -866,8 +866,8 @@ uint32_t Database_deleteStruct_pargs::write(::apache::thrift::protocol::TProtoco
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_deleteStruct_pargs");
 
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->id)));
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->name)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1107,7 +1107,7 @@ void DatabaseClient::recv_listEnums(std::vector<ida_enum> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listEnums failed: unknown result");
 }
 
-int32_t DatabaseClient::storeEnum(const ida_enum& _enum)
+bool DatabaseClient::storeEnum(const ida_enum& _enum)
 {
   send_storeEnum(_enum);
   return recv_storeEnum();
@@ -1127,7 +1127,7 @@ void DatabaseClient::send_storeEnum(const ida_enum& _enum)
   oprot_->getTransport()->flush();
 }
 
-int32_t DatabaseClient::recv_storeEnum()
+bool DatabaseClient::recv_storeEnum()
 {
 
   int32_t rseqid = 0;
@@ -1152,7 +1152,7 @@ int32_t DatabaseClient::recv_storeEnum()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
+  bool _return;
   Database_storeEnum_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -1165,19 +1165,19 @@ int32_t DatabaseClient::recv_storeEnum()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "storeEnum failed: unknown result");
 }
 
-void DatabaseClient::deleteEnum(const int32_t id)
+void DatabaseClient::deleteEnum(const std::string& name)
 {
-  send_deleteEnum(id);
+  send_deleteEnum(name);
   recv_deleteEnum();
 }
 
-void DatabaseClient::send_deleteEnum(const int32_t id)
+void DatabaseClient::send_deleteEnum(const std::string& name)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("deleteEnum", ::apache::thrift::protocol::T_CALL, cseqid);
 
   Database_deleteEnum_pargs args;
-  args.id = &id;
+  args.name = &name;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1275,7 +1275,7 @@ void DatabaseClient::recv_listStructures(std::vector<ida_struct> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listStructures failed: unknown result");
 }
 
-int32_t DatabaseClient::storeStructure(const ida_struct& _struct)
+bool DatabaseClient::storeStructure(const ida_struct& _struct)
 {
   send_storeStructure(_struct);
   return recv_storeStructure();
@@ -1295,7 +1295,7 @@ void DatabaseClient::send_storeStructure(const ida_struct& _struct)
   oprot_->getTransport()->flush();
 }
 
-int32_t DatabaseClient::recv_storeStructure()
+bool DatabaseClient::recv_storeStructure()
 {
 
   int32_t rseqid = 0;
@@ -1320,7 +1320,7 @@ int32_t DatabaseClient::recv_storeStructure()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
+  bool _return;
   Database_storeStructure_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -1333,19 +1333,19 @@ int32_t DatabaseClient::recv_storeStructure()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "storeStructure failed: unknown result");
 }
 
-void DatabaseClient::deleteStruct(const int32_t id)
+void DatabaseClient::deleteStruct(const std::string& name)
 {
-  send_deleteStruct(id);
+  send_deleteStruct(name);
   recv_deleteStruct();
 }
 
-void DatabaseClient::send_deleteStruct(const int32_t id)
+void DatabaseClient::send_deleteStruct(const std::string& name)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("deleteStruct", ::apache::thrift::protocol::T_CALL, cseqid);
 
   Database_deleteStruct_pargs args;
-  args.id = &id;
+  args.name = &name;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1588,7 +1588,7 @@ void DatabaseProcessor::process_deleteEnum(int32_t seqid, ::apache::thrift::prot
 
   Database_deleteEnum_result result;
   try {
-    iface_->deleteEnum(args.id);
+    iface_->deleteEnum(args.name);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "Database.deleteEnum");
@@ -1749,7 +1749,7 @@ void DatabaseProcessor::process_deleteStruct(int32_t seqid, ::apache::thrift::pr
 
   Database_deleteStruct_result result;
   try {
-    iface_->deleteStruct(args.id);
+    iface_->deleteStruct(args.name);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "Database.deleteStruct");

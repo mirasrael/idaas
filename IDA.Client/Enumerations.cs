@@ -50,9 +50,8 @@ namespace Ida.Client
 		}
 
         public bool Store(ida_enum @enum)
-        {
-            @enum.Id = _client.storeEnum(@enum);
-            return true;
+        {            
+            return _client.storeEnum(@enum);
         }        
 
         public void Delete(ida_enum @enum)
@@ -61,10 +60,7 @@ namespace Ida.Client
             {
                 _items.Remove(@enum);
             }
-            if (@enum.Id != 0)
-            {
-                _client.send_deleteEnum(@enum.Id);
-            }
+            _client.deleteEnum(@enum.Name);
         }        
 
         public IEnumerator<ida_enum> GetEnumerator()

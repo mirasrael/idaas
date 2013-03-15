@@ -64,7 +64,7 @@ _Ret run_in_main_thread(_Ret (_This::*func)(A0), _This* obj, A0 arg0) {
 		));
 };
 
-#define RUN_IN_MAIN_THREAD(RET, ...)\
+#define RUN_IF_IN_MAIN_THREAD(RET, ...)\
 	if (!is_main_thread()) {\
 	return (RET)run_in_main_thread(##__VA_ARGS__);\
 	}\
@@ -84,12 +84,10 @@ public:
 	virtual int idaapi visit_enum_member(const_t cid, uval_t value);
 };
 
-int idaapi enumeration_list_copier::visit_enum_member(const_t cid, uval_t value) {	
-	constantsIt->id = cid;
+int idaapi enumeration_list_copier::visit_enum_member(const_t cid, uval_t value) {		
 	get_enum_member_name(cid, buffer, sizeof(buffer));
 	constantsIt->name = buffer;
-	constantsIt->value = value;
-	constantsIt->serial = get_enum_member_serial(cid);
+	constantsIt->value = value;	
 	constantsIt->mask = get_enum_member_bmask(cid);	
 	constantsIt++;
 	return 0;
@@ -101,8 +99,7 @@ void enumeration_list_copier::copy_to(std::vector<ida_enum>& _result) {
 	for (size_t i = 0; i < count; i++) {
 		current = &_result.at(i);
 		enum_t id = getn_enum(i);
-		get_enum_name(id, buffer, sizeof(buffer));
-		current->id = id;
+		get_enum_name(id, buffer, sizeof(buffer));		
 		current->name = buffer;
 		current->isBitfield = is_bf(id);
 		current->constants.resize(get_enum_size(id));
@@ -113,7 +110,7 @@ void enumeration_list_copier::copy_to(std::vector<ida_enum>& _result) {
 
 void DatabaseHandler::listEnums(std::vector<ida_enum> & _return)
 {
-	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::listEnums, this, _return);
+	RUN_IF_IN_MAIN_THREAD(void, &DatabaseHandler::listEnums, this, _return);
 	enumeration_list_copier copier;
 	copier.copy_to(_return);	
 }
@@ -125,51 +122,54 @@ struct delete_enum_members : public enum_member_visitor_t {
 	}
 };
 
-int32_t DatabaseHandler::storeEnum( const ida_enum& _enum )
-{	
-	RUN_IN_MAIN_THREAD(int32_t, &DatabaseHandler::storeEnum, this, _enum);
-	enum_t id = _enum.id;
-	if (id != -1) {		
-		set_enum_name(id, _enum.name.c_str());
+bool DatabaseHandler::storeEnum( const ida_enum& _enum )
+{		
+	RUN_IF_IN_MAIN_THREAD(int32_t, &DatabaseHandler::storeEnum, this, _enum);
+	enum_t id = get_enum(_enum.name.c_str());
+	if (BADADDR != id) {		
 		for_all_enum_members(id, delete_enum_members());		
 	} else {
-		id = add_enum(BADADDR, _enum.name.c_str(), 0);		
-	}
+		id = add_enum(BADADDR, _enum.name.c_str(), 0);
+		if (id == BADADDR)
+			return false;
+	}	
 	set_enum_bf(id, _enum.isBitfield);		
-	for (std::vector<ida_enum_const>::const_iterator it = _enum.constants.begin(); it != _enum.constants.end(); it++) {		
-		add_enum_member(id, it->name.c_str(), it->value, it->mask);
+	for (std::vector<ida_enum_const>::const_iterator it = _enum.constants.begin(); it != _enum.constants.end(); it++) {
+		if (0 != add_enum_member(id, it->name.c_str(), it->value, it->mask)) {
+			return false;
+		}
 	}
-	return id;
+	return true;
 }
 
-void DatabaseHandler::deleteEnum( const int32_t id )
+void DatabaseHandler::deleteEnum( const std::string& name )
 {
-	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::deleteEnum, this, id);
-	del_enum(id);
+	RUN_IF_IN_MAIN_THREAD(void, &DatabaseHandler::deleteEnum, this, name);
+	del_enum(get_enum(name.c_str()));
 }
 
 void DatabaseHandler::waitBackgroundTasks()
 {
-	RUN_IN_MAIN_THREAD(void, &DatabaseHandler::waitBackgroundTasks, this);
+	RUN_IF_IN_MAIN_THREAD(void, &DatabaseHandler::waitBackgroundTasks, this);
 	autoWait();
 }
 
 void DatabaseHandler::listStructures( std::vector<ida_struct> & _return )
 {
-	RUN_IN_MAIN_THREAD(void, &StructureHandler::list, &structureHandler, _return);	
+	RUN_IF_IN_MAIN_THREAD(void, &StructureHandler::list, &structureHandler, _return);	
 	structureHandler.list(_return);
 }
 
-int32_t DatabaseHandler::storeStructure( const ida_struct& _struct )
+bool DatabaseHandler::storeStructure( const ida_struct& _struct )
 {
-	RUN_IN_MAIN_THREAD(int32_t, &StructureHandler::store, &structureHandler, _struct);
+	RUN_IF_IN_MAIN_THREAD(bool, &StructureHandler::store, &structureHandler, _struct);
 	return structureHandler.store(_struct);
 }
 
-void DatabaseHandler::deleteStruct( const int32_t id )
-{
-	RUN_IN_MAIN_THREAD(void, &StructureHandler::_delete, &structureHandler, id);	
-	structureHandler._delete(id);
+void DatabaseHandler::deleteStruct( const std::string& name )
+{	
+	RUN_IF_IN_MAIN_THREAD(void, &StructureHandler::_delete, &structureHandler, name);
+	structureHandler._delete(name);
 }
 
 

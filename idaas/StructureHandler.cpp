@@ -22,8 +22,7 @@ void struct_list_copier::copy_to(std::vector<ida_struct>&  _result) {
 	}
 }
 
-void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {
-	to.id = from->id;
+void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {	
 	get_struc_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
 
@@ -34,8 +33,7 @@ void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {
 	}	
 }
 
-void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to) {
-	to.id = from->id;	
+void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to) {	
 	get_member_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
 	qtype type, fields;
@@ -53,18 +51,19 @@ StructureHandler::~StructureHandler(void)
 {
 }
 
-int32_t StructureHandler::store( const ida_struct &_struct )
+bool StructureHandler::store( const ida_struct &_struct )
 {
-	tid_t id = _struct.id;
+	tid_t id = get_struc_id(_struct.name.c_str());
 	struc_t *struc;
 	if (id != -1) {
-		struc = get_struc(id);
-		set_struc_name(id, _struct.name.c_str());
+		struc = get_struc(id);		
 		del_struc_members(struc, 0, get_struc_size(struc));
 	} else {
 		id = add_struc(BADADDR, _struct.name.c_str());
 		struc = get_struc(id);
-	}	
+	}
+	if (BADADDR == id)
+		return false;
 
 	qstring name;
 	qtype type;
@@ -82,7 +81,7 @@ int32_t StructureHandler::store( const ida_struct &_struct )
 		parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0);
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);
 	}	
-	return id;
+	return true;
 }
 
 void StructureHandler::list( std::vector<ida_struct> &_return )
@@ -91,7 +90,7 @@ void StructureHandler::list( std::vector<ida_struct> &_return )
 	copier.copy_to(_return);
 }
 
-void StructureHandler::_delete( const int32_t id )
+void StructureHandler::_delete( const std::string& name )
 {
-	del_struc(get_struc(id));
+	del_struc(get_struc(get_struc_id(name.c_str())));
 }

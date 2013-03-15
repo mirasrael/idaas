@@ -37,37 +37,30 @@ namespace Ida.Client.Test
         [Test]
         public void ItShouldCreateEnumeration()
         {
-            ida_enum testEnumeration = Database.Enumerations.FirstOrDefault(e => e.Name == "Test");
-            if (testEnumeration != null)
-            {
-                Database.Enumerations.Delete(testEnumeration);
-            }
-
-            testEnumeration = Database.Enumerations.New("Test");
-            testEnumeration.Constants.Add(new ida_enum_const {Name = "Test1", Value = 1});            
-            Assert.That(testEnumeration.Id, Is.EqualTo(-1));
+            var enumName = GenerateUniqName();
+            var testEnumeration = Database.Enumerations.New(enumName);
+            testEnumeration.Constants.Add(new ida_enum_const { Name = enumName + "_1", Value = 1 });                        
             Assert.That(Database.Enumerations, Has.Member(testEnumeration));
-            Assert.That(Database.Enumerations.Store(testEnumeration), Is.True);
-            Assert.That(testEnumeration.Id, Is.Not.EqualTo(-1));
+            Assert.That(Database.Enumerations.Store(testEnumeration), Is.True);            
 
             Reconnect();
 
-            testEnumeration = Database.Enumerations.FirstOrDefault(e => e.Name == "Test");
+            testEnumeration = Database.Enumerations.FirstOrDefault(e => e.Name == enumName);
             Assert.That(testEnumeration, Is.Not.Null);
             Debug.Assert(testEnumeration != null, "testEnumeration != null");
-            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test1"), Is.Not.Null);
-            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test2"), Is.Null);
+            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == enumName + "_1"), Is.Not.Null);
+            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == enumName + "_2"), Is.Null);
 
-            testEnumeration = Database.Enumerations.New("Test");
-            testEnumeration.Constants.Add(new ida_enum_const {Name = "Test2", Value = 2});
+            testEnumeration = Database.Enumerations.New(enumName);
+            testEnumeration.Constants.Add(new ida_enum_const { Name = enumName + "_2", Value = 2 });
             Assert.That(Database.Enumerations.Store(testEnumeration), Is.True);
 
             Reconnect();
 
-            testEnumeration = Database.Enumerations.FirstOrDefault(e => e.Name == "Test");
+            testEnumeration = Database.Enumerations.FirstOrDefault(e => e.Name == enumName);
             Debug.Assert(testEnumeration != null, "testEnumeration != null");
-            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test1"), Is.Null);
-            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == "Test2"), Is.Not.Null);
+            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == enumName + "_1"), Is.Null);
+            Assert.That(testEnumeration.Constants.FirstOrDefault(c => c.Name == enumName + "_2"), Is.Not.Null);
             Assert.That(testEnumeration, Is.Not.Null);
         }
 

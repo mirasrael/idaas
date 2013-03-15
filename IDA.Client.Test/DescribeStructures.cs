@@ -60,7 +60,7 @@ namespace Ida.Client.Test
             testStructure = Database.Structures.First(s => s.Name == testStructure.Name);
             Assert.That(testStructure, HasMember("ByteMember", "unsigned __int8"));
             Assert.That(testStructure, HasMember("WordMember", "unsigned __int16"));
-            Assert.That(testStructure, HasMember("DWordMember", "unsigned __int32"));            
+            Assert.That(testStructure, HasMember("DWordMember", "unsigned __int32"));
             Assert.That(testStructure, HasMember("ByteArray", "unsigned __int8[2]"));
         }
 
@@ -71,11 +71,9 @@ namespace Ida.Client.Test
 
             ida_struct testStructure = Database.Structures.New(structureName);
             Assert.That(testStructure.Name, Is.EqualTo(structureName));
-            Assert.That(testStructure.Id, Is.EqualTo(-1));
             Assert.That(Database.Structures, Has.Member(testStructure));
-            testStructure.Members.Add(new ida_struct_member {Name = "Member1"});
+            testStructure.Members.Add(new ida_struct_member {Name = "Member1", Type = "int"});
             Assert.That(Database.Structures.Store(testStructure), Is.True);
-            Assert.That(testStructure.Id, Is.Not.EqualTo(-1));
 
             Reconnect();
 
@@ -83,7 +81,7 @@ namespace Ida.Client.Test
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member1"), Is.Not.Null);
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member2"), Is.Null);
             testStructure.Members.RemoveAll(m => m.Name == "Member1");
-            testStructure.Members.Add(new ida_struct_member {Name = "Member2"});
+            testStructure.Members.Add(new ida_struct_member {Name = "Member2", Type = "double"});
             Assert.That(Database.Structures.Store(testStructure), Is.True);
 
             Reconnect();
@@ -113,12 +111,12 @@ namespace Ida.Client.Test
             string structureName = GenerateUniqName();
 
             ida_struct testStructure = Database.Structures.New(structureName);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member1"});
+            testStructure.Members.Add(new ida_struct_member {Name = "Member1", Type = "int"});
             Database.Store(testStructure);
 
             testStructure = Database.Structures.New(structureName);
             Assert.That(testStructure.Members.Exists(m => m.Name == "Member1"), Is.False);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member2"});
+            testStructure.Members.Add(new ida_struct_member {Name = "Member2", Type = "double"});
             Database.Store(testStructure);
 
             Reconnect();
