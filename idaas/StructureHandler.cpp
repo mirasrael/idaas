@@ -2,6 +2,7 @@
 
 #include "Logging.h"
 
+#include <bytes.hpp>
 #include <typeinf.hpp>
 
 #include <boost/algorithm/string/replace.hpp>
@@ -58,39 +59,56 @@ StructureHandler::~StructureHandler(void)
 }
 
 bool StructureHandler::store( const ida_struct &_struct )
-{
+{	
+	bool firstMember = false;
 	tid_t id = get_struc_id(_struct.name.c_str());
 	struc_t *struc;
-	if (id != -1) {
-		struc = get_struc(id);		
-		del_struc_members(struc, 0, get_struc_size(struc));
+	if (BADADDR != id) {
+		struc = get_struc(id);
+		// Replace all members with dummy, first added member will replace it
+		if (struc->memqty > 0) {
+			member_t* first = &struc->members[0];
+			if (first->soff > 0) {
+				add_struc_member(struc, "__Dummy__", 0, byteflag(), 0, 1);
+				del_struc_members(struc, 1, BADADDR);
+			} else {
+				set_member_name(struc, 0, "__Dummy__");
+				del_struc_members(struc, first->eoff, BADADDR);
+			}
+			firstMember = true;
+		}		
 	} else {
 		id = add_struc(BADADDR, _struct.name.c_str());
 		struc = get_struc(id);
 	}
 	if (BADADDR == id)
 		return false;
-
+	
 	qstring name;
 	qtype type;
 	qtype fields;
-		
+			
 	std::vector<std::pair<tid_t, std::string>> escapedTypes;
 	for (std::vector<ida_struct_member>::const_iterator it = _struct.members.begin(); it != _struct.members.end(); it++)
 	{		
-		add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
+		if (firstMember) {
+			set_member_name(struc, 0, it->name.c_str());
+			firstMember = false;
+		} else {
+			add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
+		}
 		member_t *member = get_member(struc, get_struc_last_offset(struc));		
 
 		std::string fullType(escapeTypes(it->type, escapedTypes));
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
 		}			
-
-		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, PT_SIL)) {
+		//logmsg("decl: %s %s\n", fullType.c_str(), it->name.c_str());
+		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0)) {
 			return false;
-		}
+		}		
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);
-		restoreTypes(escapedTypes);
+		restoreTypes(escapedTypes);		
 	}	
 	return true;
 }
@@ -125,8 +143,7 @@ std::string StructureHandler::escapeTypes( const std::string& decl, std::vector<
 
 		s = match.suffix();
 	}
-	output.append(s);
-	logmsg("%s\n", output.c_str());
+	output.append(s);	
 	return output;
 }
 
