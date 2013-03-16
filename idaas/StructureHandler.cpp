@@ -44,7 +44,7 @@ void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to
 	get_member_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
 	qtype type, fields;
-	get_member_tinfo(from, &type, &fields);
+	get_or_guess_member_tinfo(from, &type, &fields);
 	print_type_to_one_line(buffer, sizeof(buffer), idati, type.c_str(), 0, 0, fields.c_str(), 0);
 	to.type = buffer;
 }
@@ -102,9 +102,9 @@ bool StructureHandler::store( const ida_struct &_struct )
 		std::string fullType(escapeTypes(it->type, escapedTypes));
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
-		}			
-		//logmsg("decl: %s %s\n", fullType.c_str(), it->name.c_str());
-		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0)) {
+		}					
+		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, PT_SIL)) {
+			logmsg("decl: %s.%s %s\n", _struct.name.c_str(), it->name.c_str(), fullType.c_str());
 			return false;
 		}		
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);
