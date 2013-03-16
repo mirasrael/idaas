@@ -4,6 +4,6 @@
 #include <ida.hpp>
 #pragma warning(default: 4996)
 
-extern "C" char *DEFAULT_PORT;
+extern "C" const char *DEFAULT_PORT;
 extern "C" int idaapi CreateConnection();
 extern "C" int idaapi CloseConnection();

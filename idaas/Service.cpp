@@ -11,17 +11,14 @@
 extern "C" {
 	char *infFilePath = NULL;
 	
-	int CreateDescriptor(const char *path) {
-		char buffer[1000];
-		qsnprintf(buffer, sizeof(buffer) -1, "Event: Init %s\n", database_idb);
-		msg(buffer);
+	int CreateDescriptor(const char *path) {		
+		msg("Event: Init %s\n", database_idb);
 		
 		size_t infFilePathLen = qstrlen(path) + 6;
 		infFilePath = (char *) qalloc(infFilePathLen + 1);		
 		qstrncpy(infFilePath, path, infFilePathLen + 1);		
-		qstrncat(infFilePath, ".idaas", infFilePathLen + 1);
-		qsnprintf(buffer, sizeof(buffer) -1, "Event: Write %s\n", infFilePath);
-		msg(buffer);		
+		qstrncat(infFilePath, ".idaas", infFilePathLen + 1);		
+		msg("Event: Write %s\n", infFilePath);		
 		FILE *infFile = fopenWT(infFilePath);		
 		qfprintf(infFile, "%s", DEFAULT_PORT);
 		qfclose(infFile);
@@ -29,10 +26,8 @@ extern "C" {
 		return 0;
 	}
 
-	int DestroyDescriptor() {
-		char buffer[1000];
-		qsnprintf(buffer, sizeof(buffer) -1, "Event: Close %s\n", database_idb);
-		msg(buffer);
+	int DestroyDescriptor() {		
+		logmsg("Event: Close %s\n", database_idb);
 
 		if (infFilePath != NULL) {
 			#pragma warning(disable: 4996)
@@ -65,14 +60,14 @@ extern "C" {
 		// an environment it was written for. Return PLUGIN_SKIP if the 	
 		// checks fail, otherwise return PLUGIN_KEEP.
 			
-		CreateConnection();
+		CreateConnection();		
 		hook_to_notification_point(HT_UI, HOOK_UI_Callback, NULL);
 
 		return PLUGIN_KEEP;
 	}
 
 	void idaapi IDAP_term(void)
-	{
+	{		
 		unhook_from_notification_point(HT_UI, HOOK_UI_Callback);
 		setLoggingEnabled(false);
 		CloseConnection();		
