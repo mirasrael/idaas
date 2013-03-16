@@ -176,28 +176,34 @@ class ida_struct_member {
 void swap(ida_struct_member &a, ida_struct_member &b);
 
 typedef struct _ida_struct__isset {
-  _ida_struct__isset() : members(false) {}
+  _ida_struct__isset() : isUnion(true), members(false) {}
+  bool isUnion;
   bool members;
 } _ida_struct__isset;
 
 class ida_struct {
  public:
 
-  static const char* ascii_fingerprint; // = "18B42A3192AED0589A6C59CA5782E811";
-  static const uint8_t binary_fingerprint[16]; // = {0x18,0xB4,0x2A,0x31,0x92,0xAE,0xD0,0x58,0x9A,0x6C,0x59,0xCA,0x57,0x82,0xE8,0x11};
+  static const char* ascii_fingerprint; // = "F83089BCC3F27DED4B671B75FE652BE0";
+  static const uint8_t binary_fingerprint[16]; // = {0xF8,0x30,0x89,0xBC,0xC3,0xF2,0x7D,0xED,0x4B,0x67,0x1B,0x75,0xFE,0x65,0x2B,0xE0};
 
-  ida_struct() : name() {
+  ida_struct() : name(), isUnion(false) {
   }
 
   virtual ~ida_struct() throw() {}
 
   std::string name;
+  bool isUnion;
   std::vector<ida_struct_member>  members;
 
   _ida_struct__isset __isset;
 
   void __set_name(const std::string& val) {
     name = val;
+  }
+
+  void __set_isUnion(const bool val) {
+    isUnion = val;
   }
 
   void __set_members(const std::vector<ida_struct_member> & val) {
@@ -207,6 +213,8 @@ class ida_struct {
   bool operator == (const ida_struct & rhs) const
   {
     if (!(name == rhs.name))
+      return false;
+    if (!(isUnion == rhs.isUnion))
       return false;
     if (!(members == rhs.members))
       return false;

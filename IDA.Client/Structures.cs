@@ -37,7 +37,7 @@ namespace Ida.Client
             return _client.listStructures();
         }
 
-        public ida_struct New(string name)
+        public ida_struct New(string name, bool isUnion = false)
         {
             ida_struct @struct = this.FirstOrDefault(e => e.Name == name);
             if (@struct == null)
@@ -45,12 +45,13 @@ namespace Ida.Client
                 @struct = new ida_struct {Name = name};
                 Items.Add(@struct);
             }
+            @struct.IsUnion = isUnion;
             @struct.Members = new List<ida_struct_member>();
             return @struct;
         }
 
         public bool Store(ida_struct @struct)
-        {            
+        {
             return _client.storeStructure(@struct);
         }
 
@@ -79,7 +80,7 @@ namespace Ida.Client
         }
 
         public void LoadFrom(Stream input)
-        {            
+        {
             XmlReader reader = XmlReader.Create(input);
             reader.ReadToFollowing("Structures");
             var loadedStructures = new List<ida_struct>();
@@ -87,17 +88,17 @@ namespace Ida.Client
                  hasStructure;
                  hasStructure = reader.ReadToNextSibling("Structure"))
             {
-                var @structure = New(reader.GetAttribute("Name"));                    
+                ida_struct @structure = New(reader.GetAttribute("Name"));
                 for (bool hasField = reader.ReadToDescendant("Field");
                      hasField;
                      hasField = reader.ReadToNextSibling("Field"))
-                {                    
+                {
                     @structure.Members.Add(new ida_struct_member
                         {
                             Name = reader.GetAttribute("Name"),
                             Type = reader.GetAttribute("Type")
-                        });                                        
-                }                
+                        });
+                }
                 loadedStructures.Add(@structure);
             }
             reader.Close();
@@ -106,7 +107,7 @@ namespace Ida.Client
 
         public void StoreAll(IEnumerable<ida_struct> structures)
         {
-            foreach (var @structure in structures)
+            foreach (ida_struct @structure in structures)
             {
                 Store(@structure);
             }

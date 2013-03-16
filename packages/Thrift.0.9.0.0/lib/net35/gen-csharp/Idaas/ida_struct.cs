@@ -24,6 +24,7 @@ namespace Idaas
   public partial class ida_struct : TBase
   {
     private string _name;
+    private bool _isUnion;
     private List<ida_struct_member> _members;
 
     public string Name
@@ -36,6 +37,19 @@ namespace Idaas
       {
         __isset.name = true;
         this._name = value;
+      }
+    }
+
+    public bool IsUnion
+    {
+      get
+      {
+        return _isUnion;
+      }
+      set
+      {
+        __isset.isUnion = true;
+        this._isUnion = value;
       }
     }
 
@@ -59,10 +73,12 @@ namespace Idaas
     #endif
     public struct Isset {
       public bool name;
+      public bool isUnion;
       public bool members;
     }
 
     public ida_struct() {
+      this._isUnion = false;
     }
 
     public void Read (TProtocol iprot)
@@ -85,6 +101,13 @@ namespace Idaas
             }
             break;
           case 2:
+            if (field.Type == TType.Bool) {
+              IsUnion = iprot.ReadBool();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 3:
             if (field.Type == TType.List) {
               {
                 Members = new List<ida_struct_member>();
@@ -123,10 +146,18 @@ namespace Idaas
         oprot.WriteString(Name);
         oprot.WriteFieldEnd();
       }
+      if (__isset.isUnion) {
+        field.Name = "isUnion";
+        field.Type = TType.Bool;
+        field.ID = 2;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(IsUnion);
+        oprot.WriteFieldEnd();
+      }
       if (Members != null && __isset.members) {
         field.Name = "members";
         field.Type = TType.List;
-        field.ID = 2;
+        field.ID = 3;
         oprot.WriteFieldBegin(field);
         {
           oprot.WriteListBegin(new TList(TType.Struct, Members.Count));
@@ -146,6 +177,8 @@ namespace Idaas
       StringBuilder sb = new StringBuilder("ida_struct(");
       sb.Append("Name: ");
       sb.Append(Name);
+      sb.Append(",IsUnion: ");
+      sb.Append(IsUnion);
       sb.Append(",Members: ");
       sb.Append(Members);
       sb.Append(")");

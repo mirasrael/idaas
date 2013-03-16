@@ -20,7 +20,8 @@ struct ida_struct_member {
 
 struct ida_struct {	
 	1: required string name
-	2: list<ida_struct_member> members
+	2: bool isUnion = false
+	3: list<ida_struct_member> members
 }
 
 service Database {

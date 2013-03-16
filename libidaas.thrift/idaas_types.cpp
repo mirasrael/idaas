@@ -295,8 +295,8 @@ void swap(ida_struct_member &a, ida_struct_member &b) {
   swap(a.type, b.type);
 }
 
-const char* ida_struct::ascii_fingerprint = "18B42A3192AED0589A6C59CA5782E811";
-const uint8_t ida_struct::binary_fingerprint[16] = {0x18,0xB4,0x2A,0x31,0x92,0xAE,0xD0,0x58,0x9A,0x6C,0x59,0xCA,0x57,0x82,0xE8,0x11};
+const char* ida_struct::ascii_fingerprint = "F83089BCC3F27DED4B671B75FE652BE0";
+const uint8_t ida_struct::binary_fingerprint[16] = {0xF8,0x30,0x89,0xBC,0xC3,0xF2,0x7D,0xED,0x4B,0x67,0x1B,0x75,0xFE,0x65,0x2B,0xE0};
 
 uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -328,6 +328,14 @@ uint32_t ida_struct::read(::apache::thrift::protocol::TProtocol* iprot) {
         }
         break;
       case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->isUnion);
+          this->__isset.isUnion = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->members.clear();
@@ -369,7 +377,11 @@ uint32_t ida_struct::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("members", ::apache::thrift::protocol::T_LIST, 2);
+  xfer += oprot->writeFieldBegin("isUnion", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->isUnion);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("members", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->members.size()));
     std::vector<ida_struct_member> ::const_iterator _iter11;
@@ -389,6 +401,7 @@ uint32_t ida_struct::write(::apache::thrift::protocol::TProtocol* oprot) const {
 void swap(ida_struct &a, ida_struct &b) {
   using ::std::swap;
   swap(a.name, b.name);
+  swap(a.isUnion, b.isUnion);
   swap(a.members, b.members);
   swap(a.__isset, b.__isset);
 }

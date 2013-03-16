@@ -32,6 +32,7 @@ void struct_list_copier::copy_to(std::vector<ida_struct>&  _result) {
 void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {	
 	get_struc_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
+	to.isUnion = from->is_union();
 
 	size_t membersCount = from->memqty;
 	to.members.resize(membersCount);
@@ -65,20 +66,22 @@ bool StructureHandler::store( const ida_struct &_struct )
 	struc_t *struc;
 	if (BADADDR != id) {
 		struc = get_struc(id);
+		if (struc->is_union() != _struct.isUnion)
+			return false;
 		// Replace all members with dummy, first added member will replace it
-		if (struc->memqty > 0) {
-			member_t* first = &struc->members[0];
-			if (first->soff > 0) {
+		if (struc->memqty > 0) {			
+			member_t* first = get_member(struc, 0);
+			if (0 == first) {
 				add_struc_member(struc, "__Dummy__", 0, byteflag(), 0, 1);
 				del_struc_members(struc, 1, BADADDR);
-			} else {
+			} else {				
+				del_struc_members(struc, struc->is_union() ? 1 : first->eoff, BADADDR);
 				set_member_name(struc, 0, "__Dummy__");
-				del_struc_members(struc, first->eoff, BADADDR);
-			}
+			}			
 			firstMember = true;
 		}		
 	} else {
-		id = add_struc(BADADDR, _struct.name.c_str());
+		id = add_struc(BADADDR, _struct.name.c_str(), _struct.isUnion);
 		struc = get_struc(id);
 	}
 	if (BADADDR == id)
@@ -89,22 +92,33 @@ bool StructureHandler::store( const ida_struct &_struct )
 	qtype fields;
 			
 	std::vector<std::pair<tid_t, std::string>> escapedTypes;
+	//logmsg("%s\n", _struct.name.c_str());
 	for (std::vector<ida_struct_member>::const_iterator it = _struct.members.begin(); it != _struct.members.end(); it++)
-	{		
+	{				
 		if (firstMember) {
 			set_member_name(struc, 0, it->name.c_str());
 			firstMember = false;
 		} else {
-			add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
+			if (struc->is_union())
+			{
+				add_struc_member(struc, it->name.c_str(), BADADDR, byteflag(), 0, 1);
+			}
+			else
+			{
+				add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
+			}			
 		}
-		member_t *member = get_member(struc, get_struc_last_offset(struc));		
-
+				
+		member_t *member;		
+		member = &struc->members[struc->memqty - 1];		
 		std::string fullType(escapeTypes(it->type, escapedTypes));
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
-		}					
-		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, PT_SIL)) {
-			logmsg("decl: %s.%s %s\n", _struct.name.c_str(), it->name.c_str(), fullType.c_str());
+		}
+		char buffer[MAXNAMELEN];
+		get_member_name(member->id, buffer, sizeof(buffer));
+		//logmsg("- %s(%s): %s\n", it->name.c_str(), buffer, fullType.c_str());
+		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0 /*PT_SIL*/)) {			
 			return false;
 		}		
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);

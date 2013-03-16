@@ -54,7 +54,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);__NT__;_USRDLL;WIN32</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_OBSOLE_FUNCS;_MBCS;%(PreprocessorDefinitions);__NT__;_USRDLL;WIN32</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -80,7 +80,7 @@ rmdir gen-cpp /Q /S</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);__IDP__;__NT__;_USRDLL;WIN32</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_OBSOLE_FUNCS;_MBCS;%(PreprocessorDefinitions);__IDP__;__NT__;_USRDLL;WIN32</PreprocessorDefinitions>
       <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
