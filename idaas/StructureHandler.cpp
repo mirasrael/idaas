@@ -7,6 +7,8 @@
 #include <enum.hpp>
 
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/lexical_cast.hpp>
 
 const std::regex StructureHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
 
@@ -36,9 +38,20 @@ void struct_list_copier::copy_struc(const struc_t *from, ida_struct& to) {
 	to.isUnion = from->is_union();
 
 	size_t membersCount = from->memqty;
+	to.members.reserve(membersCount * 2);
 	to.members.resize(membersCount);
-	for (size_t memberIdx = 0; memberIdx < membersCount; memberIdx++) {
-		copy_member(&from->members[memberIdx], to.members[memberIdx]);
+	ea_t prev_end = 0;
+	for (size_t memberIdx = 0, targetIndex = 0; memberIdx < membersCount; memberIdx++, targetIndex++) {
+		member_t *member = &from->members[memberIdx];
+		if (member->soff > prev_end) {
+			to.members.resize(to.members.size() + 1);
+			ida_struct_member& targetMember = to.members[targetIndex];
+			targetMember.name = std::string("__gap__") + boost::lexical_cast<std::string>(targetIndex);
+			targetMember.type = std::string("byte[") + boost::lexical_cast<std::string>(member->soff - prev_end) + std::string("]");
+			targetIndex++;
+		}
+		copy_member(member, to.members[targetIndex]);
+		prev_end = member->eoff;
 	}	
 }
 
@@ -90,7 +103,7 @@ bool StructureHandler::store( const ida_struct &_struct )
 			return false;
 		// Replace all members with dummy, first added member will replace it
 		if (struc->memqty > 0) {			
-			member_t* first = get_member(struc, 0);
+			member_t* first = get_member(struc, 0);			
 			if (0 == first) {
 				add_struc_member(struc, "__Dummy__", 0, byteflag(), 0, 1);
 				del_struc_members(struc, 1, BADADDR);
@@ -112,6 +125,8 @@ bool StructureHandler::store( const ida_struct &_struct )
 	qtype fields;
 			
 	std::vector<std::pair<tid_t, std::string>> escapedTypes;
+	std::vector<ea_t> gapMemberOffsets;
+	gapMemberOffsets.reserve(_struct.members.size() / 2 + 1);
 	//logmsg("%s\n", _struct.name.c_str());
 	for (std::vector<ida_struct_member>::const_iterator it = _struct.members.begin(); it != _struct.members.end(); it++)
 	{				
@@ -127,23 +142,29 @@ bool StructureHandler::store( const ida_struct &_struct )
 			{
 				add_struc_member(struc, it->name.c_str(), BADADDR, 0, 0, 0);
 			}			
-		}
-				
+		}		
+
 		member_t *member;		
 		member = &struc->members[struc->memqty - 1];		
 		std::string fullType(escapeTypes(it->type, escapedTypes));
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
-		}
-		char buffer[MAXNAMELEN];
-		get_member_name(member->id, buffer, sizeof(buffer));
-		//logmsg("- %s(%s): %s\n", it->name.c_str(), buffer, fullType.c_str());
+		}		
 		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0 /*PT_SIL*/)) {			
 			return false;
 		}		
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);
-		restoreTypes(escapedTypes);		
-	}	
+		restoreTypes(escapedTypes);
+
+		if (boost::starts_with(it->name, "__gap__")) {
+			gapMemberOffsets.push_back(member->soff);
+		}
+	}
+	if (gapMemberOffsets.size() > 0) {
+		for (std::vector<ea_t>::reverse_iterator it = gapMemberOffsets.rbegin(); it != gapMemberOffsets.rend(); it++) {
+			del_struc_member(struc, *it);
+		}
+	}
 	return true;
 }
 

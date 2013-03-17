@@ -27,7 +27,7 @@ namespace Ida.Client
         }
 
         public static ida_enum NewEnumeration(this Database database, string name, bool isBitfield = false,
-                                              Dictionary<string, int> constants = null)
+                                              IEnumerable<KeyValuePair<string, int>> constants = null)
         {
             return database.Enumerations.New(name, isBitfield, constants);
         }

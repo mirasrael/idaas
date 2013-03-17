@@ -195,5 +195,37 @@ namespace Ida.Client.Test
             Assert.That(testStructure.Members.Exists(m => m.Name == "Member1"), Is.False);
             Assert.That(testStructure.Members.Exists(m => m.Name == "Member2"), Is.True);
         }
+
+        [Test]
+        public void ItShouldCreateStructureWithGapSpace()
+        {
+            var testStructure = Database.NewStructure(GenerateUniqName(), members: new Dictionary<string, string>
+                {
+                    {"__gap__0", "byte[20]"},
+                    {"IntMember", "int"}
+                });
+            Database.Store(testStructure);
+
+            Reconnect();
+
+            testStructure = Database.Structures[testStructure.Name];
+            Assert.That(testStructure.Members.First(m => m.Name.StartsWith("__gap__")).Type, Is.EqualTo("byte[20]"));
+        }
+
+        [Test]
+        public void ItShouldNotStoreGapAtTheEnd()
+        {
+            var testStructure = Database.NewStructure(GenerateUniqName(), members: new Dictionary<string, string>
+                {
+                    {"IntMember", "int"},
+                    {"__gap__0", "byte[20]"},                    
+                });
+            Database.Store(testStructure);
+
+            Reconnect();
+
+            testStructure = Database.Structures[testStructure.Name];
+            Assert.That(testStructure.Members.FirstOrDefault(m => m.Name.StartsWith("__gap__")), Is.Null);
+        }
     }
 }

@@ -69,11 +69,6 @@ namespace Ida.Client
 
         public Structures Structures { get; private set; }        
 
-        public bool Store(ida_struct @struct)
-        {
-            return Structures.Store(@struct);
-        }        
-
         public void Dispose()
         {
             _transport.Close();

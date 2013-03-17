@@ -7,6 +7,33 @@ using Idaas;
 
 namespace Ida.Client
 {
+    public static class IdaStructExtensions
+    {
+        public static void AddMember(this ida_struct @struct, string name, string type)
+        {
+            @struct.Members.Add(new ida_struct_member { Name = name, Type = type });
+        }
+        
+        public static ida_struct_member GetMember(this ida_struct @struct, string name)
+        {
+            return @struct.Members.Find(m => m.Name == name);
+        }
+    }
+
+    public static class StructuresDatabaseExtensions
+    {
+        public static bool Store(this Database database, ida_struct @struct)
+        {
+            return database.Structures.Store(@struct);
+        }
+
+        public static ida_struct NewStructure(this Database database, string name, bool isUnion = false,
+                                              IEnumerable<KeyValuePair<string, string>> members = null)
+        {
+            return database.Structures.New(name, isUnion, members);
+        }
+    }
+
     public class Structures : IEnumerable<ida_struct>
     {
         private readonly Idaas.Database.Client _client;
@@ -37,7 +64,7 @@ namespace Ida.Client
             return _client.listStructures();
         }
 
-        public ida_struct New(string name, bool isUnion = false)
+        public ida_struct New(string name, bool isUnion = false, IEnumerable<KeyValuePair<string, string>> members = null)
         {
             ida_struct @struct = this.FirstOrDefault(e => e.Name == name);
             if (@struct == null)
@@ -47,6 +74,13 @@ namespace Ida.Client
             }
             @struct.IsUnion = isUnion;
             @struct.Members = new List<ida_struct_member>();
+            if (members != null)
+            {
+                foreach (var pair in members)
+                {
+                    @struct.AddMember(pair.Key, pair.Value);
+                }
+            }
             return @struct;
         }
 
