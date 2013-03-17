@@ -20,7 +20,32 @@ using namespace ::apache::thrift::concurrency;
 
 using namespace ::idaas;
 
-const char* DEFAULT_PORT="13044";
+bool _CheckPortIsOpen(int port) {
+	TWinsockSingleton::create();
+
+	struct sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");	
+	SOCKET s = socket(AF_INET, SOCK_STREAM, 0);
+	if (INVALID_SOCKET == s)
+		return false;	
+	bool result = SOCKET_ERROR != bind(s, (struct sockaddr *) &addr, sizeof(addr));
+	closesocket(s);
+	return result;
+}
+
+int idaapi GetDatabaseServerPort()
+{
+	static int port = -1;
+	if (port == -1) {
+		port = 13044;
+		while(!_CheckPortIsOpen(port) && port < 14000) {
+			port++;
+		}		
+	}
+	return port;
+}
 
 boost::shared_ptr<TServer> databaseServer;
 boost::shared_ptr<Thread> databaseServerThread;
@@ -47,7 +72,7 @@ int idaapi CreateConnection() {
 
 	boost::shared_ptr<DatabaseHandler> handler(new DatabaseHandler());
 	boost::shared_ptr<DatabaseProcessor> processor(new DatabaseProcessor(handler));
-	boost::shared_ptr<TServerSocket> serverTransport(new TServerSocket(atoi(DEFAULT_PORT)));
+	boost::shared_ptr<TServerSocket> serverTransport(new TServerSocket(GetDatabaseServerPort()));
 	boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
 	boost::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 	databaseServer = boost::shared_ptr<TServer>(new TSimpleServer(processor, serverTransport, transportFactory, protocolFactory));	

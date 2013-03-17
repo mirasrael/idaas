@@ -4,6 +4,7 @@
 
 #include <bytes.hpp>
 #include <typeinf.hpp>
+#include <enum.hpp>
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -45,7 +46,26 @@ void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to
 	get_member_name(from->id, buffer, sizeof(buffer));
 	to.name = buffer;
 	qtype type, fields;
-	get_or_guess_member_tinfo(from, &type, &fields);
+	if (from->has_ti()) {
+		get_member_tinfo(from, &type, &fields);
+	} else {
+		if (0 != (enumflag() & from->flag)) {
+			opinfo_t opinfo;
+			qstring name;
+			retrieve_member_info(from, &opinfo);
+			get_enum_name(opinfo.ec.tid, buffer, sizeof(buffer));
+			qstrncat(buffer, ";", sizeof(buffer));			
+			parse_decl(idati, buffer, &name, &type, &fields, 0);
+			size_t width = get_enum_width(opinfo.ec.tid);
+			width = width > 0 ? 1 << (width - 1) : sizeof(int);
+			if (from->eoff - from->soff > width) {
+				qtype elementType = type;
+				build_array_type(&type, elementType.c_str(), (from->eoff - from->soff) / width);
+			}
+		} else {
+			get_or_guess_member_tinfo(from, &type, &fields);
+		}		
+	}	
 	print_type_to_one_line(buffer, sizeof(buffer), idati, type.c_str(), 0, 0, fields.c_str(), 0);
 	to.type = buffer;
 }

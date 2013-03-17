@@ -67,17 +67,12 @@ namespace Ida.Client
 
         public Enumerations Enumerations { get; private set; }
 
-        public Structures Structures { get; private set; }
+        public Structures Structures { get; private set; }        
 
         public bool Store(ida_struct @struct)
         {
             return Structures.Store(@struct);
-        }
-
-        public bool Store(ida_enum @enum)
-        {
-            return Enumerations.Store(@enum);
-        }
+        }        
 
         public void Dispose()
         {

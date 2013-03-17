@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Idaas;
@@ -89,6 +90,28 @@ namespace Ida.Client.Test
             testStructure = Database.Structures.First(s => s.Name == structureName);
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member1"), Is.Null);
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member2"), Is.Not.Null);
+        }
+
+        [Test]
+        public void ItShouldCreateStructureMembersWithEnumType()
+        {
+            string structureName = GenerateUniqName();
+            string enumName = GenerateUniqName();
+
+            ida_enum testEnum = Database.NewEnumeration(enumName, constants: new Dictionary<string, int>
+                {
+                    {"TestValue", 0}
+                });
+            Database.Store(testEnum);
+
+            ida_struct testStructure = Database.Structures.New(structureName);
+            testStructure.Members.Add(new ida_struct_member {Name = "EnumMember", Type = testEnum.Name});
+            Database.Store(testStructure);
+
+            Reconnect();
+
+            Assert.That(Database.Structures[structureName].Members.First(m => m.Name == "EnumMember").Type,
+                        Is.EqualTo(testEnum.Name));
         }
 
         [Test]

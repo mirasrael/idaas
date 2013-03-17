@@ -112,5 +112,10 @@ namespace Ida.Client
                 Store(@structure);
             }
         }
+
+        public ida_struct this[string name]
+        {
+            get { return this.First(s => s.Name == name); }
+        }
     }
 }

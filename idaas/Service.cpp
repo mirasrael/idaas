@@ -20,7 +20,7 @@ extern "C" {
 		qstrncat(infFilePath, ".idaas", infFilePathLen + 1);		
 		msg("Event: Write %s\n", infFilePath);		
 		FILE *infFile = fopenWT(infFilePath);		
-		qfprintf(infFile, "%s", DEFAULT_PORT);
+		qfprintf(infFile, "%d", GetDatabaseServerPort());
 		qfclose(infFile);
 		
 		return 0;
