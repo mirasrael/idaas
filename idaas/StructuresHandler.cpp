@@ -1,4 +1,4 @@
-#include "StructureHandler.h"
+#include "StructuresHandler.h"
 
 #include "Logging.h"
 
@@ -10,7 +10,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
-const std::regex StructureHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
+const std::regex StructuresHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
 
 class struct_list_copier {
 private:
@@ -83,16 +83,16 @@ void struct_list_copier::copy_member(const member_t *from, ida_struct_member& to
 	to.type = buffer;
 }
 
-StructureHandler::StructureHandler(void)
+StructuresHandler::StructuresHandler(void)
 {
 }
 
 
-StructureHandler::~StructureHandler(void)
+StructuresHandler::~StructuresHandler(void)
 {
 }
 
-bool StructureHandler::store( const ida_struct &_struct )
+bool StructuresHandler::store( const ida_struct &_struct )
 {	
 	bool firstMember = false;
 	tid_t id = get_struc_id(_struct.name.c_str());
@@ -168,18 +168,18 @@ bool StructureHandler::store( const ida_struct &_struct )
 	return true;
 }
 
-void StructureHandler::list( std::vector<ida_struct> &_return )
+void StructuresHandler::list( std::vector<ida_struct> &_return )
 {
 	struct_list_copier copier;
 	copier.copy_to(_return);
 }
 
-void StructureHandler::_delete( const std::string& name )
+void StructuresHandler::_delete( const std::string& name )
 {
 	del_struc(get_struc(get_struc_id(name.c_str())));
 }
 
-std::string StructureHandler::escapeTypes( const std::string& decl, std::vector<std::pair<tid_t, std::string>>& escapedTypes ) {
+std::string StructuresHandler::escapeTypes( const std::string& decl, std::vector<std::pair<tid_t, std::string>>& escapedTypes ) {
 	std::smatch match;
 	std::string s(decl);
 	std::string output;
@@ -202,7 +202,7 @@ std::string StructureHandler::escapeTypes( const std::string& decl, std::vector<
 	return output;
 }
 
-void StructureHandler::restoreTypes( std::vector<std::pair<tid_t, std::string>>& escapedTypes )
+void StructuresHandler::restoreTypes( std::vector<std::pair<tid_t, std::string>>& escapedTypes )
 {
 	if (!escapedTypes.empty()) {
 		for (std::vector<std::pair<tid_t, std::string>>::iterator it = escapedTypes.begin(); it != escapedTypes.end(); it++) {
@@ -210,4 +210,15 @@ void StructureHandler::restoreTypes( std::vector<std::pair<tid_t, std::string>>&
 		}
 		escapedTypes.clear();
 	}
+}
+
+bool StructuresHandler::storeAll( const std::vector<ida_struct> &structs )
+{
+	for ( std::vector<ida_struct>::const_iterator it = structs.begin(); it != structs.end(); it++ )
+	{
+		if (!store(*it)) {
+			return false;
+		}
+	}
+	return true;
 }

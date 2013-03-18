@@ -105,15 +105,17 @@ rmdir gen-cpp /Q /S</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseHandler.cpp" />
+    <ClCompile Include="EnumerationsHandler.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="Service.cpp" />
-    <ClCompile Include="StructureHandler.cpp" />
+    <ClCompile Include="StructuresHandler.cpp" />
     <ClCompile Include="TcpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseHandler.h" />
+    <ClInclude Include="EnumerationsHandler.h" />
     <ClInclude Include="Logging.h" />
-    <ClInclude Include="StructureHandler.h" />
+    <ClInclude Include="StructuresHandler.h" />
     <ClInclude Include="TcpServer.h" />
   </ItemGroup>
   <ItemGroup>

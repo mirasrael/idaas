@@ -29,6 +29,11 @@ namespace Idaas
       IAsyncResult Begin_storeEnum(AsyncCallback callback, object state, ida_enum _enum);
       bool End_storeEnum(IAsyncResult asyncResult);
       #endif
+      bool storeEnums(List<ida_enum> enums);
+      #if SILVERLIGHT
+      IAsyncResult Begin_storeEnums(AsyncCallback callback, object state, List<ida_enum> enums);
+      bool End_storeEnums(IAsyncResult asyncResult);
+      #endif
       void deleteEnum(string name);
       #if SILVERLIGHT
       IAsyncResult Begin_deleteEnum(AsyncCallback callback, object state, string name);
@@ -43,6 +48,11 @@ namespace Idaas
       #if SILVERLIGHT
       IAsyncResult Begin_storeStructure(AsyncCallback callback, object state, ida_struct _struct);
       bool End_storeStructure(IAsyncResult asyncResult);
+      #endif
+      bool storeStructures(List<ida_struct> structs);
+      #if SILVERLIGHT
+      IAsyncResult Begin_storeStructures(AsyncCallback callback, object state, List<ida_struct> structs);
+      bool End_storeStructures(IAsyncResult asyncResult);
       #endif
       void deleteStruct(string name);
       #if SILVERLIGHT
@@ -202,6 +212,68 @@ namespace Idaas
           return result.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "storeEnum failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_storeEnums(AsyncCallback callback, object state, List<ida_enum> enums)
+      {
+        return send_storeEnums(callback, state, enums);
+      }
+
+      public bool End_storeEnums(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_storeEnums();
+      }
+
+      #endif
+
+      public bool storeEnums(List<ida_enum> enums)
+      {
+        #if !SILVERLIGHT
+        send_storeEnums(enums);
+        return recv_storeEnums();
+
+        #else
+        var asyncResult = Begin_storeEnums(null, null, enums);
+        return End_storeEnums(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_storeEnums(AsyncCallback callback, object state, List<ida_enum> enums)
+      #else
+      public void send_storeEnums(List<ida_enum> enums)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("storeEnums", TMessageType.Call, seqid_));
+        storeEnums_args args = new storeEnums_args();
+        args.Enums = enums;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_storeEnums()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        storeEnums_result result = new storeEnums_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "storeEnums failed: unknown result");
       }
 
       
@@ -388,6 +460,68 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_storeStructures(AsyncCallback callback, object state, List<ida_struct> structs)
+      {
+        return send_storeStructures(callback, state, structs);
+      }
+
+      public bool End_storeStructures(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_storeStructures();
+      }
+
+      #endif
+
+      public bool storeStructures(List<ida_struct> structs)
+      {
+        #if !SILVERLIGHT
+        send_storeStructures(structs);
+        return recv_storeStructures();
+
+        #else
+        var asyncResult = Begin_storeStructures(null, null, structs);
+        return End_storeStructures(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_storeStructures(AsyncCallback callback, object state, List<ida_struct> structs)
+      #else
+      public void send_storeStructures(List<ida_struct> structs)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("storeStructures", TMessageType.Call, seqid_));
+        storeStructures_args args = new storeStructures_args();
+        args.Structs = structs;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_storeStructures()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        storeStructures_result result = new storeStructures_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "storeStructures failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_deleteStruct(AsyncCallback callback, object state, string name)
       {
         return send_deleteStruct(callback, state, name);
@@ -510,9 +644,11 @@ namespace Idaas
         iface_ = iface;
         processMap_["listEnums"] = listEnums_Process;
         processMap_["storeEnum"] = storeEnum_Process;
+        processMap_["storeEnums"] = storeEnums_Process;
         processMap_["deleteEnum"] = deleteEnum_Process;
         processMap_["listStructures"] = listStructures_Process;
         processMap_["storeStructure"] = storeStructure_Process;
+        processMap_["storeStructures"] = storeStructures_Process;
         processMap_["deleteStruct"] = deleteStruct_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
@@ -573,6 +709,19 @@ namespace Idaas
         oprot.Transport.Flush();
       }
 
+      public void storeEnums_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        storeEnums_args args = new storeEnums_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        storeEnums_result result = new storeEnums_result();
+        result.Success = iface_.storeEnums(args.Enums);
+        oprot.WriteMessageBegin(new TMessage("storeEnums", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
       public void deleteEnum_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
         deleteEnum_args args = new deleteEnum_args();
@@ -607,6 +756,19 @@ namespace Idaas
         storeStructure_result result = new storeStructure_result();
         result.Success = iface_.storeStructure(args._struct);
         oprot.WriteMessageBegin(new TMessage("storeStructure", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void storeStructures_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        storeStructures_args args = new storeStructures_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        storeStructures_result result = new storeStructures_result();
+        result.Success = iface_.storeStructures(args.Structs);
+        oprot.WriteMessageBegin(new TMessage("storeStructures", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -974,6 +1136,199 @@ namespace Idaas
     #if !SILVERLIGHT
     [Serializable]
     #endif
+    public partial class storeEnums_args : TBase
+    {
+      private List<ida_enum> _enums;
+
+      public List<ida_enum> Enums
+      {
+        get
+        {
+          return _enums;
+        }
+        set
+        {
+          __isset.enums = true;
+          this._enums = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool enums;
+      }
+
+      public storeEnums_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.List) {
+                {
+                  Enums = new List<ida_enum>();
+                  TList _list12 = iprot.ReadListBegin();
+                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
+                  {
+                    ida_enum _elem14 = new ida_enum();
+                    _elem14 = new ida_enum();
+                    _elem14.Read(iprot);
+                    Enums.Add(_elem14);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeEnums_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Enums != null && __isset.enums) {
+          field.Name = "enums";
+          field.Type = TType.List;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteListBegin(new TList(TType.Struct, Enums.Count));
+            foreach (ida_enum _iter15 in Enums)
+            {
+              _iter15.Write(oprot);
+            }
+            oprot.WriteListEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeEnums_args(");
+        sb.Append("Enums: ");
+        sb.Append(Enums);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class storeEnums_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public storeEnums_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeEnums_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeEnums_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
     public partial class deleteEnum_args : TBase
     {
       private string _name;
@@ -1199,13 +1554,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_struct>();
-                  TList _list12 = iprot.ReadListBegin();
-                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
+                  TList _list16 = iprot.ReadListBegin();
+                  for( int _i17 = 0; _i17 < _list16.Count; ++_i17)
                   {
-                    ida_struct _elem14 = new ida_struct();
-                    _elem14 = new ida_struct();
-                    _elem14.Read(iprot);
-                    Success.Add(_elem14);
+                    ida_struct _elem18 = new ida_struct();
+                    _elem18 = new ida_struct();
+                    _elem18.Read(iprot);
+                    Success.Add(_elem18);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1235,9 +1590,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_struct _iter15 in Success)
+              foreach (ida_struct _iter19 in Success)
               {
-                _iter15.Write(oprot);
+                _iter19.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -1426,6 +1781,199 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("storeStructure_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class storeStructures_args : TBase
+    {
+      private List<ida_struct> _structs;
+
+      public List<ida_struct> Structs
+      {
+        get
+        {
+          return _structs;
+        }
+        set
+        {
+          __isset.structs = true;
+          this._structs = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool structs;
+      }
+
+      public storeStructures_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.List) {
+                {
+                  Structs = new List<ida_struct>();
+                  TList _list20 = iprot.ReadListBegin();
+                  for( int _i21 = 0; _i21 < _list20.Count; ++_i21)
+                  {
+                    ida_struct _elem22 = new ida_struct();
+                    _elem22 = new ida_struct();
+                    _elem22.Read(iprot);
+                    Structs.Add(_elem22);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeStructures_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Structs != null && __isset.structs) {
+          field.Name = "structs";
+          field.Type = TType.List;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteListBegin(new TList(TType.Struct, Structs.Count));
+            foreach (ida_struct _iter23 in Structs)
+            {
+              _iter23.Write(oprot);
+            }
+            oprot.WriteListEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeStructures_args(");
+        sb.Append("Structs: ");
+        sb.Append(Structs);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class storeStructures_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public storeStructures_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("storeStructures_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("storeStructures_result(");
         sb.Append("Success: ");
         sb.Append(Success);
         sb.Append(")");

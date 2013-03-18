@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Idaas;
@@ -17,15 +18,17 @@ namespace Ida.Client.Test
             int initialEnumsCount = Database.Enumerations.Count();
             int initialConstantsCount = Database.Enumerations.Aggregate(0, (cnt, e) => cnt + e.Constants.Count);
             DateTime start = DateTime.Now;
+            var enums = new List<ida_enum>();
             for (int i = 0; i < batchSize; i++)
             {
                 ida_enum @enum = Database.Enumerations.New(GenerateUniqName());
                 for (int contantIndex = 0; contantIndex < constantsCount; contantIndex++)
                 {
                     @enum.Constants.Add(new ida_enum_const {Name = GenerateUniqName(), Value = contantIndex});
-                }
-                Database.Enumerations.Store(@enum);
+                }   
+                enums.Add(@enum);
             }
+            Assert.That(Database.Enumerations.Store(enums), Is.True);
             Console.WriteLine("Time gained: {0} ms", (DateTime.Now - start).TotalMilliseconds);
             Database.Wait();
             Reconnect();

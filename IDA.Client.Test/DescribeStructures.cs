@@ -100,7 +100,7 @@ namespace Ida.Client.Test
 
             ida_enum testEnum = Database.NewEnumeration(enumName, constants: new Dictionary<string, int>
                 {
-                    {"TestValue", 0}
+                    {GenerateUniqName(), 0}
                 });
             Database.Store(testEnum);
 

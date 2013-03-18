@@ -25,13 +25,15 @@ struct ida_struct {
 }
 
 service Database {
-	list<ida_enum> listEnums(),
-	bool storeEnum(1: ida_enum _enum),
-	void deleteEnum(1: string name)	
+	list<ida_enum> listEnums()
+	bool storeEnum(1: ida_enum _enum)	
+	bool storeEnums(1: list<ida_enum> enums)
+	void deleteEnum(1: string name)
 
 	list<ida_struct> listStructures()
 	bool storeStructure(1: ida_struct _struct)
-	void deleteStruct(1: string name)
+	bool storeStructures(1: list<ida_struct> structs)
+	void deleteStruct(1: string name)	
 
 	void waitBackgroundTasks()
 }

@@ -27,7 +27,10 @@
     <ClCompile Include="DatabaseHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StructureHandler.cpp">
+    <ClCompile Include="EnumerationsHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StructuresHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +44,10 @@
     <ClInclude Include="DatabaseHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StructureHandler.h">
+    <ClInclude Include="EnumerationsHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StructuresHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

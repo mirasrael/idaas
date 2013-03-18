@@ -136,15 +136,17 @@ namespace Ida.Client
                 loadedStructures.Add(@structure);
             }
             reader.Close();
-            StoreAll(loadedStructures);
+            Store(loadedStructures);
         }
 
-        public void StoreAll(IEnumerable<ida_struct> structures)
+        public bool Store(IEnumerable<ida_struct> structures)
         {
-            foreach (ida_struct @structure in structures)
-            {
-                Store(@structure);
-            }
+            return _client.storeStructures(structures.ToList());
+        }
+
+        public bool StoreAll()
+        {
+            return _client.storeStructures(Items);
         }
 
         public ida_struct this[string name]

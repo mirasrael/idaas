@@ -97,5 +97,15 @@ namespace Ida.Client
             }
             _client.deleteEnum(@enum.Name);
         }
+
+        public bool Store(IEnumerable<ida_enum> enums)
+        {
+            return _client.storeEnums(enums.ToList());
+        }
+
+        public bool StoreAll()
+        {
+            return _client.storeEnums(Items);
+        }
     };
 }
