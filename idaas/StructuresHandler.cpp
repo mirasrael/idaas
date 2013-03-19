@@ -9,8 +9,10 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/ref.hpp>
 
 const std::regex StructuresHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
+const std::regex StructuresHandler::typeName("^([A-Za-z0-9_:$]+)\\s*(?:$|\\[)");
 
 class struct_list_copier {
 private:
@@ -213,12 +215,29 @@ void StructuresHandler::restoreTypes( std::vector<std::pair<tid_t, std::string>>
 }
 
 bool StructuresHandler::storeAll( const std::vector<ida_struct> &structs )
-{
-	for ( std::vector<ida_struct>::const_iterator it = structs.begin(); it != structs.end(); it++ )
-	{
-		if (!store(*it)) {
-			return false;
-		}
+{	
+	index_t index;
+	for ( std::vector<ida_struct>::const_iterator it = structs.begin(); it != structs.end(); it++ ) {
+		index[it->name] = &(*it);
+	}
+
+	while (index.size() > 0) {
+		storeWithDependencies(index, index.begin());
 	}
 	return true;
+}
+
+bool StructuresHandler::storeWithDependencies( index_t& index, index_t::iterator& who )
+{
+	const ida_struct *struc = who->second;
+	index.erase(who);
+	
+	std::smatch match;
+	index_t::iterator dep;
+	for (std::vector<ida_struct_member>::const_iterator it = struc->members.begin(); it != struc->members.end(); it++) {		
+		if (regex_search(it->type, match, typeName) && (dep = index.find(match[1].str())) != index.end()) {
+			storeWithDependencies(index, dep);
+		}
+	}	
+	return store(*struc);
 }

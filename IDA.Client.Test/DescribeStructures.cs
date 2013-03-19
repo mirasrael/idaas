@@ -227,5 +227,22 @@ namespace Ida.Client.Test
             testStructure = Database.Structures[testStructure.Name];
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name.StartsWith("__gap__")), Is.Null);
         }
+
+        [Test]
+        public void ItShouldResolveStructureDependencies()
+        {
+            var ownerStructure = Database.NewStructure(GenerateUniqName());
+            var nestedStructure = Database.NewStructure(GenerateUniqName(), members: new Dictionary<string, string>
+                {
+                    {"IntMember", "int"}
+                });
+            ownerStructure.AddMember("NestedMember", nestedStructure.Name);
+            Database.Structures.Store(new[] {ownerStructure, nestedStructure});
+
+            Reconnect();
+
+            Assert.That(Database.Structures[ownerStructure.Name].GetMember("NestedMember").Type, Is.EqualTo(nestedStructure.Name));
+            Assert.That(Database.Structures[nestedStructure.Name].GetMember("IntMember"), Is.Not.Null);
+        }
     }
 }
