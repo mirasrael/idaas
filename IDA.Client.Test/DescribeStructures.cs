@@ -162,9 +162,9 @@ namespace Ida.Client.Test
             Reconnect();
 
             @enum = Database.Structures[@enum.Name];
-            Assert.That(@enum.GetMember("Member1").Type, Is.EqualTo("struct " + subStructure1.Name));
-            Assert.That(@enum.GetMember("Member2").Type, Is.EqualTo("struct " + subStructure2.Name));
-            Assert.That(@enum.GetMember("Member3").Type, Is.EqualTo("struct " + subStructure3.Name));
+            Assert.That(@enum.Get("Member1").Type, Is.EqualTo("struct " + subStructure1.Name));
+            Assert.That(@enum.Get("Member2").Type, Is.EqualTo("struct " + subStructure2.Name));
+            Assert.That(@enum.Get("Member3").Type, Is.EqualTo("struct " + subStructure3.Name));
         }
 
         [Test]
@@ -308,9 +308,9 @@ namespace Ida.Client.Test
 
             Reconnect();
 
-            Assert.That(Database.Structures[ownerStructure.Name].GetMember("NestedMember").Type,
+            Assert.That(Database.Structures[ownerStructure.Name].Get("NestedMember").Type,
                         Is.EqualTo(nestedStructure.Name));
-            Assert.That(Database.Structures[nestedStructure.Name].GetMember("IntMember"), Is.Not.Null);
+            Assert.That(Database.Structures[nestedStructure.Name].Get("IntMember"), Is.Not.Null);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Idaas;
 using NUnit.Framework;
@@ -95,5 +96,34 @@ namespace Ida.Client.Test
             ida_enum_const unknownScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_UNKNOWN");
             Assert.That(unknownScheme, Is.Not.Null);
         }        
+
+        [Test]
+        public void ItShouldExportAndImportEnumerations()
+        {
+            var @enum = Database.NewEnumeration(GenerateUniqName());
+            @enum.AddConstant(@enum.Name + "_0", 0);
+
+            var flagsEnum = Database.NewEnumeration(GenerateUniqName(), true);
+            flagsEnum.AddConstant(flagsEnum.Name + "_1", 1);
+
+            Database.Enumerations.Store(new[] {@enum, flagsEnum});
+
+            var output = new MemoryStream();
+            Database.Enumerations.SaveTo(output);
+            output.Seek(0, SeekOrigin.Begin);
+            Console.WriteLine(new StreamReader(output).ReadToEnd());
+            output.Seek(0, SeekOrigin.Begin);
+
+            Database.Enumerations.Delete(@enum);
+            Database.Enumerations.Delete(flagsEnum);
+
+            Reconnect();
+
+            Database.Enumerations.LoadFrom(output);
+            Assert.That(Database.Enumerations.Has(@enum.Name), Is.True);
+            Assert.That(Database.Enumerations.Has(flagsEnum.Name), Is.True);
+            Assert.That(Database.Enumerations[flagsEnum.Name].IsBitfield, Is.True);
+            Assert.That(Database.Enumerations[flagsEnum.Name].Get(flagsEnum.Name + "_1").Value, Is.EqualTo(1));
+        }
     }
 }

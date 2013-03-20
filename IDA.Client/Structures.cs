@@ -15,7 +15,7 @@ namespace Ida.Client
             @struct.Members.Add(new ida_struct_member { Name = name, Type = type });
         }
         
-        public static ida_struct_member GetMember(this ida_struct @struct, string name)
+        public static ida_struct_member Get(this ida_struct @struct, string name)
         {
             return @struct.Members.Find(m => m.Name == name);
         }
