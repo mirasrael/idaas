@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Idaas;
 
@@ -106,6 +107,11 @@ namespace Ida.Client
         public bool StoreAll()
         {
             return _client.storeEnums(Items);
+        }
+
+        public void SaveTo(Stream output)
+        {
+            
         }
     };
 }

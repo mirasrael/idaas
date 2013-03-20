@@ -94,6 +94,6 @@ namespace Ida.Client.Test
             Assert.That(partialScheme, Is.Not.Null);
             ida_enum_const unknownScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_UNKNOWN");
             Assert.That(unknownScheme, Is.Not.Null);
-        }
+        }        
     }
 }

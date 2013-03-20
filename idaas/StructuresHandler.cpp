@@ -12,7 +12,7 @@
 #include <boost/ref.hpp>
 
 const std::regex StructuresHandler::invalidIdentifier("\\b(?:\\w|\\$)+::(?:\\w|[:$])+");
-const std::regex StructuresHandler::typeName("^([A-Za-z0-9_:$]+)\\s*(?:$|\\[)");
+const std::regex StructuresHandler::typeName("^(?:struct\\s+|union\\s+)?([A-Za-z0-9_:$]+)\\s*(?:$|\\[)");
 
 class struct_list_copier {
 private:
@@ -112,6 +112,9 @@ bool StructuresHandler::store( const ida_struct &_struct )
 			} else {				
 				del_struc_members(struc, struc->is_union() ? 1 : first->eoff, BADADDR);
 				set_member_name(struc, 0, "__Dummy__");
+				if (first->eoff > 1) {
+					set_member_type(struc, 0, byteflag(), 0, 1);
+				}
 			}			
 			firstMember = true;
 		}		
@@ -152,7 +155,8 @@ bool StructuresHandler::store( const ida_struct &_struct )
 		if (*(fullType.end() - 1) != ';') {
 			fullType.append(";");
 		}		
-		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0 /*PT_SIL*/)) {			
+		if (!parse_decl(idati, fullType.c_str(), &name, &type, &fields, 0 /*PT_SIL*/)) {
+			logmsg("Failed to parse declaration '%s' for %s.%s\n", fullType.c_str(), _struct.name.c_str(), it->name.c_str());
 			return false;
 		}		
 		set_member_tinfo(idati, struc, member, 0, type.c_str(), fields.c_str(), 0);

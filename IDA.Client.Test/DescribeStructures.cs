@@ -135,6 +135,39 @@ namespace Ida.Client.Test
         }
 
         [Test]
+        public void ItShouldLoadUnionInfo()
+        {
+            var subStructure1 = Database.NewStructure(GenerateUniqName(),
+                                                      new Dictionary<string, string>
+                                                          {
+                                                              {"IntMember", "int"},
+                                                              {"FloatMember", "float"}
+                                                          });
+            var subStructure2 = Database.NewStructure(GenerateUniqName(), new Dictionary<string, string>
+                {
+                    {"IntMember", "int"}
+                });
+            var subStructure3 = Database.NewStructure(GenerateUniqName(), new Dictionary<string, string>
+                {
+                    {"DoubleMember", "double"}
+                });
+            var @enum = Database.NewUnion(GenerateUniqName(), new Dictionary<string, string>
+                {
+                    {"Member1", "struct " + subStructure1.Name },
+                    {"Member2", "struct " + subStructure2.Name },
+                    {"Member3", "struct " + subStructure3.Name },
+                });
+            Database.Structures.Store(new[] { subStructure1, subStructure2, subStructure3, @enum });
+
+            Reconnect();
+
+            @enum = Database.Structures[@enum.Name];
+            Assert.That(@enum.GetMember("Member1").Type, Is.EqualTo("struct " + subStructure1.Name));
+            Assert.That(@enum.GetMember("Member2").Type, Is.EqualTo("struct " + subStructure2.Name));
+            Assert.That(@enum.GetMember("Member3").Type, Is.EqualTo("struct " + subStructure3.Name));
+        }
+
+        [Test]
         public void ItShouldCreateUnion()
         {
             string unionName = GenerateUniqName();
@@ -157,14 +190,48 @@ namespace Ida.Client.Test
         }
 
         [Test]
+        public void ItShouldDeleteStructures()
+        {
+            var @structure = Database.NewStructure(GenerateUniqName());
+            Database.Store(@structure);
+            Database.Structures.Delete(@structure);
+
+            Reconnect();
+
+            Assert.That(Database.Structures.Has(@structure.Name), Is.False);
+        }
+
+        [Test]
         public void ItShouldExportAndImportStructures()
         {
+            var @structure = Database.NewStructure(GenerateUniqName(),
+                                                   new Dictionary<string, string>
+                                                       {
+                                                           {"IntMember", "int"},
+                                                           {"FloatMember", "float"}
+                                                       });
+            var @union = Database.NewUnion(GenerateUniqName(),
+                                           new Dictionary<string, string>
+                                               {
+                                                   {"IntMember", "int"},
+                                                   {"FloatMember", "float"}
+                                               });
+
             var output = new MemoryStream();
             Database.Structures.SaveTo(output);
             output.Seek(0, SeekOrigin.Begin);
             Console.WriteLine(new StreamReader(output).ReadToEnd());
             output.Seek(0, SeekOrigin.Begin);
+
+            Database.Structures.Delete(@structure);
+            Database.Structures.Delete(@union);
+
+            Reconnect();
+
             Database.Structures.LoadFrom(output);
+            Assert.That(Database.Structures.Has(@structure.Name), Is.True);
+            Assert.That(Database.Structures.Has(@union.Name), Is.True);
+            Assert.That(Database.Structures[@union.Name].IsUnion, Is.True);
         }
 
         [Test]
@@ -218,7 +285,7 @@ namespace Ida.Client.Test
             var testStructure = Database.NewStructure(GenerateUniqName(), members: new Dictionary<string, string>
                 {
                     {"IntMember", "int"},
-                    {"__gap__0", "byte[20]"},                    
+                    {"__gap__0", "byte[20]"},
                 });
             Database.Store(testStructure);
 
@@ -241,7 +308,8 @@ namespace Ida.Client.Test
 
             Reconnect();
 
-            Assert.That(Database.Structures[ownerStructure.Name].GetMember("NestedMember").Type, Is.EqualTo(nestedStructure.Name));
+            Assert.That(Database.Structures[ownerStructure.Name].GetMember("NestedMember").Type,
+                        Is.EqualTo(nestedStructure.Name));
             Assert.That(Database.Structures[nestedStructure.Name].GetMember("IntMember"), Is.Not.Null);
         }
     }

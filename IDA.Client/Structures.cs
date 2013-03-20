@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,10 +28,15 @@ namespace Ida.Client
             return database.Structures.Store(@struct);
         }
 
-        public static ida_struct NewStructure(this Database database, string name, bool isUnion = false,
+        public static ida_struct NewStructure(this Database database, string name,
                                               IEnumerable<KeyValuePair<string, string>> members = null)
         {
-            return database.Structures.New(name, isUnion, members);
+            return database.Structures.New(name, false, members);
+        }
+
+        public static ida_struct NewUnion(this Database database, string name, IEnumerable<KeyValuePair<string, string>> members = null)
+        {
+            return database.Structures.New(name, true, members);
         }
     }
 
@@ -100,6 +106,7 @@ namespace Ida.Client
             {
                 writer.WriteStartElement("Structure");
                 writer.WriteAttributeString("Name", item.Name);
+                writer.WriteAttributeString("IsUnion", item.IsUnion.ToString());
                 foreach (ida_struct_member member in item.Members)
                 {
                     writer.WriteStartElement("Field");
@@ -122,7 +129,8 @@ namespace Ida.Client
                  hasStructure;
                  hasStructure = reader.ReadToNextSibling("Structure"))
             {
-                ida_struct @structure = New(reader.GetAttribute("Name"));
+                var isUnion = bool.TrueString.Equals(reader.GetAttribute("IsUnion"), StringComparison.CurrentCultureIgnoreCase);
+                ida_struct @structure = New(reader.GetAttribute("Name"), isUnion);
                 for (bool hasField = reader.ReadToDescendant("Field");
                      hasField;
                      hasField = reader.ReadToNextSibling("Field"))
@@ -152,6 +160,16 @@ namespace Ida.Client
         public ida_struct this[string name]
         {
             get { return this.First(s => s.Name == name); }
+        }
+
+        public bool Has(string name)
+        {
+            return this.Any(s => s.Name == name);
+        }
+
+        public void Delete(ida_struct structure)
+        {
+            _client.deleteStruct(structure.Name);
         }
     }
 }
