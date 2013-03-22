@@ -26,23 +26,54 @@ bool _CheckPortIsOpen(int port) {
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
-	addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");	
-	SOCKET s = socket(AF_INET, SOCK_STREAM, 0);
-	if (INVALID_SOCKET == s)
-		return false;	
-	bool result = SOCKET_ERROR != bind(s, (struct sockaddr *) &addr, sizeof(addr));
+	addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+	//logmsg("Checking port %d\n", port);
+	SOCKET s = socket(addr.sin_family, SOCK_STREAM, 0);	
+	if (INVALID_SOCKET == s) {
+		//logmsg("No socket\n");
+		return false;
+	}
+
+	u_long iMode = 1;
+	if (SOCKET_ERROR == ioctlsocket(s, FIONBIO, &iMode)) {
+		//logmsg("Can't set non-blocking mode\n");
+		closesocket(s);
+		return false;
+	}
+	if (SOCKET_ERROR != connect(s, (struct sockaddr *) &addr, sizeof(addr))) {
+		//logmsg("Connect immediately\n");
+		closesocket(s);
+		return false;
+	}
+	if (WSAEWOULDBLOCK != WSAGetLastError()) {
+		//logmsg("Connect failed with not wouldn't block: %d\n", WSAGetLastError());
+		closesocket(s);
+		return true;
+	}
+	timeval t = { 0, 100 };
+	fd_set writeSet;
+	FD_ZERO(&writeSet);
+	FD_SET(s, &writeSet);
+	if (select(NULL, NULL, &writeSet, NULL, &t) > 0) {
+		//logmsg("Connection successful\n");
+		closesocket(s);
+		return false;
+	}
+
+	//logmsg("Port is available\n");
 	closesocket(s);
-	return result;
+	return true;
 }
 
 int idaapi GetDatabaseServerPort()
 {
 	static int port = -1;
 	if (port == -1) {
-		port = 13044;
+		port = 13044;		
 		while(!_CheckPortIsOpen(port) && port < 14000) {
 			port++;
-		}		
+		}
+		logmsg("Selected port: %d\n", port);
 	}
 	return port;
 }
