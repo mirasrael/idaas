@@ -40,7 +40,7 @@ namespace Ida.Client
         }
     }
 
-    public class Structures : IEnumerable<ida_struct>
+    public class Structures : IEnumerable<ida_struct>,  IExportable
     {
         private readonly Idaas.Database.Client _client;
         private List<ida_struct> _items;

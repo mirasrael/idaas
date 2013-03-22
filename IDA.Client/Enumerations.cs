@@ -42,7 +42,7 @@ namespace Ida.Client
         }
     }
 
-    public class Enumerations : IEnumerable<ida_enum>
+    public class Enumerations : IEnumerable<ida_enum>, IExportable
     {
         private readonly Idaas.Database.Client _client;
         private List<ida_enum> _items;
