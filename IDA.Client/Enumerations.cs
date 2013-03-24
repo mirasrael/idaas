@@ -144,6 +144,7 @@ namespace Ida.Client
                     writer.WriteStartElement("Constant");
                     writer.WriteAttributeString("Name", constant.Name);
                     writer.WriteAttributeString("Value", constant.Value.ToString(NumberFormatInfo.CurrentInfo));
+                    writer.WriteAttributeString("Mask", constant.Mask.ToString(NumberFormatInfo.CurrentInfo));
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -172,10 +173,16 @@ namespace Ida.Client
                     {
                         throw new NullReferenceException("Value is not provided");
                     }
+                    var mask = reader.GetAttribute("Mask");                    
+                    if (mask == null)
+                    {
+                        throw new NullReferenceException("Mask is not provided");
+                    }
                     @enum.Constants.Add(new ida_enum_const
                     {
                         Name = reader.GetAttribute("Name"),
-                        Value = int.Parse(value)
+                        Value = int.Parse(value),
+                        Mask = int.Parse(mask)
                     });
                 }
                 loadedEnumerations.Add(@enum);

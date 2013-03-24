@@ -223,6 +223,11 @@ bool StructuresHandler::storeAll( const std::vector<ida_struct> &structs )
 	index_t index;
 	for ( std::vector<ida_struct>::const_iterator it = structs.begin(); it != structs.end(); it++ ) {
 		index[it->name] = &(*it);
+		// create empty structures initially because they can be used in pointers
+		if (BADADDR == get_struc_id(it->name.c_str())) {
+			tid_t id = add_struc(BADADDR, it->name.c_str(), it->isUnion);
+			add_struc_member(get_struc(id), "__Dummy__", 0, byteflag(), 0, 1);
+		}
 	}
 
 	while (index.size() > 0) {
