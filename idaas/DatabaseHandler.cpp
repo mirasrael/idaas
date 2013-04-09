@@ -124,4 +124,9 @@ bool DatabaseHandler::storeEnums( const std::vector<ida_enum> & enums )
 	
 }
 
+void DatabaseHandler::listStrings( std::vector<ida_string> & _return )
+{
+	return run_in_main_thread(&StringsHandler::list, &stringsHandler, _return);
+}
+
 

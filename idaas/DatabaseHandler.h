@@ -3,11 +3,14 @@
 #include <Database.h>
 #include "StructuresHandler.h"
 #include "EnumerationsHandler.h"
+#include "StringsHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
 private:
 	StructuresHandler structureHandler;
 	EnumerationsHandler enumerationsHandler;
+	StringsHandler stringsHandler;
+	
 public:
 	DatabaseHandler();
 
@@ -26,6 +29,8 @@ public:
 	bool storeStructures(const std::vector<ida_struct> & structs);
 
 	void deleteStruct(const std::string& name);
+
+	void listStrings(std::vector<ida_string> & _return);
 
 	void waitBackgroundTasks();
 };

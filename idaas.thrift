@@ -24,6 +24,11 @@ struct ida_struct {
 	3: list<ida_struct_member> members
 }
 
+struct ida_string {
+	1: required i32 address
+	2: required string value
+}
+
 service Database {
 	list<ida_enum> listEnums()
 	bool storeEnum(1: ida_enum _enum)	
@@ -33,7 +38,9 @@ service Database {
 	list<ida_struct> listStructures()
 	bool storeStructure(1: ida_struct _struct)
 	bool storeStructures(1: list<ida_struct> structs)
-	void deleteStruct(1: string name)	
+	void deleteStruct(1: string name)
+
+	list<ida_string> listStrings()
 
 	void waitBackgroundTasks()
 }

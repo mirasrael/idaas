@@ -233,6 +233,50 @@ class ida_struct {
 
 void swap(ida_struct &a, ida_struct &b);
 
+
+class ida_string {
+ public:
+
+  static const char* ascii_fingerprint; // = "3F5FC93B338687BC7235B1AB103F47B3";
+  static const uint8_t binary_fingerprint[16]; // = {0x3F,0x5F,0xC9,0x3B,0x33,0x86,0x87,0xBC,0x72,0x35,0xB1,0xAB,0x10,0x3F,0x47,0xB3};
+
+  ida_string() : address(0), value() {
+  }
+
+  virtual ~ida_string() throw() {}
+
+  int32_t address;
+  std::string value;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  void __set_value(const std::string& val) {
+    value = val;
+  }
+
+  bool operator == (const ida_string & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    if (!(value == rhs.value))
+      return false;
+    return true;
+  }
+  bool operator != (const ida_string &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ida_string & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(ida_string &a, ida_string &b);
+
 } // namespace
 
 #endif

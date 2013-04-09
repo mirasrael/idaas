@@ -81,6 +81,7 @@
     <Compile Include="DatabaseSpec.cs" />
     <Compile Include="DescribeEnumerations.cs" />
     <Compile Include="DescribeFunctions.cs" />
+    <Compile Include="DescribeStrings.cs" />
     <Compile Include="DescribeStructures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DescribeEndpoint.cs" />

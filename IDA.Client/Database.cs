@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
-using Idaas;
 using Thrift.Protocol;
 using Thrift.Transport;
 
@@ -55,6 +54,7 @@ namespace Ida.Client
             _client = new Idaas.Database.Client(proto);
             Enumerations = new Enumerations(_client);
             Structures = new Structures(_client);
+            Strings = new Strings(_client);
 
             _transport.Open();
             return true;
@@ -67,7 +67,9 @@ namespace Ida.Client
 
         public Enumerations Enumerations { get; private set; }
 
-        public Structures Structures { get; private set; }        
+        public Structures Structures { get; private set; }
+
+        public Strings Strings { get; private set; }        
 
         public void Dispose()
         {
