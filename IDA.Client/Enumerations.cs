@@ -17,9 +17,17 @@ namespace Ida.Client
 
     public static class IdaEnumExtensions
     {
-        public static void AddConstant(this ida_enum @enum, string name, int value)
+        public static void AddConstant(this ida_enum @enum, string name, int value, int? mask = null)
         {
-            @enum.Constants.Add(new ida_enum_const {Name = name, Value = value});
+            var @const = new ida_enum_const {Name = name, Value = value};
+            if (mask != null)
+            {
+                @const.Mask = mask.Value;
+            } else if (@enum.IsBitfield)
+            {
+                @const.Mask = value;
+            }
+            @enum.Constants.Add(@const);
         }
 
         public static ida_enum_const Get(this ida_enum @enum, string constantName)

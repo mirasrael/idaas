@@ -5,7 +5,7 @@ namespace Ida.Client.Test
 {
     public class DatabaseSpec
     {
-        private const string DatabaseName = @"d:\games\WoWExt\Wow_5.1.0_16357.idb";
+        private const string DatabaseName = @"d:\games\WoWExt\Wow_5.2.0_16733.idb";
         protected Database Database;
 
         [SetUp]
