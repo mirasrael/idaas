@@ -29,6 +29,15 @@ struct ida_string {
 	2: required string value
 }
 
+struct IdaRef {
+	1: required i32 refFrom
+	2: required i32 refTo
+}
+
+enum IdaRefType {
+	Data = 1
+}
+
 service Database {
 	list<ida_enum> listEnums()
 	bool storeEnum(1: ida_enum _enum)	
@@ -41,6 +50,9 @@ service Database {
 	void deleteStruct(1: string name)
 
 	list<ida_string> listStrings()
+
+	list<IdaRef> xrefsTo(i32 address, IdaRefType refType)
+	list<IdaRef> xrefsFrom(i32 address, IdaRefType refType)
 
 	void waitBackgroundTasks()
 }

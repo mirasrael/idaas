@@ -64,6 +64,16 @@ namespace Idaas
       IAsyncResult Begin_listStrings(AsyncCallback callback, object state, );
       List<ida_string> End_listStrings(IAsyncResult asyncResult);
       #endif
+      List<IdaRef> xrefsTo(int address, IdaRefType refType);
+      #if SILVERLIGHT
+      IAsyncResult Begin_xrefsTo(AsyncCallback callback, object state, int address, IdaRefType refType);
+      List<IdaRef> End_xrefsTo(IAsyncResult asyncResult);
+      #endif
+      List<IdaRef> xrefsFrom(int address, IdaRefType refType);
+      #if SILVERLIGHT
+      IAsyncResult Begin_xrefsFrom(AsyncCallback callback, object state, int address, IdaRefType refType);
+      List<IdaRef> End_xrefsFrom(IAsyncResult asyncResult);
+      #endif
       void waitBackgroundTasks();
       #if SILVERLIGHT
       IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, );
@@ -647,6 +657,132 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_xrefsTo(AsyncCallback callback, object state, int address, IdaRefType refType)
+      {
+        return send_xrefsTo(callback, state, address, refType);
+      }
+
+      public List<IdaRef> End_xrefsTo(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_xrefsTo();
+      }
+
+      #endif
+
+      public List<IdaRef> xrefsTo(int address, IdaRefType refType)
+      {
+        #if !SILVERLIGHT
+        send_xrefsTo(address, refType);
+        return recv_xrefsTo();
+
+        #else
+        var asyncResult = Begin_xrefsTo(null, null, address, refType);
+        return End_xrefsTo(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_xrefsTo(AsyncCallback callback, object state, int address, IdaRefType refType)
+      #else
+      public void send_xrefsTo(int address, IdaRefType refType)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("xrefsTo", TMessageType.Call, seqid_));
+        xrefsTo_args args = new xrefsTo_args();
+        args.Address = address;
+        args.RefType = refType;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public List<IdaRef> recv_xrefsTo()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        xrefsTo_result result = new xrefsTo_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "xrefsTo failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_xrefsFrom(AsyncCallback callback, object state, int address, IdaRefType refType)
+      {
+        return send_xrefsFrom(callback, state, address, refType);
+      }
+
+      public List<IdaRef> End_xrefsFrom(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_xrefsFrom();
+      }
+
+      #endif
+
+      public List<IdaRef> xrefsFrom(int address, IdaRefType refType)
+      {
+        #if !SILVERLIGHT
+        send_xrefsFrom(address, refType);
+        return recv_xrefsFrom();
+
+        #else
+        var asyncResult = Begin_xrefsFrom(null, null, address, refType);
+        return End_xrefsFrom(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_xrefsFrom(AsyncCallback callback, object state, int address, IdaRefType refType)
+      #else
+      public void send_xrefsFrom(int address, IdaRefType refType)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("xrefsFrom", TMessageType.Call, seqid_));
+        xrefsFrom_args args = new xrefsFrom_args();
+        args.Address = address;
+        args.RefType = refType;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public List<IdaRef> recv_xrefsFrom()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        xrefsFrom_result result = new xrefsFrom_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "xrefsFrom failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, )
       {
         return send_waitBackgroundTasks(callback, state);
@@ -717,6 +853,8 @@ namespace Idaas
         processMap_["storeStructures"] = storeStructures_Process;
         processMap_["deleteStruct"] = deleteStruct_Process;
         processMap_["listStrings"] = listStrings_Process;
+        processMap_["xrefsTo"] = xrefsTo_Process;
+        processMap_["xrefsFrom"] = xrefsFrom_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
 
@@ -862,6 +1000,32 @@ namespace Idaas
         listStrings_result result = new listStrings_result();
         result.Success = iface_.listStrings();
         oprot.WriteMessageBegin(new TMessage("listStrings", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void xrefsTo_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        xrefsTo_args args = new xrefsTo_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        xrefsTo_result result = new xrefsTo_result();
+        result.Success = iface_.xrefsTo(args.Address, args.RefType);
+        oprot.WriteMessageBegin(new TMessage("xrefsTo", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void xrefsFrom_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        xrefsFrom_args args = new xrefsFrom_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        xrefsFrom_result result = new xrefsFrom_result();
+        result.Success = iface_.xrefsFrom(args.Address, args.RefType);
+        oprot.WriteMessageBegin(new TMessage("xrefsFrom", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -2342,6 +2506,468 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("listStrings_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class xrefsTo_args : TBase
+    {
+      private int _address;
+      private IdaRefType _refType;
+
+      public int Address
+      {
+        get
+        {
+          return _address;
+        }
+        set
+        {
+          __isset.address = true;
+          this._address = value;
+        }
+      }
+
+      /// <summary>
+      /// 
+      /// <seealso cref="IdaRefType"/>
+      /// </summary>
+      public IdaRefType RefType
+      {
+        get
+        {
+          return _refType;
+        }
+        set
+        {
+          __isset.refType = true;
+          this._refType = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool address;
+        public bool refType;
+      }
+
+      public xrefsTo_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case -1:
+              if (field.Type == TType.I32) {
+                Address = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case -2:
+              if (field.Type == TType.I32) {
+                RefType = (IdaRefType)iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("xrefsTo_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (__isset.refType) {
+          field.Name = "refType";
+          field.Type = TType.I32;
+          field.ID = -2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32((int)RefType);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.address) {
+          field.Name = "address";
+          field.Type = TType.I32;
+          field.ID = -1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Address);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("xrefsTo_args(");
+        sb.Append("Address: ");
+        sb.Append(Address);
+        sb.Append(",RefType: ");
+        sb.Append(RefType);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class xrefsTo_result : TBase
+    {
+      private List<IdaRef> _success;
+
+      public List<IdaRef> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public xrefsTo_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<IdaRef>();
+                  TList _list28 = iprot.ReadListBegin();
+                  for( int _i29 = 0; _i29 < _list28.Count; ++_i29)
+                  {
+                    IdaRef _elem30 = new IdaRef();
+                    _elem30 = new IdaRef();
+                    _elem30.Read(iprot);
+                    Success.Add(_elem30);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("xrefsTo_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (IdaRef _iter31 in Success)
+              {
+                _iter31.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("xrefsTo_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class xrefsFrom_args : TBase
+    {
+      private int _address;
+      private IdaRefType _refType;
+
+      public int Address
+      {
+        get
+        {
+          return _address;
+        }
+        set
+        {
+          __isset.address = true;
+          this._address = value;
+        }
+      }
+
+      /// <summary>
+      /// 
+      /// <seealso cref="IdaRefType"/>
+      /// </summary>
+      public IdaRefType RefType
+      {
+        get
+        {
+          return _refType;
+        }
+        set
+        {
+          __isset.refType = true;
+          this._refType = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool address;
+        public bool refType;
+      }
+
+      public xrefsFrom_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case -1:
+              if (field.Type == TType.I32) {
+                Address = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case -2:
+              if (field.Type == TType.I32) {
+                RefType = (IdaRefType)iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("xrefsFrom_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (__isset.refType) {
+          field.Name = "refType";
+          field.Type = TType.I32;
+          field.ID = -2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32((int)RefType);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.address) {
+          field.Name = "address";
+          field.Type = TType.I32;
+          field.ID = -1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Address);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("xrefsFrom_args(");
+        sb.Append("Address: ");
+        sb.Append(Address);
+        sb.Append(",RefType: ");
+        sb.Append(RefType);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class xrefsFrom_result : TBase
+    {
+      private List<IdaRef> _success;
+
+      public List<IdaRef> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public xrefsFrom_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<IdaRef>();
+                  TList _list32 = iprot.ReadListBegin();
+                  for( int _i33 = 0; _i33 < _list32.Count; ++_i33)
+                  {
+                    IdaRef _elem34 = new IdaRef();
+                    _elem34 = new IdaRef();
+                    _elem34.Read(iprot);
+                    Success.Add(_elem34);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("xrefsFrom_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (IdaRef _iter35 in Success)
+              {
+                _iter35.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("xrefsFrom_result(");
         sb.Append("Success: ");
         sb.Append(Success);
         sb.Append(")");

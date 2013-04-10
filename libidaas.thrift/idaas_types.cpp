@@ -10,6 +10,14 @@
 
 namespace idaas {
 
+int _kIdaRefTypeValues[] = {
+  IdaRefType::Data
+};
+const char* _kIdaRefTypeNames[] = {
+  "Data"
+};
+const std::map<int, const char*> _IdaRefType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(1, _kIdaRefTypeValues, _kIdaRefTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
+
 const char* ida_enum_const::ascii_fingerprint = "28C2ECC89260BADB9C70330FBF47BFA8";
 const uint8_t ida_enum_const::binary_fingerprint[16] = {0x28,0xC2,0xEC,0xC8,0x92,0x60,0xBA,0xDB,0x9C,0x70,0x33,0x0F,0xBF,0x47,0xBF,0xA8};
 
@@ -484,6 +492,86 @@ void swap(ida_string &a, ida_string &b) {
   using ::std::swap;
   swap(a.address, b.address);
   swap(a.value, b.value);
+}
+
+const char* IdaRef::ascii_fingerprint = "989D1F1AE8D148D5E2119FFEC4BBBEE3";
+const uint8_t IdaRef::binary_fingerprint[16] = {0x98,0x9D,0x1F,0x1A,0xE8,0xD1,0x48,0xD5,0xE2,0x11,0x9F,0xFE,0xC4,0xBB,0xBE,0xE3};
+
+uint32_t IdaRef::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_refFrom = false;
+  bool isset_refTo = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->refFrom);
+          isset_refFrom = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->refTo);
+          isset_refTo = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_refFrom)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_refTo)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t IdaRef::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("IdaRef");
+
+  xfer += oprot->writeFieldBegin("refFrom", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->refFrom);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("refTo", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->refTo);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IdaRef &a, IdaRef &b) {
+  using ::std::swap;
+  swap(a.refFrom, b.refFrom);
+  swap(a.refTo, b.refTo);
 }
 
 } // namespace

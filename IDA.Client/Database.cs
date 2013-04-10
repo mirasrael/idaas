@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using Idaas;
 using Thrift.Protocol;
 using Thrift.Transport;
 
@@ -69,7 +71,17 @@ namespace Ida.Client
 
         public Structures Structures { get; private set; }
 
-        public Strings Strings { get; private set; }        
+        public Strings Strings { get; private set; }
+
+        public List<IdaRef> GetDataRefsTo(int address)
+        {
+            return _client.xrefsTo(address, IdaRefType.Data);
+        }
+
+        public List<IdaRef> GetDataRefsFrom(int address)
+        {
+            return _client.xrefsFrom(address, IdaRefType.Data);
+        }
 
         public void Dispose()
         {

@@ -126,7 +126,17 @@ bool DatabaseHandler::storeEnums( const std::vector<ida_enum> & enums )
 
 void DatabaseHandler::listStrings( std::vector<ida_string> & _return )
 {
-	return run_in_main_thread(&StringsHandler::list, &stringsHandler, _return);
+	run_in_main_thread(&StringsHandler::list, &stringsHandler, _return);
+}
+
+void DatabaseHandler::xrefsFrom( std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType )
+{
+	run_in_main_thread(boost::function<void()>(boost::bind(&ReferencesHandler::xrefsFrom, &referencesHandler, boost::ref(_return), address, refType)));
+}
+
+void DatabaseHandler::xrefsTo( std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType )
+{
+	run_in_main_thread(boost::function<void()>(boost::bind(&ReferencesHandler::xrefsTo, &referencesHandler, boost::ref(_return), address, refType)));
 }
 
 

@@ -4,12 +4,14 @@
 #include "StructuresHandler.h"
 #include "EnumerationsHandler.h"
 #include "StringsHandler.h"
+#include "ReferencesHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
 private:
 	StructuresHandler structureHandler;
 	EnumerationsHandler enumerationsHandler;
 	StringsHandler stringsHandler;
+	ReferencesHandler referencesHandler;
 	
 public:
 	DatabaseHandler();
@@ -31,6 +33,10 @@ public:
 	void deleteStruct(const std::string& name);
 
 	void listStrings(std::vector<ida_string> & _return);
+
+	void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
+
+	void xrefsTo(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
 
 	void waitBackgroundTasks();
 };

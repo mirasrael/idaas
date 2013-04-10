@@ -16,6 +16,14 @@
 
 namespace idaas {
 
+struct IdaRefType {
+  enum type {
+    Data = 1
+  };
+};
+
+extern const std::map<int, const char*> _IdaRefType_VALUES_TO_NAMES;
+
 typedef struct _ida_enum_const__isset {
   _ida_enum_const__isset() : mask(true) {}
   bool mask;
@@ -276,6 +284,50 @@ class ida_string {
 };
 
 void swap(ida_string &a, ida_string &b);
+
+
+class IdaRef {
+ public:
+
+  static const char* ascii_fingerprint; // = "989D1F1AE8D148D5E2119FFEC4BBBEE3";
+  static const uint8_t binary_fingerprint[16]; // = {0x98,0x9D,0x1F,0x1A,0xE8,0xD1,0x48,0xD5,0xE2,0x11,0x9F,0xFE,0xC4,0xBB,0xBE,0xE3};
+
+  IdaRef() : refFrom(0), refTo(0) {
+  }
+
+  virtual ~IdaRef() throw() {}
+
+  int32_t refFrom;
+  int32_t refTo;
+
+  void __set_refFrom(const int32_t val) {
+    refFrom = val;
+  }
+
+  void __set_refTo(const int32_t val) {
+    refTo = val;
+  }
+
+  bool operator == (const IdaRef & rhs) const
+  {
+    if (!(refFrom == rhs.refFrom))
+      return false;
+    if (!(refTo == rhs.refTo))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaRef &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaRef & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaRef &a, IdaRef &b);
 
 } // namespace
 
