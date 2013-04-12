@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Threading;
 using Idaas;
 using Thrift.Protocol;
 using Thrift.Transport;
+using System.Linq;
 
 namespace Ida.Client
 {
@@ -57,6 +59,7 @@ namespace Ida.Client
             Enumerations = new Enumerations(_client);
             Structures = new Structures(_client);
             Strings = new Strings(_client);
+            Functions = new Functions(_client);
 
             _transport.Open();
             return true;
@@ -73,6 +76,8 @@ namespace Ida.Client
 
         public Strings Strings { get; private set; }
 
+        public Functions Functions { get; private set; }
+
         public List<IdaRef> GetDataRefsTo(int address)
         {
             return _client.xrefsTo(address, IdaRefType.Data);
@@ -86,6 +91,42 @@ namespace Ida.Client
         public void Dispose()
         {
             _transport.Close();
+        }
+    }
+
+    public class Functions : IEnumerable<IdaFunction>
+    {
+        private IEnumerable<IdaFunction> _items;
+        private readonly Idaas.Database.Client _client;
+
+        internal Functions(Idaas.Database.Client client)
+        {
+            _client = client;
+        }
+
+        public IEnumerator<IdaFunction> GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+
+        private IEnumerable<IdaFunction> Items
+        {
+            get { return _items ?? (_items = Load()); }
+        }
+
+        private IEnumerable<IdaFunction> Load()
+        {
+            return _client.listFunctions();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IdaFunction FindByAddress(int address)
+        {
+            return Items.FirstOrDefault(f => f.StartAddress <= address && f.EndAddress > address);
         }
     }
 }

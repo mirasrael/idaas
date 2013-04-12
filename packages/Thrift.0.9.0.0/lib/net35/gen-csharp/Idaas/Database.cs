@@ -74,6 +74,11 @@ namespace Idaas
       IAsyncResult Begin_xrefsFrom(AsyncCallback callback, object state, int address, IdaRefType refType);
       List<IdaRef> End_xrefsFrom(IAsyncResult asyncResult);
       #endif
+      List<IdaFunction> listFunctions();
+      #if SILVERLIGHT
+      IAsyncResult Begin_listFunctions(AsyncCallback callback, object state, );
+      List<IdaFunction> End_listFunctions(IAsyncResult asyncResult);
+      #endif
       void waitBackgroundTasks();
       #if SILVERLIGHT
       IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, );
@@ -783,6 +788,67 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_listFunctions(AsyncCallback callback, object state, )
+      {
+        return send_listFunctions(callback, state);
+      }
+
+      public List<IdaFunction> End_listFunctions(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_listFunctions();
+      }
+
+      #endif
+
+      public List<IdaFunction> listFunctions()
+      {
+        #if !SILVERLIGHT
+        send_listFunctions();
+        return recv_listFunctions();
+
+        #else
+        var asyncResult = Begin_listFunctions(null, null, );
+        return End_listFunctions(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_listFunctions(AsyncCallback callback, object state, )
+      #else
+      public void send_listFunctions()
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("listFunctions", TMessageType.Call, seqid_));
+        listFunctions_args args = new listFunctions_args();
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public List<IdaFunction> recv_listFunctions()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        listFunctions_result result = new listFunctions_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "listFunctions failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, )
       {
         return send_waitBackgroundTasks(callback, state);
@@ -855,6 +921,7 @@ namespace Idaas
         processMap_["listStrings"] = listStrings_Process;
         processMap_["xrefsTo"] = xrefsTo_Process;
         processMap_["xrefsFrom"] = xrefsFrom_Process;
+        processMap_["listFunctions"] = listFunctions_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
 
@@ -1026,6 +1093,19 @@ namespace Idaas
         xrefsFrom_result result = new xrefsFrom_result();
         result.Success = iface_.xrefsFrom(args.Address, args.RefType);
         oprot.WriteMessageBegin(new TMessage("xrefsFrom", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void listFunctions_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        listFunctions_args args = new listFunctions_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        listFunctions_result result = new listFunctions_result();
+        result.Success = iface_.listFunctions();
+        oprot.WriteMessageBegin(new TMessage("listFunctions", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -2968,6 +3048,160 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("xrefsFrom_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listFunctions_args : TBase
+    {
+
+      public listFunctions_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listFunctions_args");
+        oprot.WriteStructBegin(struc);
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listFunctions_args(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listFunctions_result : TBase
+    {
+      private List<IdaFunction> _success;
+
+      public List<IdaFunction> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public listFunctions_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<IdaFunction>();
+                  TList _list36 = iprot.ReadListBegin();
+                  for( int _i37 = 0; _i37 < _list36.Count; ++_i37)
+                  {
+                    IdaFunction _elem38 = new IdaFunction();
+                    _elem38 = new IdaFunction();
+                    _elem38.Read(iprot);
+                    Success.Add(_elem38);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listFunctions_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (IdaFunction _iter39 in Success)
+              {
+                _iter39.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listFunctions_result(");
         sb.Append("Success: ");
         sb.Append(Success);
         sb.Append(")");

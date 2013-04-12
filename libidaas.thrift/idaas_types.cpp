@@ -574,4 +574,116 @@ void swap(IdaRef &a, IdaRef &b) {
   swap(a.refTo, b.refTo);
 }
 
+const char* IdaFunction::ascii_fingerprint = "9A907BD0092CBBA78E0613C3C8249BD3";
+const uint8_t IdaFunction::binary_fingerprint[16] = {0x9A,0x90,0x7B,0xD0,0x09,0x2C,0xBB,0xA7,0x8E,0x06,0x13,0xC3,0xC8,0x24,0x9B,0xD3};
+
+uint32_t IdaFunction::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_startAddress = false;
+  bool isset_endAddress = false;
+  bool isset_name = false;
+  bool isset_type = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->startAddress);
+          isset_startAddress = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->endAddress);
+          isset_endAddress = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->type);
+          isset_type = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_startAddress)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_endAddress)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_type)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t IdaFunction::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("IdaFunction");
+
+  xfer += oprot->writeFieldBegin("startAddress", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->startAddress);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("endAddress", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->endAddress);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString(this->type);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IdaFunction &a, IdaFunction &b) {
+  using ::std::swap;
+  swap(a.startAddress, b.startAddress);
+  swap(a.endAddress, b.endAddress);
+  swap(a.name, b.name);
+  swap(a.type, b.type);
+}
+
 } // namespace

@@ -139,4 +139,9 @@ void DatabaseHandler::xrefsTo( std::vector<IdaRef> & _return, const int32_t addr
 	run_in_main_thread(boost::function<void()>(boost::bind(&ReferencesHandler::xrefsTo, &referencesHandler, boost::ref(_return), address, refType)));
 }
 
+void DatabaseHandler::listFunctions( std::vector<IdaFunction> & _return )
+{
+	run_in_main_thread(&FunctionsHandler::list, &functionsHandler, _return);
+}
+
 

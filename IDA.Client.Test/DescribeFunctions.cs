@@ -1,15 +1,16 @@
 ﻿using NUnit.Framework;
+using System.Linq;
 
 namespace Ida.Client.Test
 {    
     [TestFixture]
-    public class DescribeFunctions
+    public class DescribeFunctions : DatabaseSpec
     {        
         [Test]
         public void ItShouldReturnFunctionsList()
         {
-            var database = Database.Open(@"d:\games\WoWExt\Wow-4.1.0-13914.idb");
-            //Assert.That(database.Functions.Count(), Is.EqualTo(100));
+            Assert.That(Database.Functions.Count(), Is.GreaterThan(0));
+            Assert.That(Database.Functions.First(function => function.Name == "_WinMain@16"), Is.Not.Null);
         }
     }
 }

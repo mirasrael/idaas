@@ -5,6 +5,7 @@
 #include "EnumerationsHandler.h"
 #include "StringsHandler.h"
 #include "ReferencesHandler.h"
+#include "FunctionsHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
 private:
@@ -12,6 +13,7 @@ private:
 	EnumerationsHandler enumerationsHandler;
 	StringsHandler stringsHandler;
 	ReferencesHandler referencesHandler;
+	FunctionsHandler functionsHandler;
 	
 public:
 	DatabaseHandler();
@@ -33,6 +35,8 @@ public:
 	void deleteStruct(const std::string& name);
 
 	void listStrings(std::vector<ida_string> & _return);
+
+	void listFunctions(std::vector<IdaFunction> & _return);
 
 	void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
 

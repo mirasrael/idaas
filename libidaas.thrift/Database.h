@@ -26,6 +26,7 @@ class DatabaseIf {
   virtual void listStrings(std::vector<ida_string> & _return) = 0;
   virtual void xrefsTo(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
   virtual void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
+  virtual void listFunctions(std::vector<IdaFunction> & _return) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
 
@@ -91,6 +92,9 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void xrefsFrom(std::vector<IdaRef> & /* _return */, const int32_t /* address */, const IdaRefType::type /* refType */) {
+    return;
+  }
+  void listFunctions(std::vector<IdaFunction> & /* _return */) {
     return;
   }
   void waitBackgroundTasks() {
@@ -1223,6 +1227,100 @@ class Database_xrefsFrom_presult {
 };
 
 
+class Database_listFunctions_args {
+ public:
+
+  Database_listFunctions_args() {
+  }
+
+  virtual ~Database_listFunctions_args() throw() {}
+
+
+  bool operator == (const Database_listFunctions_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_listFunctions_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_listFunctions_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_listFunctions_pargs {
+ public:
+
+
+  virtual ~Database_listFunctions_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_listFunctions_result__isset {
+  _Database_listFunctions_result__isset() : success(false) {}
+  bool success;
+} _Database_listFunctions_result__isset;
+
+class Database_listFunctions_result {
+ public:
+
+  Database_listFunctions_result() {
+  }
+
+  virtual ~Database_listFunctions_result() throw() {}
+
+  std::vector<IdaFunction>  success;
+
+  _Database_listFunctions_result__isset __isset;
+
+  void __set_success(const std::vector<IdaFunction> & val) {
+    success = val;
+  }
+
+  bool operator == (const Database_listFunctions_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_listFunctions_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_listFunctions_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_listFunctions_presult__isset {
+  _Database_listFunctions_presult__isset() : success(false) {}
+  bool success;
+} _Database_listFunctions_presult__isset;
+
+class Database_listFunctions_presult {
+ public:
+
+
+  virtual ~Database_listFunctions_presult() throw() {}
+
+  std::vector<IdaFunction> * success;
+
+  _Database_listFunctions_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
 class Database_waitBackgroundTasks_args {
  public:
 
@@ -1349,6 +1447,9 @@ class DatabaseClient : virtual public DatabaseIf {
   void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
   void send_xrefsFrom(const int32_t address, const IdaRefType::type refType);
   void recv_xrefsFrom(std::vector<IdaRef> & _return);
+  void listFunctions(std::vector<IdaFunction> & _return);
+  void send_listFunctions();
+  void recv_listFunctions(std::vector<IdaFunction> & _return);
   void waitBackgroundTasks();
   void send_waitBackgroundTasks();
   void recv_waitBackgroundTasks();
@@ -1378,6 +1479,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_listStrings(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_xrefsTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_xrefsFrom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_listFunctions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   DatabaseProcessor(boost::shared_ptr<DatabaseIf> iface) :
@@ -1393,6 +1495,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["listStrings"] = &DatabaseProcessor::process_listStrings;
     processMap_["xrefsTo"] = &DatabaseProcessor::process_xrefsTo;
     processMap_["xrefsFrom"] = &DatabaseProcessor::process_xrefsFrom;
+    processMap_["listFunctions"] = &DatabaseProcessor::process_listFunctions;
     processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
   }
 
@@ -1523,6 +1626,16 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->xrefsFrom(_return, address, refType);
     }
     ifaces_[i]->xrefsFrom(_return, address, refType);
+    return;
+  }
+
+  void listFunctions(std::vector<IdaFunction> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->listFunctions(_return);
+    }
+    ifaces_[i]->listFunctions(_return);
     return;
   }
 

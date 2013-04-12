@@ -329,6 +329,64 @@ class IdaRef {
 
 void swap(IdaRef &a, IdaRef &b);
 
+
+class IdaFunction {
+ public:
+
+  static const char* ascii_fingerprint; // = "9A907BD0092CBBA78E0613C3C8249BD3";
+  static const uint8_t binary_fingerprint[16]; // = {0x9A,0x90,0x7B,0xD0,0x09,0x2C,0xBB,0xA7,0x8E,0x06,0x13,0xC3,0xC8,0x24,0x9B,0xD3};
+
+  IdaFunction() : startAddress(0), endAddress(0), name(), type() {
+  }
+
+  virtual ~IdaFunction() throw() {}
+
+  int32_t startAddress;
+  int32_t endAddress;
+  std::string name;
+  std::string type;
+
+  void __set_startAddress(const int32_t val) {
+    startAddress = val;
+  }
+
+  void __set_endAddress(const int32_t val) {
+    endAddress = val;
+  }
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  void __set_type(const std::string& val) {
+    type = val;
+  }
+
+  bool operator == (const IdaFunction & rhs) const
+  {
+    if (!(startAddress == rhs.startAddress))
+      return false;
+    if (!(endAddress == rhs.endAddress))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    if (!(type == rhs.type))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaFunction &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaFunction & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaFunction &a, IdaFunction &b);
+
 } // namespace
 
 #endif

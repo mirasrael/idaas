@@ -34,6 +34,13 @@ struct IdaRef {
 	2: required i32 refTo
 }
 
+struct IdaFunction {
+	1: required i32 startAddress
+	2: required i32 endAddress
+	3: required string name
+	4: required string type
+}
+
 enum IdaRefType {
 	Data = 1
 }
@@ -53,6 +60,8 @@ service Database {
 
 	list<IdaRef> xrefsTo(i32 address, IdaRefType refType)
 	list<IdaRef> xrefsFrom(i32 address, IdaRefType refType)
+
+	list<IdaFunction> listFunctions()
 
 	void waitBackgroundTasks()
 }
