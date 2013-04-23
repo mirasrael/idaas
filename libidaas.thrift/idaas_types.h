@@ -24,6 +24,48 @@ struct IdaRefType {
 
 extern const std::map<int, const char*> _IdaRefType_VALUES_TO_NAMES;
 
+struct IdaOperandType {
+  enum type {
+    Unknown = 0,
+    Register = 1,
+    Constant = 2,
+    Memory = 3,
+    Dislacement = 4,
+    Address = 5,
+    FPRegister = 6
+  };
+};
+
+extern const std::map<int, const char*> _IdaOperandType_VALUES_TO_NAMES;
+
+struct IdaRegister {
+  enum type {
+    Unknown = 0,
+    Al = 1,
+    Ah = 2,
+    Ax = 3,
+    Eax = 4,
+    Bl = 5,
+    Bh = 6,
+    Bx = 7,
+    Ebx = 8,
+    Cl = 9,
+    Ch = 10,
+    Cx = 11,
+    Ecx = 12,
+    Dl = 13,
+    Dh = 14,
+    Dx = 15,
+    Edx = 16,
+    Esi = 17,
+    Edi = 18,
+    Ebp = 19,
+    Esp = 20
+  };
+};
+
+extern const std::map<int, const char*> _IdaRegister_VALUES_TO_NAMES;
+
 typedef struct _ida_enum_const__isset {
   _ida_enum_const__isset() : mask(true) {}
   bool mask;
@@ -386,6 +428,153 @@ class IdaFunction {
 };
 
 void swap(IdaFunction &a, IdaFunction &b);
+
+typedef struct _IdaOperand__isset {
+  _IdaOperand__isset() : baseRegister(false), indexRegister(false), indexScale(false), displacement(false), size(false) {}
+  bool baseRegister;
+  bool indexRegister;
+  bool indexScale;
+  bool displacement;
+  bool size;
+} _IdaOperand__isset;
+
+class IdaOperand {
+ public:
+
+  static const char* ascii_fingerprint; // = "E4D267071CB3984CF1E16FD15210BBBF";
+  static const uint8_t binary_fingerprint[16]; // = {0xE4,0xD2,0x67,0x07,0x1C,0xB3,0x98,0x4C,0xF1,0xE1,0x6F,0xD1,0x52,0x10,0xBB,0xBF};
+
+  IdaOperand() : type((IdaOperandType::type)0), baseRegister((IdaRegister::type)0), indexRegister((IdaRegister::type)0), indexScale(0), displacement(0), size(0) {
+  }
+
+  virtual ~IdaOperand() throw() {}
+
+  IdaOperandType::type type;
+  IdaRegister::type baseRegister;
+  IdaRegister::type indexRegister;
+  int32_t indexScale;
+  int32_t displacement;
+  int8_t size;
+
+  _IdaOperand__isset __isset;
+
+  void __set_type(const IdaOperandType::type val) {
+    type = val;
+  }
+
+  void __set_baseRegister(const IdaRegister::type val) {
+    baseRegister = val;
+  }
+
+  void __set_indexRegister(const IdaRegister::type val) {
+    indexRegister = val;
+  }
+
+  void __set_indexScale(const int32_t val) {
+    indexScale = val;
+  }
+
+  void __set_displacement(const int32_t val) {
+    displacement = val;
+  }
+
+  void __set_size(const int8_t val) {
+    size = val;
+  }
+
+  bool operator == (const IdaOperand & rhs) const
+  {
+    if (!(type == rhs.type))
+      return false;
+    if (!(baseRegister == rhs.baseRegister))
+      return false;
+    if (!(indexRegister == rhs.indexRegister))
+      return false;
+    if (!(indexScale == rhs.indexScale))
+      return false;
+    if (!(displacement == rhs.displacement))
+      return false;
+    if (!(size == rhs.size))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaOperand &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaOperand & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaOperand &a, IdaOperand &b);
+
+
+class IdaInstruction {
+ public:
+
+  static const char* ascii_fingerprint; // = "BF13BE4E100165470528FD02E1D3B2B6";
+  static const uint8_t binary_fingerprint[16]; // = {0xBF,0x13,0xBE,0x4E,0x10,0x01,0x65,0x47,0x05,0x28,0xFD,0x02,0xE1,0xD3,0xB2,0xB6};
+
+  IdaInstruction() : address(0), size(0), mnemonic() {
+  }
+
+  virtual ~IdaInstruction() throw() {}
+
+  int32_t address;
+  int32_t size;
+  std::string mnemonic;
+  std::vector<IdaOperand>  operands;
+  std::vector<std::string>  prefixes;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  void __set_size(const int32_t val) {
+    size = val;
+  }
+
+  void __set_mnemonic(const std::string& val) {
+    mnemonic = val;
+  }
+
+  void __set_operands(const std::vector<IdaOperand> & val) {
+    operands = val;
+  }
+
+  void __set_prefixes(const std::vector<std::string> & val) {
+    prefixes = val;
+  }
+
+  bool operator == (const IdaInstruction & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    if (!(size == rhs.size))
+      return false;
+    if (!(mnemonic == rhs.mnemonic))
+      return false;
+    if (!(operands == rhs.operands))
+      return false;
+    if (!(prefixes == rhs.prefixes))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaInstruction &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaInstruction & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaInstruction &a, IdaInstruction &b);
 
 } // namespace
 

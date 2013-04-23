@@ -144,4 +144,10 @@ void DatabaseHandler::listFunctions( std::vector<IdaFunction> & _return )
 	run_in_main_thread(&FunctionsHandler::list, &functionsHandler, _return);
 }
 
+void DatabaseHandler::fetchInstruction( IdaInstruction& _return, const int32_t address )
+{
+	run_in_main_thread(boost::function<void()>(
+		boost::bind(&InstructionsHandler::fetch, &instructionsHandler, boost::ref(_return), address)));
+}
+
 

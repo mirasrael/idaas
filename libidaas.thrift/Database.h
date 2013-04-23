@@ -26,6 +26,7 @@ class DatabaseIf {
   virtual void listStrings(std::vector<ida_string> & _return) = 0;
   virtual void xrefsTo(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
   virtual void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
+  virtual void fetchInstruction(IdaInstruction& _return, const int32_t address) = 0;
   virtual void listFunctions(std::vector<IdaFunction> & _return) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
@@ -92,6 +93,9 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void xrefsFrom(std::vector<IdaRef> & /* _return */, const int32_t /* address */, const IdaRefType::type /* refType */) {
+    return;
+  }
+  void fetchInstruction(IdaInstruction& /* _return */, const int32_t /* address */) {
     return;
   }
   void listFunctions(std::vector<IdaFunction> & /* _return */) {
@@ -1226,6 +1230,114 @@ class Database_xrefsFrom_presult {
 
 };
 
+typedef struct _Database_fetchInstruction_args__isset {
+  _Database_fetchInstruction_args__isset() : address(false) {}
+  bool address;
+} _Database_fetchInstruction_args__isset;
+
+class Database_fetchInstruction_args {
+ public:
+
+  Database_fetchInstruction_args() : address(0) {
+  }
+
+  virtual ~Database_fetchInstruction_args() throw() {}
+
+  int32_t address;
+
+  _Database_fetchInstruction_args__isset __isset;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  bool operator == (const Database_fetchInstruction_args & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_fetchInstruction_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_fetchInstruction_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_fetchInstruction_pargs {
+ public:
+
+
+  virtual ~Database_fetchInstruction_pargs() throw() {}
+
+  const int32_t* address;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_fetchInstruction_result__isset {
+  _Database_fetchInstruction_result__isset() : success(false) {}
+  bool success;
+} _Database_fetchInstruction_result__isset;
+
+class Database_fetchInstruction_result {
+ public:
+
+  Database_fetchInstruction_result() {
+  }
+
+  virtual ~Database_fetchInstruction_result() throw() {}
+
+  IdaInstruction success;
+
+  _Database_fetchInstruction_result__isset __isset;
+
+  void __set_success(const IdaInstruction& val) {
+    success = val;
+  }
+
+  bool operator == (const Database_fetchInstruction_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_fetchInstruction_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_fetchInstruction_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_fetchInstruction_presult__isset {
+  _Database_fetchInstruction_presult__isset() : success(false) {}
+  bool success;
+} _Database_fetchInstruction_presult__isset;
+
+class Database_fetchInstruction_presult {
+ public:
+
+
+  virtual ~Database_fetchInstruction_presult() throw() {}
+
+  IdaInstruction* success;
+
+  _Database_fetchInstruction_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 
 class Database_listFunctions_args {
  public:
@@ -1447,6 +1559,9 @@ class DatabaseClient : virtual public DatabaseIf {
   void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
   void send_xrefsFrom(const int32_t address, const IdaRefType::type refType);
   void recv_xrefsFrom(std::vector<IdaRef> & _return);
+  void fetchInstruction(IdaInstruction& _return, const int32_t address);
+  void send_fetchInstruction(const int32_t address);
+  void recv_fetchInstruction(IdaInstruction& _return);
   void listFunctions(std::vector<IdaFunction> & _return);
   void send_listFunctions();
   void recv_listFunctions(std::vector<IdaFunction> & _return);
@@ -1479,6 +1594,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_listStrings(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_xrefsTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_xrefsFrom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_fetchInstruction(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_listFunctions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
@@ -1495,6 +1611,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["listStrings"] = &DatabaseProcessor::process_listStrings;
     processMap_["xrefsTo"] = &DatabaseProcessor::process_xrefsTo;
     processMap_["xrefsFrom"] = &DatabaseProcessor::process_xrefsFrom;
+    processMap_["fetchInstruction"] = &DatabaseProcessor::process_fetchInstruction;
     processMap_["listFunctions"] = &DatabaseProcessor::process_listFunctions;
     processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
   }
@@ -1626,6 +1743,16 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->xrefsFrom(_return, address, refType);
     }
     ifaces_[i]->xrefsFrom(_return, address, refType);
+    return;
+  }
+
+  void fetchInstruction(IdaInstruction& _return, const int32_t address) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->fetchInstruction(_return, address);
+    }
+    ifaces_[i]->fetchInstruction(_return, address);
     return;
   }
 

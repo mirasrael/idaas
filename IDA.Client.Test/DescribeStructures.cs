@@ -237,9 +237,9 @@ namespace Ida.Client.Test
         [Test]
         public void ItShouldGetStructuresList()
         {
-            ida_struct devInfo = Database.Structures.First(s => s.Name == "_SP_DEVINFO_DATA");
+            ida_struct devInfo = Database.Structures.First(s => s.Name == "TestStructure");
             Assert.That(devInfo, Is.Not.Null);
-            Assert.That(devInfo.Members.FirstOrDefault(m => m.Name == "ClassGuid"), Is.Not.Null);
+            Assert.That(devInfo.Members.FirstOrDefault(m => m.Name == "IntField"), Is.Not.Null);
         }
 
         [Test]

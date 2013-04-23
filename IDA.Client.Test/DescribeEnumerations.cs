@@ -86,15 +86,13 @@ namespace Ida.Client.Test
         public void ItShouldGetEnumerationsList()
         {
             Assert.That(Database, Is.Not.Null);
-            ida_enum internetScheme = Database.Enumerations.First(e => e.Name == "INTERNET_SCHEME");
-            Assert.That(internetScheme.Name, Is.Not.Null);
-            Assert.That(internetScheme.IsBitfield, Is.False);
-            ida_enum_const defaultScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_DEFAULT");
-            Assert.That(defaultScheme, Is.Not.Null);
-            ida_enum_const partialScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_PARTIAL");
-            Assert.That(partialScheme, Is.Not.Null);
-            ida_enum_const unknownScheme = internetScheme.Constants.Find(c => c.Name == "INTERNET_SCHEME_UNKNOWN");
-            Assert.That(unknownScheme, Is.Not.Null);
+            ida_enum testEnumeration = Database.Enumerations.First(e => e.Name == "TestEnumeration");
+            Assert.That(testEnumeration.Name, Is.Not.Null);
+            Assert.That(testEnumeration.IsBitfield, Is.False);
+            ida_enum_const constant0 = testEnumeration.Constants.Find(c => c.Name == "TestConstant_0");
+            Assert.That(constant0, Is.Not.Null);
+            ida_enum_const constant1 = testEnumeration.Constants.Find(c => c.Name == "TestConstant_1");
+            Assert.That(constant1, Is.Not.Null);            
         }        
 
         [Test]

@@ -18,6 +18,74 @@ const char* _kIdaRefTypeNames[] = {
 };
 const std::map<int, const char*> _IdaRefType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(1, _kIdaRefTypeValues, _kIdaRefTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
 
+int _kIdaOperandTypeValues[] = {
+  IdaOperandType::Unknown,
+  IdaOperandType::Register,
+  IdaOperandType::Constant,
+  IdaOperandType::Memory,
+  IdaOperandType::Dislacement,
+  IdaOperandType::Address,
+  IdaOperandType::FPRegister
+};
+const char* _kIdaOperandTypeNames[] = {
+  "Unknown",
+  "Register",
+  "Constant",
+  "Memory",
+  "Dislacement",
+  "Address",
+  "FPRegister"
+};
+const std::map<int, const char*> _IdaOperandType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(7, _kIdaOperandTypeValues, _kIdaOperandTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
+
+int _kIdaRegisterValues[] = {
+  IdaRegister::Unknown,
+  IdaRegister::Al,
+  IdaRegister::Ah,
+  IdaRegister::Ax,
+  IdaRegister::Eax,
+  IdaRegister::Bl,
+  IdaRegister::Bh,
+  IdaRegister::Bx,
+  IdaRegister::Ebx,
+  IdaRegister::Cl,
+  IdaRegister::Ch,
+  IdaRegister::Cx,
+  IdaRegister::Ecx,
+  IdaRegister::Dl,
+  IdaRegister::Dh,
+  IdaRegister::Dx,
+  IdaRegister::Edx,
+  IdaRegister::Esi,
+  IdaRegister::Edi,
+  IdaRegister::Ebp,
+  IdaRegister::Esp
+};
+const char* _kIdaRegisterNames[] = {
+  "Unknown",
+  "Al",
+  "Ah",
+  "Ax",
+  "Eax",
+  "Bl",
+  "Bh",
+  "Bx",
+  "Ebx",
+  "Cl",
+  "Ch",
+  "Cx",
+  "Ecx",
+  "Dl",
+  "Dh",
+  "Dx",
+  "Edx",
+  "Esi",
+  "Edi",
+  "Ebp",
+  "Esp"
+};
+const std::map<int, const char*> _IdaRegister_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(21, _kIdaRegisterValues, _kIdaRegisterNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
+
 const char* ida_enum_const::ascii_fingerprint = "28C2ECC89260BADB9C70330FBF47BFA8";
 const uint8_t ida_enum_const::binary_fingerprint[16] = {0x28,0xC2,0xEC,0xC8,0x92,0x60,0xBA,0xDB,0x9C,0x70,0x33,0x0F,0xBF,0x47,0xBF,0xA8};
 
@@ -684,6 +752,310 @@ void swap(IdaFunction &a, IdaFunction &b) {
   swap(a.endAddress, b.endAddress);
   swap(a.name, b.name);
   swap(a.type, b.type);
+}
+
+const char* IdaOperand::ascii_fingerprint = "E4D267071CB3984CF1E16FD15210BBBF";
+const uint8_t IdaOperand::binary_fingerprint[16] = {0xE4,0xD2,0x67,0x07,0x1C,0xB3,0x98,0x4C,0xF1,0xE1,0x6F,0xD1,0x52,0x10,0xBB,0xBF};
+
+uint32_t IdaOperand::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_type = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast12;
+          xfer += iprot->readI32(ecast12);
+          this->type = (IdaOperandType::type)ecast12;
+          isset_type = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast13;
+          xfer += iprot->readI32(ecast13);
+          this->baseRegister = (IdaRegister::type)ecast13;
+          this->__isset.baseRegister = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast14;
+          xfer += iprot->readI32(ecast14);
+          this->indexRegister = (IdaRegister::type)ecast14;
+          this->__isset.indexRegister = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->indexScale);
+          this->__isset.indexScale = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->displacement);
+          this->__isset.displacement = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->size);
+          this->__isset.size = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_type)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t IdaOperand::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("IdaOperand");
+
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((int32_t)this->type);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("baseRegister", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((int32_t)this->baseRegister);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("indexRegister", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((int32_t)this->indexRegister);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("indexScale", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->indexScale);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("displacement", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->displacement);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_BYTE, 6);
+  xfer += oprot->writeByte(this->size);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IdaOperand &a, IdaOperand &b) {
+  using ::std::swap;
+  swap(a.type, b.type);
+  swap(a.baseRegister, b.baseRegister);
+  swap(a.indexRegister, b.indexRegister);
+  swap(a.indexScale, b.indexScale);
+  swap(a.displacement, b.displacement);
+  swap(a.size, b.size);
+  swap(a.__isset, b.__isset);
+}
+
+const char* IdaInstruction::ascii_fingerprint = "BF13BE4E100165470528FD02E1D3B2B6";
+const uint8_t IdaInstruction::binary_fingerprint[16] = {0xBF,0x13,0xBE,0x4E,0x10,0x01,0x65,0x47,0x05,0x28,0xFD,0x02,0xE1,0xD3,0xB2,0xB6};
+
+uint32_t IdaInstruction::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_address = false;
+  bool isset_size = false;
+  bool isset_mnemonic = false;
+  bool isset_operands = false;
+  bool isset_prefixes = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->address);
+          isset_address = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->size);
+          isset_size = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->mnemonic);
+          isset_mnemonic = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->operands.clear();
+            uint32_t _size15;
+            ::apache::thrift::protocol::TType _etype18;
+            xfer += iprot->readListBegin(_etype18, _size15);
+            this->operands.resize(_size15);
+            uint32_t _i19;
+            for (_i19 = 0; _i19 < _size15; ++_i19)
+            {
+              xfer += this->operands[_i19].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          isset_operands = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->prefixes.clear();
+            uint32_t _size20;
+            ::apache::thrift::protocol::TType _etype23;
+            xfer += iprot->readListBegin(_etype23, _size20);
+            this->prefixes.resize(_size20);
+            uint32_t _i24;
+            for (_i24 = 0; _i24 < _size20; ++_i24)
+            {
+              xfer += iprot->readString(this->prefixes[_i24]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          isset_prefixes = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_address)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_size)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_mnemonic)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_operands)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_prefixes)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t IdaInstruction::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("IdaInstruction");
+
+  xfer += oprot->writeFieldBegin("address", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->address);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->size);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("mnemonic", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->mnemonic);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("operands", ::apache::thrift::protocol::T_LIST, 4);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->operands.size()));
+    std::vector<IdaOperand> ::const_iterator _iter25;
+    for (_iter25 = this->operands.begin(); _iter25 != this->operands.end(); ++_iter25)
+    {
+      xfer += (*_iter25).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("prefixes", ::apache::thrift::protocol::T_LIST, 5);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->prefixes.size()));
+    std::vector<std::string> ::const_iterator _iter26;
+    for (_iter26 = this->prefixes.begin(); _iter26 != this->prefixes.end(); ++_iter26)
+    {
+      xfer += oprot->writeString((*_iter26));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IdaInstruction &a, IdaInstruction &b) {
+  using ::std::swap;
+  swap(a.address, b.address);
+  swap(a.size, b.size);
+  swap(a.mnemonic, b.mnemonic);
+  swap(a.operands, b.operands);
+  swap(a.prefixes, b.prefixes);
 }
 
 } // namespace

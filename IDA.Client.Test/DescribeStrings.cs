@@ -9,7 +9,7 @@ namespace Ida.Client.Test
          public void ItShouldGetListOfStrings()
          {
              var strings = Database.Strings;
-             Assert.That(strings["!This program cannot be run in DOS mode"], Is.Not.Null);
+             Assert.That(strings["Local variable used before initialization"], Is.Not.Null);
          }
     }
 }

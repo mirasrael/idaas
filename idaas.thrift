@@ -29,6 +29,10 @@ struct ida_string {
 	2: required string value
 }
 
+enum IdaRefType {
+	Data = 1
+}
+
 struct IdaRef {
 	1: required i32 refFrom
 	2: required i32 refTo
@@ -41,8 +45,55 @@ struct IdaFunction {
 	4: required string type
 }
 
-enum IdaRefType {
-	Data = 1
+enum IdaOperandType {
+	Unknown = 0
+	Register = 1
+	Constant = 2
+	Memory = 3
+	Dislacement = 4
+	Address = 5
+	FPRegister = 6
+}
+
+enum IdaRegister {
+	Unknown = 0
+	Al
+	Ah
+	Ax
+	Eax
+	Bl
+	Bh
+	Bx
+	Ebx
+	Cl
+	Ch
+	Cx
+	Ecx
+	Dl
+	Dh
+	Dx
+	Edx
+	Esi
+	Edi
+	Ebp
+	Esp
+}
+
+struct IdaOperand {
+	1: required IdaOperandType type		
+	2: IdaRegister baseRegister
+	3: IdaRegister indexRegister
+	4: i32 indexScale
+	5: i32 displacement
+	6: byte size
+}
+
+struct IdaInstruction {
+	1: required i32 address
+	2: required i32 size
+	3: required string mnemonic
+	4: required list<IdaOperand> operands	
+	5: required list<string> prefixes
 }
 
 service Database {
@@ -58,8 +109,10 @@ service Database {
 
 	list<ida_string> listStrings()
 
-	list<IdaRef> xrefsTo(i32 address, IdaRefType refType)
-	list<IdaRef> xrefsFrom(i32 address, IdaRefType refType)
+	list<IdaRef> xrefsTo(1: i32 address, 2: IdaRefType refType)
+	list<IdaRef> xrefsFrom(1: i32 address, 2: IdaRefType refType)
+
+	IdaInstruction fetchInstruction(1: i32 address)
 
 	list<IdaFunction> listFunctions()
 

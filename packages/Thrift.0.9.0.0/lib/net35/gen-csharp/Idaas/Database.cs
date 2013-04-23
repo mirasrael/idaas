@@ -74,6 +74,11 @@ namespace Idaas
       IAsyncResult Begin_xrefsFrom(AsyncCallback callback, object state, int address, IdaRefType refType);
       List<IdaRef> End_xrefsFrom(IAsyncResult asyncResult);
       #endif
+      IdaInstruction fetchInstruction(int address);
+      #if SILVERLIGHT
+      IAsyncResult Begin_fetchInstruction(AsyncCallback callback, object state, int address);
+      IdaInstruction End_fetchInstruction(IAsyncResult asyncResult);
+      #endif
       List<IdaFunction> listFunctions();
       #if SILVERLIGHT
       IAsyncResult Begin_listFunctions(AsyncCallback callback, object state, );
@@ -788,6 +793,68 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_fetchInstruction(AsyncCallback callback, object state, int address)
+      {
+        return send_fetchInstruction(callback, state, address);
+      }
+
+      public IdaInstruction End_fetchInstruction(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_fetchInstruction();
+      }
+
+      #endif
+
+      public IdaInstruction fetchInstruction(int address)
+      {
+        #if !SILVERLIGHT
+        send_fetchInstruction(address);
+        return recv_fetchInstruction();
+
+        #else
+        var asyncResult = Begin_fetchInstruction(null, null, address);
+        return End_fetchInstruction(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_fetchInstruction(AsyncCallback callback, object state, int address)
+      #else
+      public void send_fetchInstruction(int address)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("fetchInstruction", TMessageType.Call, seqid_));
+        fetchInstruction_args args = new fetchInstruction_args();
+        args.Address = address;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public IdaInstruction recv_fetchInstruction()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        fetchInstruction_result result = new fetchInstruction_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "fetchInstruction failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_listFunctions(AsyncCallback callback, object state, )
       {
         return send_listFunctions(callback, state);
@@ -921,6 +988,7 @@ namespace Idaas
         processMap_["listStrings"] = listStrings_Process;
         processMap_["xrefsTo"] = xrefsTo_Process;
         processMap_["xrefsFrom"] = xrefsFrom_Process;
+        processMap_["fetchInstruction"] = fetchInstruction_Process;
         processMap_["listFunctions"] = listFunctions_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
@@ -1098,6 +1166,19 @@ namespace Idaas
         oprot.Transport.Flush();
       }
 
+      public void fetchInstruction_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        fetchInstruction_args args = new fetchInstruction_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        fetchInstruction_result result = new fetchInstruction_result();
+        result.Success = iface_.fetchInstruction(args.Address);
+        oprot.WriteMessageBegin(new TMessage("fetchInstruction", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
       public void listFunctions_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
         listFunctions_args args = new listFunctions_args();
@@ -1221,13 +1302,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_enum>();
-                  TList _list8 = iprot.ReadListBegin();
-                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
+                  TList _list16 = iprot.ReadListBegin();
+                  for( int _i17 = 0; _i17 < _list16.Count; ++_i17)
                   {
-                    ida_enum _elem10 = new ida_enum();
-                    _elem10 = new ida_enum();
-                    _elem10.Read(iprot);
-                    Success.Add(_elem10);
+                    ida_enum _elem18 = new ida_enum();
+                    _elem18 = new ida_enum();
+                    _elem18.Read(iprot);
+                    Success.Add(_elem18);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1257,9 +1338,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_enum _iter11 in Success)
+              foreach (ida_enum _iter19 in Success)
               {
-                _iter11.Write(oprot);
+                _iter19.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -1505,13 +1586,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Enums = new List<ida_enum>();
-                  TList _list12 = iprot.ReadListBegin();
-                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
+                  TList _list20 = iprot.ReadListBegin();
+                  for( int _i21 = 0; _i21 < _list20.Count; ++_i21)
                   {
-                    ida_enum _elem14 = new ida_enum();
-                    _elem14 = new ida_enum();
-                    _elem14.Read(iprot);
-                    Enums.Add(_elem14);
+                    ida_enum _elem22 = new ida_enum();
+                    _elem22 = new ida_enum();
+                    _elem22.Read(iprot);
+                    Enums.Add(_elem22);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1539,9 +1620,9 @@ namespace Idaas
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Enums.Count));
-            foreach (ida_enum _iter15 in Enums)
+            foreach (ida_enum _iter23 in Enums)
             {
-              _iter15.Write(oprot);
+              _iter23.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -1878,13 +1959,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_struct>();
-                  TList _list16 = iprot.ReadListBegin();
-                  for( int _i17 = 0; _i17 < _list16.Count; ++_i17)
+                  TList _list24 = iprot.ReadListBegin();
+                  for( int _i25 = 0; _i25 < _list24.Count; ++_i25)
                   {
-                    ida_struct _elem18 = new ida_struct();
-                    _elem18 = new ida_struct();
-                    _elem18.Read(iprot);
-                    Success.Add(_elem18);
+                    ida_struct _elem26 = new ida_struct();
+                    _elem26 = new ida_struct();
+                    _elem26.Read(iprot);
+                    Success.Add(_elem26);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1914,9 +1995,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_struct _iter19 in Success)
+              foreach (ida_struct _iter27 in Success)
               {
-                _iter19.Write(oprot);
+                _iter27.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -2162,13 +2243,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Structs = new List<ida_struct>();
-                  TList _list20 = iprot.ReadListBegin();
-                  for( int _i21 = 0; _i21 < _list20.Count; ++_i21)
+                  TList _list28 = iprot.ReadListBegin();
+                  for( int _i29 = 0; _i29 < _list28.Count; ++_i29)
                   {
-                    ida_struct _elem22 = new ida_struct();
-                    _elem22 = new ida_struct();
-                    _elem22.Read(iprot);
-                    Structs.Add(_elem22);
+                    ida_struct _elem30 = new ida_struct();
+                    _elem30 = new ida_struct();
+                    _elem30.Read(iprot);
+                    Structs.Add(_elem30);
                   }
                   iprot.ReadListEnd();
                 }
@@ -2196,9 +2277,9 @@ namespace Idaas
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Structs.Count));
-            foreach (ida_struct _iter23 in Structs)
+            foreach (ida_struct _iter31 in Structs)
             {
-              _iter23.Write(oprot);
+              _iter31.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -2535,13 +2616,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<ida_string>();
-                  TList _list24 = iprot.ReadListBegin();
-                  for( int _i25 = 0; _i25 < _list24.Count; ++_i25)
+                  TList _list32 = iprot.ReadListBegin();
+                  for( int _i33 = 0; _i33 < _list32.Count; ++_i33)
                   {
-                    ida_string _elem26 = new ida_string();
-                    _elem26 = new ida_string();
-                    _elem26.Read(iprot);
-                    Success.Add(_elem26);
+                    ida_string _elem34 = new ida_string();
+                    _elem34 = new ida_string();
+                    _elem34.Read(iprot);
+                    Success.Add(_elem34);
                   }
                   iprot.ReadListEnd();
                 }
@@ -2571,9 +2652,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (ida_string _iter27 in Success)
+              foreach (ida_string _iter35 in Success)
               {
-                _iter27.Write(oprot);
+                _iter35.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -2658,14 +2739,14 @@ namespace Idaas
           }
           switch (field.ID)
           {
-            case -1:
+            case 1:
               if (field.Type == TType.I32) {
                 Address = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
-            case -2:
+            case 2:
               if (field.Type == TType.I32) {
                 RefType = (IdaRefType)iprot.ReadI32();
               } else { 
@@ -2685,20 +2766,20 @@ namespace Idaas
         TStruct struc = new TStruct("xrefsTo_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (__isset.refType) {
-          field.Name = "refType";
-          field.Type = TType.I32;
-          field.ID = -2;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32((int)RefType);
-          oprot.WriteFieldEnd();
-        }
         if (__isset.address) {
           field.Name = "address";
           field.Type = TType.I32;
-          field.ID = -1;
+          field.ID = 1;
           oprot.WriteFieldBegin(field);
           oprot.WriteI32(Address);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.refType) {
+          field.Name = "refType";
+          field.Type = TType.I32;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32((int)RefType);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -2766,13 +2847,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<IdaRef>();
-                  TList _list28 = iprot.ReadListBegin();
-                  for( int _i29 = 0; _i29 < _list28.Count; ++_i29)
+                  TList _list36 = iprot.ReadListBegin();
+                  for( int _i37 = 0; _i37 < _list36.Count; ++_i37)
                   {
-                    IdaRef _elem30 = new IdaRef();
-                    _elem30 = new IdaRef();
-                    _elem30.Read(iprot);
-                    Success.Add(_elem30);
+                    IdaRef _elem38 = new IdaRef();
+                    _elem38 = new IdaRef();
+                    _elem38.Read(iprot);
+                    Success.Add(_elem38);
                   }
                   iprot.ReadListEnd();
                 }
@@ -2802,9 +2883,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (IdaRef _iter31 in Success)
+              foreach (IdaRef _iter39 in Success)
               {
-                _iter31.Write(oprot);
+                _iter39.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -2889,14 +2970,14 @@ namespace Idaas
           }
           switch (field.ID)
           {
-            case -1:
+            case 1:
               if (field.Type == TType.I32) {
                 Address = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
-            case -2:
+            case 2:
               if (field.Type == TType.I32) {
                 RefType = (IdaRefType)iprot.ReadI32();
               } else { 
@@ -2916,20 +2997,20 @@ namespace Idaas
         TStruct struc = new TStruct("xrefsFrom_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (__isset.refType) {
-          field.Name = "refType";
-          field.Type = TType.I32;
-          field.ID = -2;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32((int)RefType);
-          oprot.WriteFieldEnd();
-        }
         if (__isset.address) {
           field.Name = "address";
           field.Type = TType.I32;
-          field.ID = -1;
+          field.ID = 1;
           oprot.WriteFieldBegin(field);
           oprot.WriteI32(Address);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.refType) {
+          field.Name = "refType";
+          field.Type = TType.I32;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32((int)RefType);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -2997,13 +3078,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<IdaRef>();
-                  TList _list32 = iprot.ReadListBegin();
-                  for( int _i33 = 0; _i33 < _list32.Count; ++_i33)
+                  TList _list40 = iprot.ReadListBegin();
+                  for( int _i41 = 0; _i41 < _list40.Count; ++_i41)
                   {
-                    IdaRef _elem34 = new IdaRef();
-                    _elem34 = new IdaRef();
-                    _elem34.Read(iprot);
-                    Success.Add(_elem34);
+                    IdaRef _elem42 = new IdaRef();
+                    _elem42 = new IdaRef();
+                    _elem42.Read(iprot);
+                    Success.Add(_elem42);
                   }
                   iprot.ReadListEnd();
                 }
@@ -3033,9 +3114,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (IdaRef _iter35 in Success)
+              foreach (IdaRef _iter43 in Success)
               {
-                _iter35.Write(oprot);
+                _iter43.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -3050,6 +3131,184 @@ namespace Idaas
         StringBuilder sb = new StringBuilder("xrefsFrom_result(");
         sb.Append("Success: ");
         sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class fetchInstruction_args : TBase
+    {
+      private int _address;
+
+      public int Address
+      {
+        get
+        {
+          return _address;
+        }
+        set
+        {
+          __isset.address = true;
+          this._address = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool address;
+      }
+
+      public fetchInstruction_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                Address = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("fetchInstruction_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (__isset.address) {
+          field.Name = "address";
+          field.Type = TType.I32;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Address);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("fetchInstruction_args(");
+        sb.Append("Address: ");
+        sb.Append(Address);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class fetchInstruction_result : TBase
+    {
+      private IdaInstruction _success;
+
+      public IdaInstruction Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public fetchInstruction_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new IdaInstruction();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("fetchInstruction_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.Struct;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            Success.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("fetchInstruction_result(");
+        sb.Append("Success: ");
+        sb.Append(Success== null ? "<null>" : Success.ToString());
         sb.Append(")");
         return sb.ToString();
       }
@@ -3151,13 +3410,13 @@ namespace Idaas
               if (field.Type == TType.List) {
                 {
                   Success = new List<IdaFunction>();
-                  TList _list36 = iprot.ReadListBegin();
-                  for( int _i37 = 0; _i37 < _list36.Count; ++_i37)
+                  TList _list44 = iprot.ReadListBegin();
+                  for( int _i45 = 0; _i45 < _list44.Count; ++_i45)
                   {
-                    IdaFunction _elem38 = new IdaFunction();
-                    _elem38 = new IdaFunction();
-                    _elem38.Read(iprot);
-                    Success.Add(_elem38);
+                    IdaFunction _elem46 = new IdaFunction();
+                    _elem46 = new IdaFunction();
+                    _elem46.Read(iprot);
+                    Success.Add(_elem46);
                   }
                   iprot.ReadListEnd();
                 }
@@ -3187,9 +3446,9 @@ namespace Idaas
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-              foreach (IdaFunction _iter39 in Success)
+              foreach (IdaFunction _iter47 in Success)
               {
-                _iter39.Write(oprot);
+                _iter47.Write(oprot);
               }
               oprot.WriteListEnd();
             }
