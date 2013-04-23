@@ -39,5 +39,10 @@ namespace Ida.Client
         {
             return Items.FirstOrDefault(f => f.StartAddress <= address && f.EndAddress > address);
         }
+
+        public IdaFunction FindByName(string name)
+        {
+            return Items.FirstOrDefault(f => f.Name == name);
+        }
     }
 }

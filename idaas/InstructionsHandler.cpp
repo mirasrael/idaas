@@ -32,7 +32,7 @@ void InstructionsHandler::fetch( IdaInstruction &_return, int32_t address )
 	}
 	_return.operands.resize(UA_MAXOP);
 	size_t n = 0;
-	while ( n < UA_MAXOP && cmd.Operands->type != o_void) {		
+	while ( n < UA_MAXOP && cmd.Operands[n].type != o_void) {		
 		fetchOperand(_return.operands[n], cmd.Operands[n]);
 		n++;
 	}
@@ -64,10 +64,9 @@ void InstructionsHandler::fetchOperand(IdaOperand &_return, op_t &input)
 		break;
 	}
 	switch(input.type) {
-	case o_reg:
-		msg("Ebp: %d Mapped ebp: %d Reg: %d\n", str2reg("ebp"), registerMapping[str2reg("ebp")], input.reg);
+	case o_reg:		
 		_return.type = IdaOperandType::Register;
-		_return.baseRegister = IdaRegister::Unknown; //mapRegister(input.reg);
+		_return.baseRegister = mapRegister(input.reg);
 		break;
 	case o_imm:
 		_return.type = IdaOperandType::Constant;
