@@ -60,7 +60,12 @@ struct IdaRegister {
     Esi = 17,
     Edi = 18,
     Ebp = 19,
-    Esp = 20
+    Esp = 20,
+    Xmm0 = 21,
+    Xmm1 = 22,
+    Xmm2 = 23,
+    Xmm3 = 24,
+    None = 25
   };
 };
 
@@ -430,36 +435,47 @@ class IdaFunction {
 void swap(IdaFunction &a, IdaFunction &b);
 
 typedef struct _IdaOperand__isset {
-  _IdaOperand__isset() : baseRegister(false), indexRegister(false), indexScale(false), displacement(false), size(false) {}
+  _IdaOperand__isset() : register_(false), address(false), baseRegister(false), indexRegister(false), indexScale(false), value(false) {}
+  bool register_;
+  bool address;
   bool baseRegister;
   bool indexRegister;
   bool indexScale;
-  bool displacement;
-  bool size;
+  bool value;
 } _IdaOperand__isset;
 
 class IdaOperand {
  public:
 
-  static const char* ascii_fingerprint; // = "E4D267071CB3984CF1E16FD15210BBBF";
-  static const uint8_t binary_fingerprint[16]; // = {0xE4,0xD2,0x67,0x07,0x1C,0xB3,0x98,0x4C,0xF1,0xE1,0x6F,0xD1,0x52,0x10,0xBB,0xBF};
+  static const char* ascii_fingerprint; // = "B4635C14DC753231940A1B762E16393A";
+  static const uint8_t binary_fingerprint[16]; // = {0xB4,0x63,0x5C,0x14,0xDC,0x75,0x32,0x31,0x94,0x0A,0x1B,0x76,0x2E,0x16,0x39,0x3A};
 
-  IdaOperand() : type((IdaOperandType::type)0), baseRegister((IdaRegister::type)0), indexRegister((IdaRegister::type)0), indexScale(0), displacement(0), size(0) {
+  IdaOperand() : type((IdaOperandType::type)0), register_((IdaRegister::type)0), address(0), baseRegister((IdaRegister::type)0), indexRegister((IdaRegister::type)0), indexScale(0), size(0), value(0) {
   }
 
   virtual ~IdaOperand() throw() {}
 
   IdaOperandType::type type;
+  IdaRegister::type register_;
+  int32_t address;
   IdaRegister::type baseRegister;
   IdaRegister::type indexRegister;
   int32_t indexScale;
-  int32_t displacement;
   int8_t size;
+  int32_t value;
 
   _IdaOperand__isset __isset;
 
   void __set_type(const IdaOperandType::type val) {
     type = val;
+  }
+
+  void __set_register_(const IdaRegister::type val) {
+    register_ = val;
+  }
+
+  void __set_address(const int32_t val) {
+    address = val;
   }
 
   void __set_baseRegister(const IdaRegister::type val) {
@@ -474,17 +490,21 @@ class IdaOperand {
     indexScale = val;
   }
 
-  void __set_displacement(const int32_t val) {
-    displacement = val;
-  }
-
   void __set_size(const int8_t val) {
     size = val;
+  }
+
+  void __set_value(const int32_t val) {
+    value = val;
   }
 
   bool operator == (const IdaOperand & rhs) const
   {
     if (!(type == rhs.type))
+      return false;
+    if (!(register_ == rhs.register_))
+      return false;
+    if (!(address == rhs.address))
       return false;
     if (!(baseRegister == rhs.baseRegister))
       return false;
@@ -492,9 +512,9 @@ class IdaOperand {
       return false;
     if (!(indexScale == rhs.indexScale))
       return false;
-    if (!(displacement == rhs.displacement))
-      return false;
     if (!(size == rhs.size))
+      return false;
+    if (!(value == rhs.value))
       return false;
     return true;
   }
@@ -515,8 +535,8 @@ void swap(IdaOperand &a, IdaOperand &b);
 class IdaInstruction {
  public:
 
-  static const char* ascii_fingerprint; // = "BF13BE4E100165470528FD02E1D3B2B6";
-  static const uint8_t binary_fingerprint[16]; // = {0xBF,0x13,0xBE,0x4E,0x10,0x01,0x65,0x47,0x05,0x28,0xFD,0x02,0xE1,0xD3,0xB2,0xB6};
+  static const char* ascii_fingerprint; // = "62E54BCE50BE8DE9ED7359AB71B4C0C0";
+  static const uint8_t binary_fingerprint[16]; // = {0x62,0xE5,0x4B,0xCE,0x50,0xBE,0x8D,0xE9,0xED,0x73,0x59,0xAB,0x71,0xB4,0xC0,0xC0};
 
   IdaInstruction() : address(0), size(0), mnemonic() {
   }

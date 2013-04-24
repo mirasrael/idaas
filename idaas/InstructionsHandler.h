@@ -14,12 +14,14 @@ private:
 	IdaRegister::type *registerMapping;
 	void prepareMapping();
 	void setRegisterMapping(const char *registerName, IdaRegister::type idaRegister);
-	void fetchOperand(IdaOperand &_return, op_t &input);
+	void fetchOperand(IdaOperand &_return, const op_t &input);
 	IdaRegister::type mapRegister(int reg);
+	int calculateOperandSize(const op_t &input);
+	void setIndexRegister(IdaOperand &_return, const op_t &input);
 public:
 	InstructionsHandler(void);
 	~InstructionsHandler(void);
 
-	void fetch(IdaInstruction &_return, int32_t address);
+	void fetch(IdaInstruction &_return, int32_t address);	
 };
 

@@ -56,7 +56,7 @@ enum IdaOperandType {
 }
 
 enum IdaRegister {
-	Unknown = 0
+	Unknown = 0	
 	Al
 	Ah
 	Ax
@@ -77,15 +77,22 @@ enum IdaRegister {
 	Edi
 	Ebp
 	Esp
+	Xmm0
+	Xmm1
+	Xmm2
+	Xmm3
+	None
 }
 
 struct IdaOperand {
-	1: required IdaOperandType type		
-	2: IdaRegister baseRegister
-	3: IdaRegister indexRegister
-	4: i32 indexScale
-	5: i32 displacement
-	6: byte size
+	1: required IdaOperandType type
+	2: IdaRegister register_	
+	3: i32 address
+	4: IdaRegister baseRegister
+	5: IdaRegister indexRegister
+	6: i32 indexScale
+	7: required byte size
+	8: i32 value
 }
 
 struct IdaInstruction {

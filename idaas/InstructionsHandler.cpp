@@ -1,4 +1,5 @@
 #include "InstructionsHandler.h"
+#include <intel.hpp>
 
 InstructionsHandler::InstructionsHandler(void)
 {	
@@ -39,48 +40,65 @@ void InstructionsHandler::fetch( IdaInstruction &_return, int32_t address )
 	_return.operands.resize(n);
 }
 
-void InstructionsHandler::fetchOperand(IdaOperand &_return, op_t &input) 
-{
+int InstructionsHandler::calculateOperandSize(const op_t &input) {
 	switch (input.dtyp)
 	{
 	case dt_byte:
-		_return.size = 1;
-		break;
+		return 1;	
 	case dt_word:
-		_return.size = 2;
-		break;
+		return 2;		
 	case dt_dword:
 	case dt_float:
-		_return.size = 4;
-		break;
+		return 4;		
 	case dt_qword:
 	case dt_double:
-		_return.size = 8;
-		break;
+		return 8;		
 	case dt_byte16:
-		_return.size = 16;
-		break;
+		return 16;		
 	default:
-		break;
+		return -1;
 	}
+}
+
+void InstructionsHandler::setIndexRegister(IdaOperand &_return, const op_t &input)
+{	
+	int index = x86_index(input);
+	if (index != INDEX_NONE) {
+		_return.indexRegister = mapRegister(index);
+		_return.indexScale = x86_scale(input);
+	} else {
+		_return.indexRegister = IdaRegister::None;
+	}
+}
+
+void InstructionsHandler::fetchOperand(IdaOperand &_return, const op_t &input) 
+{
+	_return.size = calculateOperandSize(input);
 	switch(input.type) {
 	case o_reg:		
 		_return.type = IdaOperandType::Register;
-		_return.baseRegister = mapRegister(input.reg);
+		_return.register_ = mapRegister(input.reg);
 		break;
 	case o_imm:
 		_return.type = IdaOperandType::Constant;
+		_return.value = input.value;
 		break;
 	case o_mem:
 		_return.type = IdaOperandType::Memory;
+		_return.address = input.addr;
+		setIndexRegister(_return, input);
 		break;
 	case o_displ:
 	case o_phrase:
 		_return.type = IdaOperandType::Dislacement;
+		_return.address = input.addr;
+		_return.baseRegister = mapRegister(x86_base(input));
+		setIndexRegister(_return, input);
 		break;
 	case o_near:
 	case o_far:
 		_return.type = IdaOperandType::Address;
+		_return.address = input.addr;
 		break;
 	case o_idpspec3:
 		_return.type = IdaOperandType::FPRegister;
@@ -129,6 +147,10 @@ void InstructionsHandler::prepareMapping()
 	setRegisterMapping("edi", IdaRegister::Edi);
 	setRegisterMapping("ebp", IdaRegister::Ebp);	
 	setRegisterMapping("esp", IdaRegister::Esp);
+	setRegisterMapping("xmm0", IdaRegister::Xmm0);
+	setRegisterMapping("xmm1", IdaRegister::Xmm1);
+	setRegisterMapping("xmm2", IdaRegister::Xmm2);
+	setRegisterMapping("xmm3", IdaRegister::Xmm3);
 }
 
 void InstructionsHandler::setRegisterMapping( const char *registerName, IdaRegister::type idaRegister )
