@@ -19,7 +19,12 @@ void FunctionsHandler::list( std::vector<IdaFunction> & _return )
 		func_t* f = getn_func(idx);
 		func.startAddress = f->startEA;
 		func.endAddress = f->endEA;
-		func.type = "";		
+		qtype type, fields;		
+		if (!get_tinfo(func.startAddress, &type, &fields)) {					
+			guess_func_tinfo(f, &type, &fields);
+		}
+		print_type_to_one_line(buffer, sizeof(buffer), idati, type.c_str(), 0, 0, fields.c_str(), 0);
+		func.type = buffer;	
 		func.name = get_func_name(func.startAddress, buffer, sizeof(buffer));
 	}
 }
