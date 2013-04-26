@@ -89,6 +89,16 @@ namespace Ida.Client
             return _client.xrefsFrom(address, IdaRefType.Data);
         }
 
+        public IdaTypeInfo ParseTypeDeclaration(string typeDeclaration)
+        {
+            return _client.parseTypeDeclaration(typeDeclaration);
+        }
+
+        public string FormatTypeInfo(IdaTypeInfo typeInfo)
+        {
+            return _client.formatTypeInfo(typeInfo);
+        }
+
         public void Dispose()
         {
             _transport.Close();

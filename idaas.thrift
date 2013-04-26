@@ -103,6 +103,12 @@ struct IdaInstruction {
 	5: required list<string> prefixes
 }
 
+struct IdaTypeInfo {
+	1: string name
+	2: string type
+	3: string fields
+}
+
 service Database {
 	list<ida_enum> listEnums()
 	bool storeEnum(1: ida_enum _enum)	
@@ -122,6 +128,9 @@ service Database {
 	IdaInstruction fetchInstruction(1: i32 address)
 
 	list<IdaFunction> listFunctions()
+
+	IdaTypeInfo parseTypeDeclaration(string typeDeclaration)
+	string formatTypeInfo(IdaTypeInfo typeInfo)
 
 	void waitBackgroundTasks()
 }

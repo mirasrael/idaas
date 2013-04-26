@@ -150,4 +150,12 @@ void DatabaseHandler::fetchInstruction( IdaInstruction& _return, const int32_t a
 		boost::bind(&InstructionsHandler::fetch, &instructionsHandler, boost::ref(_return), address)));
 }
 
+void DatabaseHandler::parseTypeDeclaration( IdaTypeInfo& _return, const std::string& typeDeclaration )
+{
+	typesHandler.parseTypeDeclaration(_return, typeDeclaration);	
+}
 
+void DatabaseHandler::formatTypeInfo( std::string& _return, const IdaTypeInfo& typeInfo )
+{
+	typesHandler.formatTypeInfo(_return, typeInfo);
+}

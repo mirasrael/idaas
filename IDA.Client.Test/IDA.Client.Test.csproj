@@ -84,6 +84,7 @@
     <Compile Include="DescribeInstructions.cs" />
     <Compile Include="DescribeStrings.cs" />
     <Compile Include="DescribeStructures.cs" />
+    <Compile Include="DescribeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

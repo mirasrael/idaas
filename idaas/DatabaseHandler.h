@@ -7,6 +7,7 @@
 #include "ReferencesHandler.h"
 #include "FunctionsHandler.h"
 #include "InstructionsHandler.h"
+#include "TypesHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
 private:
@@ -16,6 +17,7 @@ private:
 	ReferencesHandler referencesHandler;
 	FunctionsHandler functionsHandler;
 	InstructionsHandler instructionsHandler;
+	TypesHandler typesHandler;
 	
 public:
 	DatabaseHandler();
@@ -45,6 +47,10 @@ public:
 	void xrefsTo(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
 
 	void fetchInstruction(IdaInstruction& _return, const int32_t address);
+
+	void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration);
+
+	void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo);
 
 	void waitBackgroundTasks();
 };

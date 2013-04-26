@@ -84,6 +84,16 @@ namespace Idaas
       IAsyncResult Begin_listFunctions(AsyncCallback callback, object state, );
       List<IdaFunction> End_listFunctions(IAsyncResult asyncResult);
       #endif
+      IdaTypeInfo parseTypeDeclaration(string typeDeclaration);
+      #if SILVERLIGHT
+      IAsyncResult Begin_parseTypeDeclaration(AsyncCallback callback, object state, string typeDeclaration);
+      IdaTypeInfo End_parseTypeDeclaration(IAsyncResult asyncResult);
+      #endif
+      string formatTypeInfo(IdaTypeInfo typeInfo);
+      #if SILVERLIGHT
+      IAsyncResult Begin_formatTypeInfo(AsyncCallback callback, object state, IdaTypeInfo typeInfo);
+      string End_formatTypeInfo(IAsyncResult asyncResult);
+      #endif
       void waitBackgroundTasks();
       #if SILVERLIGHT
       IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, );
@@ -916,6 +926,130 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_parseTypeDeclaration(AsyncCallback callback, object state, string typeDeclaration)
+      {
+        return send_parseTypeDeclaration(callback, state, typeDeclaration);
+      }
+
+      public IdaTypeInfo End_parseTypeDeclaration(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_parseTypeDeclaration();
+      }
+
+      #endif
+
+      public IdaTypeInfo parseTypeDeclaration(string typeDeclaration)
+      {
+        #if !SILVERLIGHT
+        send_parseTypeDeclaration(typeDeclaration);
+        return recv_parseTypeDeclaration();
+
+        #else
+        var asyncResult = Begin_parseTypeDeclaration(null, null, typeDeclaration);
+        return End_parseTypeDeclaration(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_parseTypeDeclaration(AsyncCallback callback, object state, string typeDeclaration)
+      #else
+      public void send_parseTypeDeclaration(string typeDeclaration)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("parseTypeDeclaration", TMessageType.Call, seqid_));
+        parseTypeDeclaration_args args = new parseTypeDeclaration_args();
+        args.TypeDeclaration = typeDeclaration;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public IdaTypeInfo recv_parseTypeDeclaration()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        parseTypeDeclaration_result result = new parseTypeDeclaration_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "parseTypeDeclaration failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_formatTypeInfo(AsyncCallback callback, object state, IdaTypeInfo typeInfo)
+      {
+        return send_formatTypeInfo(callback, state, typeInfo);
+      }
+
+      public string End_formatTypeInfo(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_formatTypeInfo();
+      }
+
+      #endif
+
+      public string formatTypeInfo(IdaTypeInfo typeInfo)
+      {
+        #if !SILVERLIGHT
+        send_formatTypeInfo(typeInfo);
+        return recv_formatTypeInfo();
+
+        #else
+        var asyncResult = Begin_formatTypeInfo(null, null, typeInfo);
+        return End_formatTypeInfo(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_formatTypeInfo(AsyncCallback callback, object state, IdaTypeInfo typeInfo)
+      #else
+      public void send_formatTypeInfo(IdaTypeInfo typeInfo)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("formatTypeInfo", TMessageType.Call, seqid_));
+        formatTypeInfo_args args = new formatTypeInfo_args();
+        args.TypeInfo = typeInfo;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public string recv_formatTypeInfo()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        formatTypeInfo_result result = new formatTypeInfo_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "formatTypeInfo failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, )
       {
         return send_waitBackgroundTasks(callback, state);
@@ -990,6 +1124,8 @@ namespace Idaas
         processMap_["xrefsFrom"] = xrefsFrom_Process;
         processMap_["fetchInstruction"] = fetchInstruction_Process;
         processMap_["listFunctions"] = listFunctions_Process;
+        processMap_["parseTypeDeclaration"] = parseTypeDeclaration_Process;
+        processMap_["formatTypeInfo"] = formatTypeInfo_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
 
@@ -1187,6 +1323,32 @@ namespace Idaas
         listFunctions_result result = new listFunctions_result();
         result.Success = iface_.listFunctions();
         oprot.WriteMessageBegin(new TMessage("listFunctions", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void parseTypeDeclaration_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        parseTypeDeclaration_args args = new parseTypeDeclaration_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        parseTypeDeclaration_result result = new parseTypeDeclaration_result();
+        result.Success = iface_.parseTypeDeclaration(args.TypeDeclaration);
+        oprot.WriteMessageBegin(new TMessage("parseTypeDeclaration", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void formatTypeInfo_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        formatTypeInfo_args args = new formatTypeInfo_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        formatTypeInfo_result result = new formatTypeInfo_result();
+        result.Success = iface_.formatTypeInfo(args.TypeInfo);
+        oprot.WriteMessageBegin(new TMessage("formatTypeInfo", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -3461,6 +3623,362 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("listFunctions_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class parseTypeDeclaration_args : TBase
+    {
+      private string _typeDeclaration;
+
+      public string TypeDeclaration
+      {
+        get
+        {
+          return _typeDeclaration;
+        }
+        set
+        {
+          __isset.typeDeclaration = true;
+          this._typeDeclaration = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool typeDeclaration;
+      }
+
+      public parseTypeDeclaration_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case -1:
+              if (field.Type == TType.String) {
+                TypeDeclaration = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("parseTypeDeclaration_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (TypeDeclaration != null && __isset.typeDeclaration) {
+          field.Name = "typeDeclaration";
+          field.Type = TType.String;
+          field.ID = -1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(TypeDeclaration);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("parseTypeDeclaration_args(");
+        sb.Append("TypeDeclaration: ");
+        sb.Append(TypeDeclaration);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class parseTypeDeclaration_result : TBase
+    {
+      private IdaTypeInfo _success;
+
+      public IdaTypeInfo Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public parseTypeDeclaration_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new IdaTypeInfo();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("parseTypeDeclaration_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.Struct;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            Success.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("parseTypeDeclaration_result(");
+        sb.Append("Success: ");
+        sb.Append(Success== null ? "<null>" : Success.ToString());
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class formatTypeInfo_args : TBase
+    {
+      private IdaTypeInfo _typeInfo;
+
+      public IdaTypeInfo TypeInfo
+      {
+        get
+        {
+          return _typeInfo;
+        }
+        set
+        {
+          __isset.typeInfo = true;
+          this._typeInfo = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool typeInfo;
+      }
+
+      public formatTypeInfo_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case -1:
+              if (field.Type == TType.Struct) {
+                TypeInfo = new IdaTypeInfo();
+                TypeInfo.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("formatTypeInfo_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (TypeInfo != null && __isset.typeInfo) {
+          field.Name = "typeInfo";
+          field.Type = TType.Struct;
+          field.ID = -1;
+          oprot.WriteFieldBegin(field);
+          TypeInfo.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("formatTypeInfo_args(");
+        sb.Append("TypeInfo: ");
+        sb.Append(TypeInfo== null ? "<null>" : TypeInfo.ToString());
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class formatTypeInfo_result : TBase
+    {
+      private string _success;
+
+      public string Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public formatTypeInfo_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.String) {
+                Success = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("formatTypeInfo_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.String;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteString(Success);
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("formatTypeInfo_result(");
         sb.Append("Success: ");
         sb.Append(Success);
         sb.Append(")");

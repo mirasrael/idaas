@@ -28,6 +28,8 @@ class DatabaseIf {
   virtual void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
   virtual void fetchInstruction(IdaInstruction& _return, const int32_t address) = 0;
   virtual void listFunctions(std::vector<IdaFunction> & _return) = 0;
+  virtual void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration) = 0;
+  virtual void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
 
@@ -99,6 +101,12 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void listFunctions(std::vector<IdaFunction> & /* _return */) {
+    return;
+  }
+  void parseTypeDeclaration(IdaTypeInfo& /* _return */, const std::string& /* typeDeclaration */) {
+    return;
+  }
+  void formatTypeInfo(std::string& /* _return */, const IdaTypeInfo& /* typeInfo */) {
     return;
   }
   void waitBackgroundTasks() {
@@ -1432,6 +1440,222 @@ class Database_listFunctions_presult {
 
 };
 
+typedef struct _Database_parseTypeDeclaration_args__isset {
+  _Database_parseTypeDeclaration_args__isset() : typeDeclaration(false) {}
+  bool typeDeclaration;
+} _Database_parseTypeDeclaration_args__isset;
+
+class Database_parseTypeDeclaration_args {
+ public:
+
+  Database_parseTypeDeclaration_args() : typeDeclaration() {
+  }
+
+  virtual ~Database_parseTypeDeclaration_args() throw() {}
+
+  std::string typeDeclaration;
+
+  _Database_parseTypeDeclaration_args__isset __isset;
+
+  void __set_typeDeclaration(const std::string& val) {
+    typeDeclaration = val;
+  }
+
+  bool operator == (const Database_parseTypeDeclaration_args & rhs) const
+  {
+    if (!(typeDeclaration == rhs.typeDeclaration))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_parseTypeDeclaration_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_parseTypeDeclaration_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_parseTypeDeclaration_pargs {
+ public:
+
+
+  virtual ~Database_parseTypeDeclaration_pargs() throw() {}
+
+  const std::string* typeDeclaration;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_parseTypeDeclaration_result__isset {
+  _Database_parseTypeDeclaration_result__isset() : success(false) {}
+  bool success;
+} _Database_parseTypeDeclaration_result__isset;
+
+class Database_parseTypeDeclaration_result {
+ public:
+
+  Database_parseTypeDeclaration_result() {
+  }
+
+  virtual ~Database_parseTypeDeclaration_result() throw() {}
+
+  IdaTypeInfo success;
+
+  _Database_parseTypeDeclaration_result__isset __isset;
+
+  void __set_success(const IdaTypeInfo& val) {
+    success = val;
+  }
+
+  bool operator == (const Database_parseTypeDeclaration_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_parseTypeDeclaration_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_parseTypeDeclaration_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_parseTypeDeclaration_presult__isset {
+  _Database_parseTypeDeclaration_presult__isset() : success(false) {}
+  bool success;
+} _Database_parseTypeDeclaration_presult__isset;
+
+class Database_parseTypeDeclaration_presult {
+ public:
+
+
+  virtual ~Database_parseTypeDeclaration_presult() throw() {}
+
+  IdaTypeInfo* success;
+
+  _Database_parseTypeDeclaration_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _Database_formatTypeInfo_args__isset {
+  _Database_formatTypeInfo_args__isset() : typeInfo(false) {}
+  bool typeInfo;
+} _Database_formatTypeInfo_args__isset;
+
+class Database_formatTypeInfo_args {
+ public:
+
+  Database_formatTypeInfo_args() {
+  }
+
+  virtual ~Database_formatTypeInfo_args() throw() {}
+
+  IdaTypeInfo typeInfo;
+
+  _Database_formatTypeInfo_args__isset __isset;
+
+  void __set_typeInfo(const IdaTypeInfo& val) {
+    typeInfo = val;
+  }
+
+  bool operator == (const Database_formatTypeInfo_args & rhs) const
+  {
+    if (!(typeInfo == rhs.typeInfo))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_formatTypeInfo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_formatTypeInfo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_formatTypeInfo_pargs {
+ public:
+
+
+  virtual ~Database_formatTypeInfo_pargs() throw() {}
+
+  const IdaTypeInfo* typeInfo;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_formatTypeInfo_result__isset {
+  _Database_formatTypeInfo_result__isset() : success(false) {}
+  bool success;
+} _Database_formatTypeInfo_result__isset;
+
+class Database_formatTypeInfo_result {
+ public:
+
+  Database_formatTypeInfo_result() : success() {
+  }
+
+  virtual ~Database_formatTypeInfo_result() throw() {}
+
+  std::string success;
+
+  _Database_formatTypeInfo_result__isset __isset;
+
+  void __set_success(const std::string& val) {
+    success = val;
+  }
+
+  bool operator == (const Database_formatTypeInfo_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_formatTypeInfo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_formatTypeInfo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_formatTypeInfo_presult__isset {
+  _Database_formatTypeInfo_presult__isset() : success(false) {}
+  bool success;
+} _Database_formatTypeInfo_presult__isset;
+
+class Database_formatTypeInfo_presult {
+ public:
+
+
+  virtual ~Database_formatTypeInfo_presult() throw() {}
+
+  std::string* success;
+
+  _Database_formatTypeInfo_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 
 class Database_waitBackgroundTasks_args {
  public:
@@ -1565,6 +1789,12 @@ class DatabaseClient : virtual public DatabaseIf {
   void listFunctions(std::vector<IdaFunction> & _return);
   void send_listFunctions();
   void recv_listFunctions(std::vector<IdaFunction> & _return);
+  void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration);
+  void send_parseTypeDeclaration(const std::string& typeDeclaration);
+  void recv_parseTypeDeclaration(IdaTypeInfo& _return);
+  void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo);
+  void send_formatTypeInfo(const IdaTypeInfo& typeInfo);
+  void recv_formatTypeInfo(std::string& _return);
   void waitBackgroundTasks();
   void send_waitBackgroundTasks();
   void recv_waitBackgroundTasks();
@@ -1596,6 +1826,8 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_xrefsFrom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_fetchInstruction(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_listFunctions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_parseTypeDeclaration(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_formatTypeInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   DatabaseProcessor(boost::shared_ptr<DatabaseIf> iface) :
@@ -1613,6 +1845,8 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["xrefsFrom"] = &DatabaseProcessor::process_xrefsFrom;
     processMap_["fetchInstruction"] = &DatabaseProcessor::process_fetchInstruction;
     processMap_["listFunctions"] = &DatabaseProcessor::process_listFunctions;
+    processMap_["parseTypeDeclaration"] = &DatabaseProcessor::process_parseTypeDeclaration;
+    processMap_["formatTypeInfo"] = &DatabaseProcessor::process_formatTypeInfo;
     processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
   }
 
@@ -1763,6 +1997,26 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->listFunctions(_return);
     }
     ifaces_[i]->listFunctions(_return);
+    return;
+  }
+
+  void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->parseTypeDeclaration(_return, typeDeclaration);
+    }
+    ifaces_[i]->parseTypeDeclaration(_return, typeDeclaration);
+    return;
+  }
+
+  void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->formatTypeInfo(_return, typeInfo);
+    }
+    ifaces_[i]->formatTypeInfo(_return, typeInfo);
     return;
   }
 

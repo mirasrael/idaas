@@ -114,6 +114,7 @@ rmdir gen-cpp /Q /S</Command>
     <ClCompile Include="StringsHandler.cpp" />
     <ClCompile Include="StructuresHandler.cpp" />
     <ClCompile Include="TcpServer.cpp" />
+    <ClCompile Include="TypesHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseHandler.h" />
@@ -125,6 +126,7 @@ rmdir gen-cpp /Q /S</Command>
     <ClInclude Include="StringsHandler.h" />
     <ClInclude Include="StructuresHandler.h" />
     <ClInclude Include="TcpServer.h" />
+    <ClInclude Include="TypesHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libidaas.thrift\libidaas.thrift.vcxproj">

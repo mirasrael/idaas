@@ -596,6 +596,65 @@ class IdaInstruction {
 
 void swap(IdaInstruction &a, IdaInstruction &b);
 
+typedef struct _IdaTypeInfo__isset {
+  _IdaTypeInfo__isset() : name(false), type(false), fields(false) {}
+  bool name;
+  bool type;
+  bool fields;
+} _IdaTypeInfo__isset;
+
+class IdaTypeInfo {
+ public:
+
+  static const char* ascii_fingerprint; // = "AB879940BD15B6B25691265F7384B271";
+  static const uint8_t binary_fingerprint[16]; // = {0xAB,0x87,0x99,0x40,0xBD,0x15,0xB6,0xB2,0x56,0x91,0x26,0x5F,0x73,0x84,0xB2,0x71};
+
+  IdaTypeInfo() : name(), type(), fields() {
+  }
+
+  virtual ~IdaTypeInfo() throw() {}
+
+  std::string name;
+  std::string type;
+  std::string fields;
+
+  _IdaTypeInfo__isset __isset;
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  void __set_type(const std::string& val) {
+    type = val;
+  }
+
+  void __set_fields(const std::string& val) {
+    fields = val;
+  }
+
+  bool operator == (const IdaTypeInfo & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    if (!(type == rhs.type))
+      return false;
+    if (!(fields == rhs.fields))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaTypeInfo &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaTypeInfo & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaTypeInfo &a, IdaTypeInfo &b);
+
 } // namespace
 
 #endif
