@@ -14,5 +14,6 @@ public:
 	FunctionsHandler(void);
 	~FunctionsHandler(void);
 	void list( std::vector<IdaFunction> & _return );
+	void getFunctionFrame( IdaFunctionFrame& _return, const int32_t address );
 };
 

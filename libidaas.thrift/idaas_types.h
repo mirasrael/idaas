@@ -187,16 +187,16 @@ class ida_enum {
 void swap(ida_enum &a, ida_enum &b);
 
 
-class ida_struct_member {
+class IdaStructMember {
  public:
 
   static const char* ascii_fingerprint; // = "07A9615F837F7D0A952B595DD3020972";
   static const uint8_t binary_fingerprint[16]; // = {0x07,0xA9,0x61,0x5F,0x83,0x7F,0x7D,0x0A,0x95,0x2B,0x59,0x5D,0xD3,0x02,0x09,0x72};
 
-  ida_struct_member() : name(), type() {
+  IdaStructMember() : name(), type() {
   }
 
-  virtual ~ida_struct_member() throw() {}
+  virtual ~IdaStructMember() throw() {}
 
   std::string name;
   std::string type;
@@ -209,7 +209,7 @@ class ida_struct_member {
     type = val;
   }
 
-  bool operator == (const ida_struct_member & rhs) const
+  bool operator == (const IdaStructMember & rhs) const
   {
     if (!(name == rhs.name))
       return false;
@@ -217,41 +217,41 @@ class ida_struct_member {
       return false;
     return true;
   }
-  bool operator != (const ida_struct_member &rhs) const {
+  bool operator != (const IdaStructMember &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const ida_struct_member & ) const;
+  bool operator < (const IdaStructMember & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-void swap(ida_struct_member &a, ida_struct_member &b);
+void swap(IdaStructMember &a, IdaStructMember &b);
 
-typedef struct _ida_struct__isset {
-  _ida_struct__isset() : isUnion(true), members(false) {}
+typedef struct _IdaStruct__isset {
+  _IdaStruct__isset() : isUnion(true), members(false) {}
   bool isUnion;
   bool members;
-} _ida_struct__isset;
+} _IdaStruct__isset;
 
-class ida_struct {
+class IdaStruct {
  public:
 
   static const char* ascii_fingerprint; // = "F83089BCC3F27DED4B671B75FE652BE0";
   static const uint8_t binary_fingerprint[16]; // = {0xF8,0x30,0x89,0xBC,0xC3,0xF2,0x7D,0xED,0x4B,0x67,0x1B,0x75,0xFE,0x65,0x2B,0xE0};
 
-  ida_struct() : name(), isUnion(false) {
+  IdaStruct() : name(), isUnion(false) {
   }
 
-  virtual ~ida_struct() throw() {}
+  virtual ~IdaStruct() throw() {}
 
   std::string name;
   bool isUnion;
-  std::vector<ida_struct_member>  members;
+  std::vector<IdaStructMember>  members;
 
-  _ida_struct__isset __isset;
+  _IdaStruct__isset __isset;
 
   void __set_name(const std::string& val) {
     name = val;
@@ -261,11 +261,11 @@ class ida_struct {
     isUnion = val;
   }
 
-  void __set_members(const std::vector<ida_struct_member> & val) {
+  void __set_members(const std::vector<IdaStructMember> & val) {
     members = val;
   }
 
-  bool operator == (const ida_struct & rhs) const
+  bool operator == (const IdaStruct & rhs) const
   {
     if (!(name == rhs.name))
       return false;
@@ -275,18 +275,18 @@ class ida_struct {
       return false;
     return true;
   }
-  bool operator != (const ida_struct &rhs) const {
+  bool operator != (const IdaStruct &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const ida_struct & ) const;
+  bool operator < (const IdaStruct & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-void swap(ida_struct &a, ida_struct &b);
+void swap(IdaStruct &a, IdaStruct &b);
 
 
 class ida_string {
@@ -433,6 +433,57 @@ class IdaFunction {
 };
 
 void swap(IdaFunction &a, IdaFunction &b);
+
+
+class IdaFunctionFrame {
+ public:
+
+  static const char* ascii_fingerprint; // = "264FC5764D512B6591D6600760DDC031";
+  static const uint8_t binary_fingerprint[16]; // = {0x26,0x4F,0xC5,0x76,0x4D,0x51,0x2B,0x65,0x91,0xD6,0x60,0x07,0x60,0xDD,0xC0,0x31};
+
+  IdaFunctionFrame() : address(0) {
+  }
+
+  virtual ~IdaFunctionFrame() throw() {}
+
+  int32_t address;
+  std::vector<IdaStructMember>  arguments;
+  std::vector<IdaStructMember>  variables;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  void __set_arguments(const std::vector<IdaStructMember> & val) {
+    arguments = val;
+  }
+
+  void __set_variables(const std::vector<IdaStructMember> & val) {
+    variables = val;
+  }
+
+  bool operator == (const IdaFunctionFrame & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    if (!(arguments == rhs.arguments))
+      return false;
+    if (!(variables == rhs.variables))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaFunctionFrame &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaFunctionFrame & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaFunctionFrame &a, IdaFunctionFrame &b);
 
 typedef struct _IdaOperand__isset {
   _IdaOperand__isset() : register_(false), address(false), baseRegister(false), indexRegister(false), indexScale(false), value(false) {}

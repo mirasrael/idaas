@@ -10,12 +10,12 @@ namespace Ida.Client
 {
     public static class IdaStructExtensions
     {
-        public static void AddMember(this ida_struct @struct, string name, string type)
+        public static void AddMember(this IdaStruct @struct, string name, string type)
         {
-            @struct.Members.Add(new ida_struct_member { Name = name, Type = type });
+            @struct.Members.Add(new IdaStructMember { Name = name, Type = type });
         }
-        
-        public static ida_struct_member Get(this ida_struct @struct, string name)
+
+        public static IdaStructMember Get(this IdaStruct @struct, string name)
         {
             return @struct.Members.Find(m => m.Name == name);
         }
@@ -23,39 +23,39 @@ namespace Ida.Client
 
     public static class StructuresDatabaseExtensions
     {
-        public static bool Store(this Database database, ida_struct @struct)
+        public static bool Store(this Database database, IdaStruct @struct)
         {
             return database.Structures.Store(@struct);
         }
 
-        public static ida_struct NewStructure(this Database database, string name,
+        public static IdaStruct NewStructure(this Database database, string name,
                                               IEnumerable<KeyValuePair<string, string>> members = null)
         {
             return database.Structures.New(name, false, members);
         }
 
-        public static ida_struct NewUnion(this Database database, string name, IEnumerable<KeyValuePair<string, string>> members = null)
+        public static IdaStruct NewUnion(this Database database, string name, IEnumerable<KeyValuePair<string, string>> members = null)
         {
             return database.Structures.New(name, true, members);
         }
     }
 
-    public class Structures : IEnumerable<ida_struct>,  IExportable
+    public class Structures : IEnumerable<IdaStruct>,  IExportable
     {
         private readonly Idaas.Database.Client _client;
-        private List<ida_struct> _items;
+        private List<IdaStruct> _items;
 
         internal Structures(Idaas.Database.Client client)
         {
             _client = client;
         }
 
-        private List<ida_struct> Items
+        private List<IdaStruct> Items
         {
             get { return _items ?? (_items = Load()); }
         }
 
-        public IEnumerator<ida_struct> GetEnumerator()
+        public IEnumerator<IdaStruct> GetEnumerator()
         {
             return Items.GetEnumerator();
         }
@@ -65,21 +65,21 @@ namespace Ida.Client
             return GetEnumerator();
         }
 
-        private List<ida_struct> Load()
+        private List<IdaStruct> Load()
         {
             return _client.listStructures();
         }
 
-        public ida_struct New(string name, bool isUnion = false, IEnumerable<KeyValuePair<string, string>> members = null)
+        public IdaStruct New(string name, bool isUnion = false, IEnumerable<KeyValuePair<string, string>> members = null)
         {
-            ida_struct @struct = this.FirstOrDefault(e => e.Name == name);
+            IdaStruct @struct = this.FirstOrDefault(e => e.Name == name);
             if (@struct == null)
             {
-                @struct = new ida_struct {Name = name};
+                @struct = new IdaStruct {Name = name};
                 Items.Add(@struct);
             }
             @struct.IsUnion = isUnion;
-            @struct.Members = new List<ida_struct_member>();
+            @struct.Members = new List<IdaStructMember>();
             if (members != null)
             {
                 foreach (var pair in members)
@@ -90,7 +90,7 @@ namespace Ida.Client
             return @struct;
         }
 
-        public bool Store(ida_struct @struct)
+        public bool Store(IdaStruct @struct)
         {
             return _client.storeStructure(@struct);
         }
@@ -102,12 +102,12 @@ namespace Ida.Client
                     Indent = true
                 });
             writer.WriteStartElement("Structures");
-            foreach (ida_struct item in Items)
+            foreach (IdaStruct item in Items)
             {
                 writer.WriteStartElement("Structure");
                 writer.WriteAttributeString("Name", item.Name);
                 writer.WriteAttributeString("IsUnion", item.IsUnion.ToString());
-                foreach (ida_struct_member member in item.Members)
+                foreach (IdaStructMember member in item.Members)
                 {
                     writer.WriteStartElement("Field");
                     writer.WriteAttributeString("Name", member.Name);
@@ -124,18 +124,18 @@ namespace Ida.Client
         {
             XmlReader reader = XmlReader.Create(input);
             reader.ReadToFollowing("Structures");
-            var loadedStructures = new List<ida_struct>();
+            var loadedStructures = new List<IdaStruct>();
             for (bool hasStructure = reader.ReadToDescendant("Structure");
                  hasStructure;
                  hasStructure = reader.ReadToNextSibling("Structure"))
             {
                 var isUnion = bool.TrueString.Equals(reader.GetAttribute("IsUnion"), StringComparison.CurrentCultureIgnoreCase);
-                ida_struct @structure = New(reader.GetAttribute("Name"), isUnion);
+                IdaStruct @structure = New(reader.GetAttribute("Name"), isUnion);
                 for (bool hasField = reader.ReadToDescendant("Field");
                      hasField;
                      hasField = reader.ReadToNextSibling("Field"))
                 {
-                    @structure.Members.Add(new ida_struct_member
+                    @structure.Members.Add(new IdaStructMember
                         {
                             Name = reader.GetAttribute("Name"),
                             Type = reader.GetAttribute("Type")
@@ -147,7 +147,7 @@ namespace Ida.Client
             Store(loadedStructures);
         }
 
-        public bool Store(IEnumerable<ida_struct> structures)
+        public bool Store(IEnumerable<IdaStruct> structures)
         {
             return _client.storeStructures(structures.ToList());
         }
@@ -157,7 +157,7 @@ namespace Ida.Client
             return _client.storeStructures(Items);
         }
 
-        public ida_struct this[string name]
+        public IdaStruct this[string name]
         {
             get { return this.First(s => s.Name == name); }
         }
@@ -167,7 +167,7 @@ namespace Ida.Client
             return this.Any(s => s.Name == name);
         }
 
-        public void Delete(ida_struct structure)
+        public void Delete(IdaStruct structure)
         {
             _client.deleteStruct(structure.Name);
         }

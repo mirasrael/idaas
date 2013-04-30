@@ -44,5 +44,10 @@ namespace Ida.Client
         {
             return Items.FirstOrDefault(f => f.Name == name);
         }
+
+        public IdaFunctionFrame GetFrame(int address)
+        {
+            return _client.getFunctionFrame(address);
+        }
     }
 }

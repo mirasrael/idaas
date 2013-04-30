@@ -5,12 +5,14 @@
 #include <Database.h>
 #include <struct.hpp>
 
+#include "struct_copiers.h"
+
 using namespace idaas;
 
 class StructuresHandler
 {	
 private:
-	typedef std::map<std::string, const ida_struct*> index_t;
+	typedef std::map<std::string, const IdaStruct*> index_t;
 
 	const static std::regex invalidIdentifier;
 	const static std::regex typeName;
@@ -21,9 +23,9 @@ private:
 public:
 	StructuresHandler(void);
 	~StructuresHandler(void);
-	bool store( const ida_struct &_struct );
-	bool storeAll( const std::vector<ida_struct> &structs );
-	void list( std::vector<ida_struct> &_return );
-	void _delete( const std::string& name );	
+	bool store( const IdaStruct &_struct );
+	bool storeAll( const std::vector<IdaStruct> &structs );
+	void list( std::vector<IdaStruct> &_return );
+	void _delete( const std::string& name );
 };
 

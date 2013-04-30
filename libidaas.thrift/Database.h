@@ -19,15 +19,16 @@ class DatabaseIf {
   virtual bool storeEnum(const ida_enum& _enum) = 0;
   virtual bool storeEnums(const std::vector<ida_enum> & enums) = 0;
   virtual void deleteEnum(const std::string& name) = 0;
-  virtual void listStructures(std::vector<ida_struct> & _return) = 0;
-  virtual bool storeStructure(const ida_struct& _struct) = 0;
-  virtual bool storeStructures(const std::vector<ida_struct> & structs) = 0;
+  virtual void listStructures(std::vector<IdaStruct> & _return) = 0;
+  virtual bool storeStructure(const IdaStruct& _struct) = 0;
+  virtual bool storeStructures(const std::vector<IdaStruct> & structs) = 0;
   virtual void deleteStruct(const std::string& name) = 0;
   virtual void listStrings(std::vector<ida_string> & _return) = 0;
   virtual void xrefsTo(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
   virtual void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType) = 0;
   virtual void fetchInstruction(IdaInstruction& _return, const int32_t address) = 0;
   virtual void listFunctions(std::vector<IdaFunction> & _return) = 0;
+  virtual void getFunctionFrame(IdaFunctionFrame& _return, const int32_t address) = 0;
   virtual void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration) = 0;
   virtual void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo) = 0;
   virtual void waitBackgroundTasks() = 0;
@@ -74,14 +75,14 @@ class DatabaseNull : virtual public DatabaseIf {
   void deleteEnum(const std::string& /* name */) {
     return;
   }
-  void listStructures(std::vector<ida_struct> & /* _return */) {
+  void listStructures(std::vector<IdaStruct> & /* _return */) {
     return;
   }
-  bool storeStructure(const ida_struct& /* _struct */) {
+  bool storeStructure(const IdaStruct& /* _struct */) {
     bool _return = false;
     return _return;
   }
-  bool storeStructures(const std::vector<ida_struct> & /* structs */) {
+  bool storeStructures(const std::vector<IdaStruct> & /* structs */) {
     bool _return = false;
     return _return;
   }
@@ -101,6 +102,9 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void listFunctions(std::vector<IdaFunction> & /* _return */) {
+    return;
+  }
+  void getFunctionFrame(IdaFunctionFrame& /* _return */, const int32_t /* address */) {
     return;
   }
   void parseTypeDeclaration(IdaTypeInfo& /* _return */, const std::string& /* typeDeclaration */) {
@@ -562,11 +566,11 @@ class Database_listStructures_result {
 
   virtual ~Database_listStructures_result() throw() {}
 
-  std::vector<ida_struct>  success;
+  std::vector<IdaStruct>  success;
 
   _Database_listStructures_result__isset __isset;
 
-  void __set_success(const std::vector<ida_struct> & val) {
+  void __set_success(const std::vector<IdaStruct> & val) {
     success = val;
   }
 
@@ -598,7 +602,7 @@ class Database_listStructures_presult {
 
   virtual ~Database_listStructures_presult() throw() {}
 
-  std::vector<ida_struct> * success;
+  std::vector<IdaStruct> * success;
 
   _Database_listStructures_presult__isset __isset;
 
@@ -619,11 +623,11 @@ class Database_storeStructure_args {
 
   virtual ~Database_storeStructure_args() throw() {}
 
-  ida_struct _struct;
+  IdaStruct _struct;
 
   _Database_storeStructure_args__isset __isset;
 
-  void __set__struct(const ida_struct& val) {
+  void __set__struct(const IdaStruct& val) {
     _struct = val;
   }
 
@@ -651,7 +655,7 @@ class Database_storeStructure_pargs {
 
   virtual ~Database_storeStructure_pargs() throw() {}
 
-  const ida_struct* _struct;
+  const IdaStruct* _struct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -727,11 +731,11 @@ class Database_storeStructures_args {
 
   virtual ~Database_storeStructures_args() throw() {}
 
-  std::vector<ida_struct>  structs;
+  std::vector<IdaStruct>  structs;
 
   _Database_storeStructures_args__isset __isset;
 
-  void __set_structs(const std::vector<ida_struct> & val) {
+  void __set_structs(const std::vector<IdaStruct> & val) {
     structs = val;
   }
 
@@ -759,7 +763,7 @@ class Database_storeStructures_pargs {
 
   virtual ~Database_storeStructures_pargs() throw() {}
 
-  const std::vector<ida_struct> * structs;
+  const std::vector<IdaStruct> * structs;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1440,6 +1444,114 @@ class Database_listFunctions_presult {
 
 };
 
+typedef struct _Database_getFunctionFrame_args__isset {
+  _Database_getFunctionFrame_args__isset() : address(false) {}
+  bool address;
+} _Database_getFunctionFrame_args__isset;
+
+class Database_getFunctionFrame_args {
+ public:
+
+  Database_getFunctionFrame_args() : address(0) {
+  }
+
+  virtual ~Database_getFunctionFrame_args() throw() {}
+
+  int32_t address;
+
+  _Database_getFunctionFrame_args__isset __isset;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  bool operator == (const Database_getFunctionFrame_args & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_getFunctionFrame_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_getFunctionFrame_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_getFunctionFrame_pargs {
+ public:
+
+
+  virtual ~Database_getFunctionFrame_pargs() throw() {}
+
+  const int32_t* address;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_getFunctionFrame_result__isset {
+  _Database_getFunctionFrame_result__isset() : success(false) {}
+  bool success;
+} _Database_getFunctionFrame_result__isset;
+
+class Database_getFunctionFrame_result {
+ public:
+
+  Database_getFunctionFrame_result() {
+  }
+
+  virtual ~Database_getFunctionFrame_result() throw() {}
+
+  IdaFunctionFrame success;
+
+  _Database_getFunctionFrame_result__isset __isset;
+
+  void __set_success(const IdaFunctionFrame& val) {
+    success = val;
+  }
+
+  bool operator == (const Database_getFunctionFrame_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_getFunctionFrame_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_getFunctionFrame_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_getFunctionFrame_presult__isset {
+  _Database_getFunctionFrame_presult__isset() : success(false) {}
+  bool success;
+} _Database_getFunctionFrame_presult__isset;
+
+class Database_getFunctionFrame_presult {
+ public:
+
+
+  virtual ~Database_getFunctionFrame_presult() throw() {}
+
+  IdaFunctionFrame* success;
+
+  _Database_getFunctionFrame_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _Database_parseTypeDeclaration_args__isset {
   _Database_parseTypeDeclaration_args__isset() : typeDeclaration(false) {}
   bool typeDeclaration;
@@ -1762,14 +1874,14 @@ class DatabaseClient : virtual public DatabaseIf {
   void deleteEnum(const std::string& name);
   void send_deleteEnum(const std::string& name);
   void recv_deleteEnum();
-  void listStructures(std::vector<ida_struct> & _return);
+  void listStructures(std::vector<IdaStruct> & _return);
   void send_listStructures();
-  void recv_listStructures(std::vector<ida_struct> & _return);
-  bool storeStructure(const ida_struct& _struct);
-  void send_storeStructure(const ida_struct& _struct);
+  void recv_listStructures(std::vector<IdaStruct> & _return);
+  bool storeStructure(const IdaStruct& _struct);
+  void send_storeStructure(const IdaStruct& _struct);
   bool recv_storeStructure();
-  bool storeStructures(const std::vector<ida_struct> & structs);
-  void send_storeStructures(const std::vector<ida_struct> & structs);
+  bool storeStructures(const std::vector<IdaStruct> & structs);
+  void send_storeStructures(const std::vector<IdaStruct> & structs);
   bool recv_storeStructures();
   void deleteStruct(const std::string& name);
   void send_deleteStruct(const std::string& name);
@@ -1789,6 +1901,9 @@ class DatabaseClient : virtual public DatabaseIf {
   void listFunctions(std::vector<IdaFunction> & _return);
   void send_listFunctions();
   void recv_listFunctions(std::vector<IdaFunction> & _return);
+  void getFunctionFrame(IdaFunctionFrame& _return, const int32_t address);
+  void send_getFunctionFrame(const int32_t address);
+  void recv_getFunctionFrame(IdaFunctionFrame& _return);
   void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration);
   void send_parseTypeDeclaration(const std::string& typeDeclaration);
   void recv_parseTypeDeclaration(IdaTypeInfo& _return);
@@ -1826,6 +1941,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_xrefsFrom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_fetchInstruction(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_listFunctions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getFunctionFrame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parseTypeDeclaration(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_formatTypeInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1845,6 +1961,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["xrefsFrom"] = &DatabaseProcessor::process_xrefsFrom;
     processMap_["fetchInstruction"] = &DatabaseProcessor::process_fetchInstruction;
     processMap_["listFunctions"] = &DatabaseProcessor::process_listFunctions;
+    processMap_["getFunctionFrame"] = &DatabaseProcessor::process_getFunctionFrame;
     processMap_["parseTypeDeclaration"] = &DatabaseProcessor::process_parseTypeDeclaration;
     processMap_["formatTypeInfo"] = &DatabaseProcessor::process_formatTypeInfo;
     processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
@@ -1913,7 +2030,7 @@ class DatabaseMultiface : virtual public DatabaseIf {
     ifaces_[i]->deleteEnum(name);
   }
 
-  void listStructures(std::vector<ida_struct> & _return) {
+  void listStructures(std::vector<IdaStruct> & _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1923,7 +2040,7 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return;
   }
 
-  bool storeStructure(const ida_struct& _struct) {
+  bool storeStructure(const IdaStruct& _struct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1932,7 +2049,7 @@ class DatabaseMultiface : virtual public DatabaseIf {
     return ifaces_[i]->storeStructure(_struct);
   }
 
-  bool storeStructures(const std::vector<ida_struct> & structs) {
+  bool storeStructures(const std::vector<IdaStruct> & structs) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1997,6 +2114,16 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->listFunctions(_return);
     }
     ifaces_[i]->listFunctions(_return);
+    return;
+  }
+
+  void getFunctionFrame(IdaFunctionFrame& _return, const int32_t address) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getFunctionFrame(_return, address);
+    }
+    ifaces_[i]->getFunctionFrame(_return, address);
     return;
   }
 

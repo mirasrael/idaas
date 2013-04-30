@@ -30,17 +30,19 @@ public:
 
 	void deleteEnum(const std::string& name);
 
-	void listStructures(std::vector<idaas::ida_struct> & _return);
+	void listStructures(std::vector<idaas::IdaStruct> & _return);
 
-	bool storeStructure(const idaas::ida_struct& _struct);
+	bool storeStructure(const idaas::IdaStruct& _struct);
 
-	bool storeStructures(const std::vector<ida_struct> & structs);
+	bool storeStructures(const std::vector<IdaStruct> & structs);
 
 	void deleteStruct(const std::string& name);
 
 	void listStrings(std::vector<ida_string> & _return);
 
 	void listFunctions(std::vector<IdaFunction> & _return);
+
+	void getFunctionFrame(IdaFunctionFrame& _return, const int32_t address);
 
 	void xrefsFrom(std::vector<IdaRef> & _return, const int32_t address, const IdaRefType::type refType);
 

@@ -98,12 +98,12 @@ void DatabaseHandler::waitBackgroundTasks()
 	run_in_main_thread(boost::function<bool()>(autoWait));		
 }
 
-void DatabaseHandler::listStructures( std::vector<ida_struct> & _return )
+void DatabaseHandler::listStructures( std::vector<IdaStruct> & _return )
 {
 	run_in_main_thread(&StructuresHandler::list, &structureHandler, _return);	
 }
 
-bool DatabaseHandler::storeStructure( const ida_struct& _struct )
+bool DatabaseHandler::storeStructure( const IdaStruct& _struct )
 {
 	return run_in_main_thread(&StructuresHandler::store, &structureHandler, _struct);	
 }
@@ -113,7 +113,7 @@ void DatabaseHandler::deleteStruct( const std::string& name )
 	run_in_main_thread(&StructuresHandler::_delete, &structureHandler, name);	
 }
 
-bool DatabaseHandler::storeStructures( const std::vector<ida_struct> & structs )
+bool DatabaseHandler::storeStructures( const std::vector<IdaStruct> & structs )
 {
 	return run_in_main_thread(&StructuresHandler::storeAll, &structureHandler, structs);	
 }
@@ -158,4 +158,10 @@ void DatabaseHandler::parseTypeDeclaration( IdaTypeInfo& _return, const std::str
 void DatabaseHandler::formatTypeInfo( std::string& _return, const IdaTypeInfo& typeInfo )
 {
 	typesHandler.formatTypeInfo(_return, typeInfo);
+}
+
+void DatabaseHandler::getFunctionFrame( IdaFunctionFrame& _return, const int32_t address )
+{
+	run_in_main_thread(boost::function<void()>(
+		boost::bind(&FunctionsHandler::getFunctionFrame, &functionsHandler, boost::ref(_return), address)));
 }

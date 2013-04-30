@@ -19,6 +19,14 @@ namespace Ida.Client.Test
         }
 
         [Test]
+        public void ItShouldGetFunctionFrame()
+        {
+            var frame = Database.Functions.GetFrame(0x00411580);
+            Assert.That(frame.Arguments, Has.Count.EqualTo(2));
+            Assert.That(frame.Variables, Has.Count.EqualTo(5));
+        }
+
+        [Test]
         public void ItShouldGuessFunctionType()
         {
             var checkEsp = Database.Functions.FindByName("_RTC_CheckEsp");

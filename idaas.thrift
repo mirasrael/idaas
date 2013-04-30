@@ -13,15 +13,15 @@ struct ida_enum {
 	3: list<ida_enum_const> constants
 }
 
-struct ida_struct_member {	
+struct IdaStructMember {	
 	1: required string name
 	2: required string type	
 }
 
-struct ida_struct {	
+struct IdaStruct {	
 	1: required string name
 	2: bool isUnion = false
-	3: list<ida_struct_member> members
+	3: list<IdaStructMember> members
 }
 
 struct ida_string {
@@ -43,6 +43,12 @@ struct IdaFunction {
 	2: required i32 endAddress
 	3: required string name
 	4: required string type
+}
+
+struct IdaFunctionFrame {
+	1: required i32 address
+	2: required list<IdaStructMember> arguments
+	3: required list<IdaStructMember> variables
 }
 
 enum IdaOperandType {
@@ -115,9 +121,9 @@ service Database {
 	bool storeEnums(1: list<ida_enum> enums)
 	void deleteEnum(1: string name)
 
-	list<ida_struct> listStructures()
-	bool storeStructure(1: ida_struct _struct)
-	bool storeStructures(1: list<ida_struct> structs)
+	list<IdaStruct> listStructures()
+	bool storeStructure(1: IdaStruct _struct)
+	bool storeStructures(1: list<IdaStruct> structs)
 	void deleteStruct(1: string name)
 
 	list<ida_string> listStrings()
@@ -128,6 +134,7 @@ service Database {
 	IdaInstruction fetchInstruction(1: i32 address)
 
 	list<IdaFunction> listFunctions()
+	IdaFunctionFrame getFunctionFrame(1: i32 address)
 
 	IdaTypeInfo parseTypeDeclaration(string typeDeclaration)
 	string formatTypeInfo(IdaTypeInfo typeInfo)

@@ -18,13 +18,13 @@ namespace Ida.Client.Test
 
             public override bool Matches(object oStruct)
             {
-                var @struct = oStruct as ida_struct;
+                var @struct = oStruct as IdaStruct;
                 if (@struct == null)
                 {
                     actual = "No struct";
                     return false;
                 }
-                ida_struct_member member = @struct.Members.Find(m => m.Name == Name);
+                IdaStructMember member = @struct.Members.Find(m => m.Name == Name);
                 if (member == null)
                 {
                     actual = "No member";
@@ -49,11 +49,11 @@ namespace Ida.Client.Test
         [Test]
         public void IsShouldAddPrimitiveMembers()
         {
-            ida_struct testStructure = Database.Structures.New(GenerateUniqName());
-            testStructure.Members.Add(new ida_struct_member {Name = "ByteMember", Type = "unsigned __int8"});
-            testStructure.Members.Add(new ida_struct_member {Name = "WordMember", Type = "unsigned __int16"});
-            testStructure.Members.Add(new ida_struct_member {Name = "DWordMember", Type = "unsigned __int32"});
-            testStructure.Members.Add(new ida_struct_member {Name = "ByteArray", Type = "unsigned __int8[2]"});
+            IdaStruct testStructure = Database.Structures.New(GenerateUniqName());
+            testStructure.Members.Add(new IdaStructMember { Name = "ByteMember", Type = "unsigned __int8" });
+            testStructure.Members.Add(new IdaStructMember { Name = "WordMember", Type = "unsigned __int16" });
+            testStructure.Members.Add(new IdaStructMember { Name = "DWordMember", Type = "unsigned __int32" });
+            testStructure.Members.Add(new IdaStructMember { Name = "ByteArray", Type = "unsigned __int8[2]" });
             Assert.That(Database.Store(testStructure), Is.True);
 
             Reconnect();
@@ -70,10 +70,10 @@ namespace Ida.Client.Test
         {
             string structureName = GenerateUniqName();
 
-            ida_struct testStructure = Database.Structures.New(structureName);
+            IdaStruct testStructure = Database.Structures.New(structureName);
             Assert.That(testStructure.Name, Is.EqualTo(structureName));
             Assert.That(Database.Structures, Has.Member(testStructure));
-            testStructure.Members.Add(new ida_struct_member {Name = "Member1", Type = "int"});
+            testStructure.Members.Add(new IdaStructMember { Name = "Member1", Type = "int" });
             Assert.That(Database.Structures.Store(testStructure), Is.True);
 
             Reconnect();
@@ -82,7 +82,7 @@ namespace Ida.Client.Test
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member1"), Is.Not.Null);
             Assert.That(testStructure.Members.FirstOrDefault(m => m.Name == "Member2"), Is.Null);
             testStructure.Members.RemoveAll(m => m.Name == "Member1");
-            testStructure.Members.Add(new ida_struct_member {Name = "Member2", Type = "double"});
+            testStructure.Members.Add(new IdaStructMember { Name = "Member2", Type = "double" });
             Assert.That(Database.Structures.Store(testStructure), Is.True);
 
             Reconnect();
@@ -104,8 +104,8 @@ namespace Ida.Client.Test
                 });
             Database.Store(testEnum);
 
-            ida_struct testStructure = Database.Structures.New(structureName);
-            testStructure.Members.Add(new ida_struct_member {Name = "EnumMember", Type = testEnum.Name});
+            IdaStruct testStructure = Database.Structures.New(structureName);
+            testStructure.Members.Add(new IdaStructMember { Name = "EnumMember", Type = testEnum.Name });
             Database.Store(testStructure);
 
             Reconnect();
@@ -118,13 +118,13 @@ namespace Ida.Client.Test
         public void ItShouldCreateStructuresWithSpecialSymbols()
         {
             string fieldTypeName = "_MY_SYSTEM_INFO::$1593C2ABA4C275C0FBEC2498FA3B0937::$2";
-            ida_struct fieldType = Database.Structures.New(fieldTypeName);
-            fieldType.Members.Add(new ida_struct_member {Name = "SubMember1", Type = "int"});
+            IdaStruct fieldType = Database.Structures.New(fieldTypeName);
+            fieldType.Members.Add(new IdaStructMember { Name = "SubMember1", Type = "int" });
             Assert.That(Database.Store(fieldType), Is.True);
 
             string ownerName = "_MY_SYSTEM_INFO::$1593C2ABA4C275C0FBEC2498FA3B0937";
-            ida_struct owner = Database.Structures.New(ownerName);
-            owner.Members.Add(new ida_struct_member {Name = "Member1", Type = fieldType.Name});
+            IdaStruct owner = Database.Structures.New(ownerName);
+            owner.Members.Add(new IdaStructMember { Name = "Member1", Type = fieldType.Name });
             Assert.That(Database.Store(owner), Is.True);
 
             Reconnect();
@@ -172,13 +172,13 @@ namespace Ida.Client.Test
         {
             string unionName = GenerateUniqName();
 
-            ida_struct testStructure = Database.Structures.New(unionName, isUnion: true);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member1", Type = "int"});
+            IdaStruct testStructure = Database.Structures.New(unionName, isUnion: true);
+            testStructure.Members.Add(new IdaStructMember { Name = "Member1", Type = "int" });
             Database.Store(testStructure);
 
             testStructure = Database.Structures.New(unionName, isUnion: true);
             Assert.That(testStructure.Members.Exists(m => m.Name == "Member1"), Is.False);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member2", Type = "double"});
+            testStructure.Members.Add(new IdaStructMember { Name = "Member2", Type = "double" });
             Database.Store(testStructure);
 
             Reconnect();
@@ -237,7 +237,7 @@ namespace Ida.Client.Test
         [Test]
         public void ItShouldGetStructuresList()
         {
-            ida_struct devInfo = Database.Structures.First(s => s.Name == "TestStructure");
+            IdaStruct devInfo = Database.Structures.First(s => s.Name == "TestStructure");
             Assert.That(devInfo, Is.Not.Null);
             Assert.That(devInfo.Members.FirstOrDefault(m => m.Name == "IntField"), Is.Not.Null);
         }
@@ -247,13 +247,13 @@ namespace Ida.Client.Test
         {
             string structureName = GenerateUniqName();
 
-            ida_struct testStructure = Database.Structures.New(structureName);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member1", Type = "int"});
+            IdaStruct testStructure = Database.Structures.New(structureName);
+            testStructure.Members.Add(new IdaStructMember { Name = "Member1", Type = "int" });
             Database.Store(testStructure);
 
             testStructure = Database.Structures.New(structureName);
             Assert.That(testStructure.Members.Exists(m => m.Name == "Member1"), Is.False);
-            testStructure.Members.Add(new ida_struct_member {Name = "Member2", Type = "double"});
+            testStructure.Members.Add(new IdaStructMember { Name = "Member2", Type = "double" });
             Database.Store(testStructure);
 
             Reconnect();
