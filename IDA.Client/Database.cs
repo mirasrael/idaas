@@ -59,6 +59,7 @@ namespace Ida.Client
             Strings = new Strings(_client);
             Functions = new Functions(_client);
             Instructions = new Instructions(_client);
+            Names = new Names(_client);
 
             _transport.Open();
             return true;
@@ -78,6 +79,8 @@ namespace Ida.Client
         public Functions Functions { get; private set; }
 
         public Instructions Instructions { get; private set; }
+
+        public Names Names { get; private set; }
 
         public List<IdaRef> GetDataRefsTo(int address)
         {

@@ -165,3 +165,9 @@ void DatabaseHandler::getFunctionFrame( IdaFunctionFrame& _return, const int32_t
 	run_in_main_thread(boost::function<void()>(
 		boost::bind(&FunctionsHandler::getFunctionFrame, &functionsHandler, boost::ref(_return), address)));
 }
+
+
+void DatabaseHandler::listNamedAddresses( std::vector<IdaNamedAddress> &_return ) {
+	run_in_main_thread(boost::function<void()>(
+		boost::bind(&AddressesHandler::list, &addressesHandler, boost::ref(_return))));
+}

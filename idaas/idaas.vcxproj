@@ -104,6 +104,7 @@ rmdir gen-cpp /Q /S</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AddressesHandler.cpp" />
     <ClCompile Include="DatabaseHandler.cpp" />
     <ClCompile Include="EnumerationsHandler.cpp" />
     <ClCompile Include="FunctionsHandler.cpp" />
@@ -118,6 +119,7 @@ rmdir gen-cpp /Q /S</Command>
     <ClCompile Include="TypesHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddressesHandler.h" />
     <ClInclude Include="DatabaseHandler.h" />
     <ClInclude Include="EnumerationsHandler.h" />
     <ClInclude Include="FunctionsHandler.h" />

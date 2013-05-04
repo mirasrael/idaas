@@ -90,7 +90,7 @@ void InstructionsHandler::fetchOperand(IdaOperand &_return, const op_t &input)
 		break;
 	case o_displ:
 	case o_phrase:
-		_return.type = IdaOperandType::Dislacement;
+		_return.type = IdaOperandType::Displacement;
 		_return.address = input.addr;
 		_return.baseRegister = mapRegister(x86_base(input));
 		setIndexRegister(_return, input);

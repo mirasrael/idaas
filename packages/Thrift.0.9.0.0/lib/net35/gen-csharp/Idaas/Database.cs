@@ -99,6 +99,11 @@ namespace Idaas
       IAsyncResult Begin_formatTypeInfo(AsyncCallback callback, object state, IdaTypeInfo typeInfo);
       string End_formatTypeInfo(IAsyncResult asyncResult);
       #endif
+      List<IdaNamedAddress> listNamedAddresses();
+      #if SILVERLIGHT
+      IAsyncResult Begin_listNamedAddresses(AsyncCallback callback, object state, );
+      List<IdaNamedAddress> End_listNamedAddresses(IAsyncResult asyncResult);
+      #endif
       void waitBackgroundTasks();
       #if SILVERLIGHT
       IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, );
@@ -1117,6 +1122,67 @@ namespace Idaas
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_listNamedAddresses(AsyncCallback callback, object state, )
+      {
+        return send_listNamedAddresses(callback, state);
+      }
+
+      public List<IdaNamedAddress> End_listNamedAddresses(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_listNamedAddresses();
+      }
+
+      #endif
+
+      public List<IdaNamedAddress> listNamedAddresses()
+      {
+        #if !SILVERLIGHT
+        send_listNamedAddresses();
+        return recv_listNamedAddresses();
+
+        #else
+        var asyncResult = Begin_listNamedAddresses(null, null, );
+        return End_listNamedAddresses(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_listNamedAddresses(AsyncCallback callback, object state, )
+      #else
+      public void send_listNamedAddresses()
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("listNamedAddresses", TMessageType.Call, seqid_));
+        listNamedAddresses_args args = new listNamedAddresses_args();
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public List<IdaNamedAddress> recv_listNamedAddresses()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        listNamedAddresses_result result = new listNamedAddresses_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "listNamedAddresses failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_waitBackgroundTasks(AsyncCallback callback, object state, )
       {
         return send_waitBackgroundTasks(callback, state);
@@ -1194,6 +1260,7 @@ namespace Idaas
         processMap_["getFunctionFrame"] = getFunctionFrame_Process;
         processMap_["parseTypeDeclaration"] = parseTypeDeclaration_Process;
         processMap_["formatTypeInfo"] = formatTypeInfo_Process;
+        processMap_["listNamedAddresses"] = listNamedAddresses_Process;
         processMap_["waitBackgroundTasks"] = waitBackgroundTasks_Process;
       }
 
@@ -1430,6 +1497,19 @@ namespace Idaas
         formatTypeInfo_result result = new formatTypeInfo_result();
         result.Success = iface_.formatTypeInfo(args.TypeInfo);
         oprot.WriteMessageBegin(new TMessage("formatTypeInfo", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void listNamedAddresses_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        listNamedAddresses_args args = new listNamedAddresses_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        listNamedAddresses_result result = new listNamedAddresses_result();
+        result.Success = iface_.listNamedAddresses();
+        oprot.WriteMessageBegin(new TMessage("listNamedAddresses", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -4238,6 +4318,160 @@ namespace Idaas
 
       public override string ToString() {
         StringBuilder sb = new StringBuilder("formatTypeInfo_result(");
+        sb.Append("Success: ");
+        sb.Append(Success);
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listNamedAddresses_args : TBase
+    {
+
+      public listNamedAddresses_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listNamedAddresses_args");
+        oprot.WriteStructBegin(struc);
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listNamedAddresses_args(");
+        sb.Append(")");
+        return sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class listNamedAddresses_result : TBase
+    {
+      private List<IdaNamedAddress> _success;
+
+      public List<IdaNamedAddress> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public listNamedAddresses_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<IdaNamedAddress>();
+                  TList _list56 = iprot.ReadListBegin();
+                  for( int _i57 = 0; _i57 < _list56.Count; ++_i57)
+                  {
+                    IdaNamedAddress _elem58 = new IdaNamedAddress();
+                    _elem58 = new IdaNamedAddress();
+                    _elem58.Read(iprot);
+                    Success.Add(_elem58);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("listNamedAddresses_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+              foreach (IdaNamedAddress _iter59 in Success)
+              {
+                _iter59.Write(oprot);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder sb = new StringBuilder("listNamedAddresses_result(");
         sb.Append("Success: ");
         sb.Append(Success);
         sb.Append(")");

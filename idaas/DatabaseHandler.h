@@ -8,6 +8,7 @@
 #include "FunctionsHandler.h"
 #include "InstructionsHandler.h"
 #include "TypesHandler.h"
+#include "AddressesHandler.h"
 
 class DatabaseHandler : virtual public idaas::DatabaseIf {
 private:
@@ -18,6 +19,7 @@ private:
 	FunctionsHandler functionsHandler;
 	InstructionsHandler instructionsHandler;
 	TypesHandler typesHandler;
+	AddressesHandler addressesHandler;
 	
 public:
 	DatabaseHandler();
@@ -53,6 +55,8 @@ public:
 	void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration);
 
 	void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo);
+	
+	void listNamedAddresses( std::vector<IdaNamedAddress> &_return );
 
 	void waitBackgroundTasks();
 };

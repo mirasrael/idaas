@@ -51,7 +51,7 @@ namespace Ida.Client.Test
             Assert.That(instruction.Mnemonic, Is.EqualTo("mov"));
             Assert.That(instruction.Operands.Count, Is.EqualTo(2));
             var operand = instruction.Operands[1];
-            Assert.That(operand.Type, Is.EqualTo(IdaOperandType.Dislacement));
+            Assert.That(operand.Type, Is.EqualTo(IdaOperandType.Displacement));
             Assert.That(operand.Size, Is.EqualTo(4));
             Assert.That(operand.BaseRegister, Is.EqualTo(IdaRegister.Ebp));
             Assert.That(operand.IndexRegister, Is.EqualTo(IdaRegister.None));

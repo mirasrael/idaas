@@ -24,13 +24,24 @@ struct IdaRefType {
 
 extern const std::map<int, const char*> _IdaRefType_VALUES_TO_NAMES;
 
+struct IdaSegmentType {
+  enum type {
+    Unknown = 0,
+    Data = 1,
+    Code = 2,
+    Import = 3
+  };
+};
+
+extern const std::map<int, const char*> _IdaSegmentType_VALUES_TO_NAMES;
+
 struct IdaOperandType {
   enum type {
     Unknown = 0,
     Register = 1,
     Constant = 2,
     Memory = 3,
-    Dislacement = 4,
+    Displacement = 4,
     Address = 5,
     FPRegister = 6
   };
@@ -484,6 +495,64 @@ class IdaFunctionFrame {
 };
 
 void swap(IdaFunctionFrame &a, IdaFunctionFrame &b);
+
+
+class IdaNamedAddress {
+ public:
+
+  static const char* ascii_fingerprint; // = "8E595A1DCD897D76B9D95487E55A8A4E";
+  static const uint8_t binary_fingerprint[16]; // = {0x8E,0x59,0x5A,0x1D,0xCD,0x89,0x7D,0x76,0xB9,0xD9,0x54,0x87,0xE5,0x5A,0x8A,0x4E};
+
+  IdaNamedAddress() : address(0), name(), type(), segment((IdaSegmentType::type)0) {
+  }
+
+  virtual ~IdaNamedAddress() throw() {}
+
+  int32_t address;
+  std::string name;
+  std::string type;
+  IdaSegmentType::type segment;
+
+  void __set_address(const int32_t val) {
+    address = val;
+  }
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  void __set_type(const std::string& val) {
+    type = val;
+  }
+
+  void __set_segment(const IdaSegmentType::type val) {
+    segment = val;
+  }
+
+  bool operator == (const IdaNamedAddress & rhs) const
+  {
+    if (!(address == rhs.address))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    if (!(type == rhs.type))
+      return false;
+    if (!(segment == rhs.segment))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaNamedAddress &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaNamedAddress & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaNamedAddress &a, IdaNamedAddress &b);
 
 typedef struct _IdaOperand__isset {
   _IdaOperand__isset() : register_(false), address(false), baseRegister(false), indexRegister(false), indexScale(false), value(false) {}

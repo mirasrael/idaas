@@ -51,12 +51,26 @@ struct IdaFunctionFrame {
 	3: required list<IdaStructMember> variables
 }
 
+enum IdaSegmentType {
+	Unknown = 0
+	Data = 1
+	Code = 2
+	Import = 3
+}
+
+struct IdaNamedAddress {
+	1: required i32 address	
+	2: required string name
+	3: required string type
+	4: required IdaSegmentType segment 
+}
+
 enum IdaOperandType {
 	Unknown = 0
 	Register = 1
 	Constant = 2
 	Memory = 3
-	Dislacement = 4
+	Displacement = 4
 	Address = 5
 	FPRegister = 6
 }
@@ -138,6 +152,8 @@ service Database {
 
 	IdaTypeInfo parseTypeDeclaration(string typeDeclaration)
 	string formatTypeInfo(IdaTypeInfo typeInfo)
+
+	list<IdaNamedAddress> listNamedAddresses()
 
 	void waitBackgroundTasks()
 }

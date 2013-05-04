@@ -31,6 +31,7 @@ class DatabaseIf {
   virtual void getFunctionFrame(IdaFunctionFrame& _return, const int32_t address) = 0;
   virtual void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration) = 0;
   virtual void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo) = 0;
+  virtual void listNamedAddresses(std::vector<IdaNamedAddress> & _return) = 0;
   virtual void waitBackgroundTasks() = 0;
 };
 
@@ -111,6 +112,9 @@ class DatabaseNull : virtual public DatabaseIf {
     return;
   }
   void formatTypeInfo(std::string& /* _return */, const IdaTypeInfo& /* typeInfo */) {
+    return;
+  }
+  void listNamedAddresses(std::vector<IdaNamedAddress> & /* _return */) {
     return;
   }
   void waitBackgroundTasks() {
@@ -1769,6 +1773,100 @@ class Database_formatTypeInfo_presult {
 };
 
 
+class Database_listNamedAddresses_args {
+ public:
+
+  Database_listNamedAddresses_args() {
+  }
+
+  virtual ~Database_listNamedAddresses_args() throw() {}
+
+
+  bool operator == (const Database_listNamedAddresses_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Database_listNamedAddresses_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_listNamedAddresses_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Database_listNamedAddresses_pargs {
+ public:
+
+
+  virtual ~Database_listNamedAddresses_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_listNamedAddresses_result__isset {
+  _Database_listNamedAddresses_result__isset() : success(false) {}
+  bool success;
+} _Database_listNamedAddresses_result__isset;
+
+class Database_listNamedAddresses_result {
+ public:
+
+  Database_listNamedAddresses_result() {
+  }
+
+  virtual ~Database_listNamedAddresses_result() throw() {}
+
+  std::vector<IdaNamedAddress>  success;
+
+  _Database_listNamedAddresses_result__isset __isset;
+
+  void __set_success(const std::vector<IdaNamedAddress> & val) {
+    success = val;
+  }
+
+  bool operator == (const Database_listNamedAddresses_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const Database_listNamedAddresses_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Database_listNamedAddresses_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Database_listNamedAddresses_presult__isset {
+  _Database_listNamedAddresses_presult__isset() : success(false) {}
+  bool success;
+} _Database_listNamedAddresses_presult__isset;
+
+class Database_listNamedAddresses_presult {
+ public:
+
+
+  virtual ~Database_listNamedAddresses_presult() throw() {}
+
+  std::vector<IdaNamedAddress> * success;
+
+  _Database_listNamedAddresses_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
 class Database_waitBackgroundTasks_args {
  public:
 
@@ -1910,6 +2008,9 @@ class DatabaseClient : virtual public DatabaseIf {
   void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo);
   void send_formatTypeInfo(const IdaTypeInfo& typeInfo);
   void recv_formatTypeInfo(std::string& _return);
+  void listNamedAddresses(std::vector<IdaNamedAddress> & _return);
+  void send_listNamedAddresses();
+  void recv_listNamedAddresses(std::vector<IdaNamedAddress> & _return);
   void waitBackgroundTasks();
   void send_waitBackgroundTasks();
   void recv_waitBackgroundTasks();
@@ -1944,6 +2045,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getFunctionFrame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parseTypeDeclaration(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_formatTypeInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_listNamedAddresses(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_waitBackgroundTasks(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   DatabaseProcessor(boost::shared_ptr<DatabaseIf> iface) :
@@ -1964,6 +2066,7 @@ class DatabaseProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getFunctionFrame"] = &DatabaseProcessor::process_getFunctionFrame;
     processMap_["parseTypeDeclaration"] = &DatabaseProcessor::process_parseTypeDeclaration;
     processMap_["formatTypeInfo"] = &DatabaseProcessor::process_formatTypeInfo;
+    processMap_["listNamedAddresses"] = &DatabaseProcessor::process_listNamedAddresses;
     processMap_["waitBackgroundTasks"] = &DatabaseProcessor::process_waitBackgroundTasks;
   }
 
@@ -2144,6 +2247,16 @@ class DatabaseMultiface : virtual public DatabaseIf {
       ifaces_[i]->formatTypeInfo(_return, typeInfo);
     }
     ifaces_[i]->formatTypeInfo(_return, typeInfo);
+    return;
+  }
+
+  void listNamedAddresses(std::vector<IdaNamedAddress> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->listNamedAddresses(_return);
+    }
+    ifaces_[i]->listNamedAddresses(_return);
     return;
   }
 

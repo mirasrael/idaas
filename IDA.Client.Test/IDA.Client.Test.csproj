@@ -78,6 +78,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DescribeNames.cs" />
     <Compile Include="DatabaseSpec.cs" />
     <Compile Include="DescribeEnumerations.cs" />
     <Compile Include="DescribeFunctions.cs" />
