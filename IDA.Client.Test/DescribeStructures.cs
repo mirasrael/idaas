@@ -268,7 +268,7 @@ namespace Ida.Client.Test
         {
             var testStructure = Database.NewStructure(GenerateUniqName(), members: new Dictionary<string, string>
                 {
-                    {"__gap__0", "byte[20]"},
+                    {"__gap__0", "unsigned char[20]"},
                     {"IntMember", "int"}
                 });
             Database.Store(testStructure);
@@ -276,7 +276,7 @@ namespace Ida.Client.Test
             Reconnect();
 
             testStructure = Database.Structures[testStructure.Name];
-            Assert.That(testStructure.Members.First(m => m.Name.StartsWith("__gap__")).Type, Is.EqualTo("byte[20]"));
+            Assert.That(testStructure.Members.First(m => m.Name.StartsWith("__gap__")).Type, Is.EqualTo("unsigned char[20]"));
         }
 
         [Test]

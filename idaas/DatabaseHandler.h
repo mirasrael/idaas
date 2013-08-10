@@ -55,6 +55,8 @@ public:
 	void parseTypeDeclaration(IdaTypeInfo& _return, const std::string& typeDeclaration);
 
 	void formatTypeInfo(std::string& _return, const IdaTypeInfo& typeInfo);
+
+	void listTypeLibraries( std::vector<IdaTypeLibrary>& _return );
 	
 	void listNamedAddresses( std::vector<IdaNamedAddress> &_return );
 

@@ -775,6 +775,57 @@ class IdaTypeInfo {
 
 void swap(IdaTypeInfo &a, IdaTypeInfo &b);
 
+
+class IdaTypeLibrary {
+ public:
+
+  static const char* ascii_fingerprint; // = "F4FBB48551F3F3F41148E2FEAC5CDC2E";
+  static const uint8_t binary_fingerprint[16]; // = {0xF4,0xFB,0xB4,0x85,0x51,0xF3,0xF3,0xF4,0x11,0x48,0xE2,0xFE,0xAC,0x5C,0xDC,0x2E};
+
+  IdaTypeLibrary() : name() {
+  }
+
+  virtual ~IdaTypeLibrary() throw() {}
+
+  std::string name;
+  std::vector<IdaTypeInfo>  types;
+  std::vector<std::string>  baseLibraries;
+
+  void __set_name(const std::string& val) {
+    name = val;
+  }
+
+  void __set_types(const std::vector<IdaTypeInfo> & val) {
+    types = val;
+  }
+
+  void __set_baseLibraries(const std::vector<std::string> & val) {
+    baseLibraries = val;
+  }
+
+  bool operator == (const IdaTypeLibrary & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    if (!(types == rhs.types))
+      return false;
+    if (!(baseLibraries == rhs.baseLibraries))
+      return false;
+    return true;
+  }
+  bool operator != (const IdaTypeLibrary &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IdaTypeLibrary & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+void swap(IdaTypeLibrary &a, IdaTypeLibrary &b);
+
 } // namespace
 
 #endif

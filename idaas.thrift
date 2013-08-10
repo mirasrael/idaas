@@ -129,6 +129,12 @@ struct IdaTypeInfo {
 	3: string fields
 }
 
+struct IdaTypeLibrary {
+	1: required string name
+	2: required list<IdaTypeInfo> types
+	3: required list<string> baseLibraries
+}
+
 service Database {
 	list<ida_enum> listEnums()
 	bool storeEnum(1: ida_enum _enum)	
@@ -150,8 +156,9 @@ service Database {
 	list<IdaFunction> listFunctions()
 	IdaFunctionFrame getFunctionFrame(1: i32 address)
 
-	IdaTypeInfo parseTypeDeclaration(string typeDeclaration)
-	string formatTypeInfo(IdaTypeInfo typeInfo)
+	IdaTypeInfo parseTypeDeclaration(1: string typeDeclaration)
+	string formatTypeInfo(1: IdaTypeInfo typeInfo)
+	list<IdaTypeLibrary> listTypeLibraries()
 
 	list<IdaNamedAddress> listNamedAddresses()
 

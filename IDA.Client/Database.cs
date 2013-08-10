@@ -7,6 +7,7 @@ using System.Threading;
 using Idaas;
 using Thrift.Protocol;
 using Thrift.Transport;
+using System.Linq;
 
 namespace Ida.Client
 {
@@ -40,13 +41,24 @@ namespace Ida.Client
                     return null;
                 }
 	        }
-            var port = int.Parse(File.ReadAllText(infFilePath));
+            var lines = File.ReadLines(infFilePath).ToArray();
+            var port = int.Parse(lines[0]);
+            var pid = int.Parse(lines[1]);
+            try
+            {
+                Process.GetProcessById(pid);
+            }
+            catch (ArgumentException)
+            {
+                File.Delete(infFilePath);
+                return Open(path);
+            }
             var database = new Database();
             if (!database.Connect(new IPEndPoint(IPAddress.Loopback, port)))
             {
                 return null;
             }
-            return database;		
+            return database;
         }
 
         protected bool Connect(IPEndPoint endPoint)
@@ -60,6 +72,7 @@ namespace Ida.Client
             Functions = new Functions(_client);
             Instructions = new Instructions(_client);
             Names = new Names(_client);
+            TypeLibraries = new TypeLibraries(_client);
 
             _transport.Open();
             return true;
@@ -81,6 +94,10 @@ namespace Ida.Client
         public Instructions Instructions { get; private set; }
 
         public Names Names { get; private set; }
+
+        public TypeLibraries TypeLibraries { get; private set; }
+
+        public TypeLibrary MainTypeLibrary { get { return TypeLibraries["_main"]; } }
 
         public List<IdaRef> GetDataRefsTo(int address)
         {

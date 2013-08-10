@@ -160,6 +160,13 @@ void DatabaseHandler::formatTypeInfo( std::string& _return, const IdaTypeInfo& t
 	typesHandler.formatTypeInfo(_return, typeInfo);
 }
 
+void DatabaseHandler::listTypeLibraries( std::vector<IdaTypeLibrary>& _return )
+{
+	run_in_main_thread(boost::function<void()>(
+		boost::bind(&TypesHandler::listTypeLibraries, &typesHandler, boost::ref(_return))));
+}
+
+
 void DatabaseHandler::getFunctionFrame( IdaFunctionFrame& _return, const int32_t address )
 {
 	run_in_main_thread(boost::function<void()>(

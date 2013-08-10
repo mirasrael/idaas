@@ -7,6 +7,7 @@
 #pragma warning(default: 4996)
 #include "Logging.h"
 #include "TcpServer.h"
+#include <boost/thread/win32/thread_primitives.hpp>
 
 extern "C" {
 	char *infFilePath = NULL;
@@ -17,10 +18,11 @@ extern "C" {
 		size_t infFilePathLen = qstrlen(path) + 6;
 		infFilePath = (char *) qalloc(infFilePathLen + 1);		
 		qstrncpy(infFilePath, path, infFilePathLen + 1);		
-		qstrncat(infFilePath, ".idaas", infFilePathLen + 1);		
+		qstrncat(infFilePath, ".idaas", infFilePathLen + 1);
 		msg("Event: Write %s\n", infFilePath);		
-		FILE *infFile = fopenWT(infFilePath);		
-		qfprintf(infFile, "%d", GetDatabaseServerPort());
+		FILE *infFile = fopenWT(infFilePath);
+		qfprintf(infFile, "%d\n", GetDatabaseServerPort());
+		qfprintf(infFile, "%d\n", boost::detail::win32::GetCurrentProcessId());
 		qfclose(infFile);
 		
 		return 0;

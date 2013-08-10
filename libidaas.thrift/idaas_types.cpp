@@ -1451,4 +1451,140 @@ void swap(IdaTypeInfo &a, IdaTypeInfo &b) {
   swap(a.__isset, b.__isset);
 }
 
+const char* IdaTypeLibrary::ascii_fingerprint = "F4FBB48551F3F3F41148E2FEAC5CDC2E";
+const uint8_t IdaTypeLibrary::binary_fingerprint[16] = {0xF4,0xFB,0xB4,0x85,0x51,0xF3,0xF3,0xF4,0x11,0x48,0xE2,0xFE,0xAC,0x5C,0xDC,0x2E};
+
+uint32_t IdaTypeLibrary::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_name = false;
+  bool isset_types = false;
+  bool isset_baseLibraries = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          isset_name = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->types.clear();
+            uint32_t _size41;
+            ::apache::thrift::protocol::TType _etype44;
+            xfer += iprot->readListBegin(_etype44, _size41);
+            this->types.resize(_size41);
+            uint32_t _i45;
+            for (_i45 = 0; _i45 < _size41; ++_i45)
+            {
+              xfer += this->types[_i45].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          isset_types = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->baseLibraries.clear();
+            uint32_t _size46;
+            ::apache::thrift::protocol::TType _etype49;
+            xfer += iprot->readListBegin(_etype49, _size46);
+            this->baseLibraries.resize(_size46);
+            uint32_t _i50;
+            for (_i50 = 0; _i50 < _size46; ++_i50)
+            {
+              xfer += iprot->readString(this->baseLibraries[_i50]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          isset_baseLibraries = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_name)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_types)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_baseLibraries)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t IdaTypeLibrary::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("IdaTypeLibrary");
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("types", ::apache::thrift::protocol::T_LIST, 2);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->types.size()));
+    std::vector<IdaTypeInfo> ::const_iterator _iter51;
+    for (_iter51 = this->types.begin(); _iter51 != this->types.end(); ++_iter51)
+    {
+      xfer += (*_iter51).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("baseLibraries", ::apache::thrift::protocol::T_LIST, 3);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->baseLibraries.size()));
+    std::vector<std::string> ::const_iterator _iter52;
+    for (_iter52 = this->baseLibraries.begin(); _iter52 != this->baseLibraries.end(); ++_iter52)
+    {
+      xfer += oprot->writeString((*_iter52));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IdaTypeLibrary &a, IdaTypeLibrary &b) {
+  using ::std::swap;
+  swap(a.name, b.name);
+  swap(a.types, b.types);
+  swap(a.baseLibraries, b.baseLibraries);
+}
+
 } // namespace

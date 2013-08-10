@@ -5,7 +5,7 @@ namespace Ida.Client.Test
 {
     public class DatabaseSpec
     {
-        private const string DatabaseName = @"d:\projects\idaas\TestApplication.idb";
+        private const string DatabaseName = @"k:\projects\idaas\TestApplication.idb";
         protected Database Database;
 
         [SetUp]

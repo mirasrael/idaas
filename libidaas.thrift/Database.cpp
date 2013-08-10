@@ -77,14 +77,14 @@ uint32_t Database_listEnums_result::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size41;
-            ::apache::thrift::protocol::TType _etype44;
-            xfer += iprot->readListBegin(_etype44, _size41);
-            this->success.resize(_size41);
-            uint32_t _i45;
-            for (_i45 = 0; _i45 < _size41; ++_i45)
+            uint32_t _size53;
+            ::apache::thrift::protocol::TType _etype56;
+            xfer += iprot->readListBegin(_etype56, _size53);
+            this->success.resize(_size53);
+            uint32_t _i57;
+            for (_i57 = 0; _i57 < _size53; ++_i57)
             {
-              xfer += this->success[_i45].read(iprot);
+              xfer += this->success[_i57].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -115,10 +115,10 @@ uint32_t Database_listEnums_result::write(::apache::thrift::protocol::TProtocol*
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ida_enum> ::const_iterator _iter46;
-      for (_iter46 = this->success.begin(); _iter46 != this->success.end(); ++_iter46)
+      std::vector<ida_enum> ::const_iterator _iter58;
+      for (_iter58 = this->success.begin(); _iter58 != this->success.end(); ++_iter58)
       {
-        xfer += (*_iter46).write(oprot);
+        xfer += (*_iter58).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -153,14 +153,14 @@ uint32_t Database_listEnums_presult::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size47;
-            ::apache::thrift::protocol::TType _etype50;
-            xfer += iprot->readListBegin(_etype50, _size47);
-            (*(this->success)).resize(_size47);
-            uint32_t _i51;
-            for (_i51 = 0; _i51 < _size47; ++_i51)
+            uint32_t _size59;
+            ::apache::thrift::protocol::TType _etype62;
+            xfer += iprot->readListBegin(_etype62, _size59);
+            (*(this->success)).resize(_size59);
+            uint32_t _i63;
+            for (_i63 = 0; _i63 < _size59; ++_i63)
             {
-              xfer += (*(this->success))[_i51].read(iprot);
+              xfer += (*(this->success))[_i63].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -367,14 +367,14 @@ uint32_t Database_storeEnums_args::read(::apache::thrift::protocol::TProtocol* i
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->enums.clear();
-            uint32_t _size52;
-            ::apache::thrift::protocol::TType _etype55;
-            xfer += iprot->readListBegin(_etype55, _size52);
-            this->enums.resize(_size52);
-            uint32_t _i56;
-            for (_i56 = 0; _i56 < _size52; ++_i56)
+            uint32_t _size64;
+            ::apache::thrift::protocol::TType _etype67;
+            xfer += iprot->readListBegin(_etype67, _size64);
+            this->enums.resize(_size64);
+            uint32_t _i68;
+            for (_i68 = 0; _i68 < _size64; ++_i68)
             {
-              xfer += this->enums[_i56].read(iprot);
+              xfer += this->enums[_i68].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -402,10 +402,10 @@ uint32_t Database_storeEnums_args::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeFieldBegin("enums", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->enums.size()));
-    std::vector<ida_enum> ::const_iterator _iter57;
-    for (_iter57 = this->enums.begin(); _iter57 != this->enums.end(); ++_iter57)
+    std::vector<ida_enum> ::const_iterator _iter69;
+    for (_iter69 = this->enums.begin(); _iter69 != this->enums.end(); ++_iter69)
     {
-      xfer += (*_iter57).write(oprot);
+      xfer += (*_iter69).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -423,10 +423,10 @@ uint32_t Database_storeEnums_pargs::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeFieldBegin("enums", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->enums)).size()));
-    std::vector<ida_enum> ::const_iterator _iter58;
-    for (_iter58 = (*(this->enums)).begin(); _iter58 != (*(this->enums)).end(); ++_iter58)
+    std::vector<ida_enum> ::const_iterator _iter70;
+    for (_iter70 = (*(this->enums)).begin(); _iter70 != (*(this->enums)).end(); ++_iter70)
     {
-      xfer += (*_iter58).write(oprot);
+      xfer += (*_iter70).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -733,14 +733,14 @@ uint32_t Database_listStructures_result::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size59;
-            ::apache::thrift::protocol::TType _etype62;
-            xfer += iprot->readListBegin(_etype62, _size59);
-            this->success.resize(_size59);
-            uint32_t _i63;
-            for (_i63 = 0; _i63 < _size59; ++_i63)
+            uint32_t _size71;
+            ::apache::thrift::protocol::TType _etype74;
+            xfer += iprot->readListBegin(_etype74, _size71);
+            this->success.resize(_size71);
+            uint32_t _i75;
+            for (_i75 = 0; _i75 < _size71; ++_i75)
             {
-              xfer += this->success[_i63].read(iprot);
+              xfer += this->success[_i75].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -771,10 +771,10 @@ uint32_t Database_listStructures_result::write(::apache::thrift::protocol::TProt
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<IdaStruct> ::const_iterator _iter64;
-      for (_iter64 = this->success.begin(); _iter64 != this->success.end(); ++_iter64)
+      std::vector<IdaStruct> ::const_iterator _iter76;
+      for (_iter76 = this->success.begin(); _iter76 != this->success.end(); ++_iter76)
       {
-        xfer += (*_iter64).write(oprot);
+        xfer += (*_iter76).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -809,14 +809,14 @@ uint32_t Database_listStructures_presult::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size65;
-            ::apache::thrift::protocol::TType _etype68;
-            xfer += iprot->readListBegin(_etype68, _size65);
-            (*(this->success)).resize(_size65);
-            uint32_t _i69;
-            for (_i69 = 0; _i69 < _size65; ++_i69)
+            uint32_t _size77;
+            ::apache::thrift::protocol::TType _etype80;
+            xfer += iprot->readListBegin(_etype80, _size77);
+            (*(this->success)).resize(_size77);
+            uint32_t _i81;
+            for (_i81 = 0; _i81 < _size77; ++_i81)
             {
-              xfer += (*(this->success))[_i69].read(iprot);
+              xfer += (*(this->success))[_i81].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1023,14 +1023,14 @@ uint32_t Database_storeStructures_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->structs.clear();
-            uint32_t _size70;
-            ::apache::thrift::protocol::TType _etype73;
-            xfer += iprot->readListBegin(_etype73, _size70);
-            this->structs.resize(_size70);
-            uint32_t _i74;
-            for (_i74 = 0; _i74 < _size70; ++_i74)
+            uint32_t _size82;
+            ::apache::thrift::protocol::TType _etype85;
+            xfer += iprot->readListBegin(_etype85, _size82);
+            this->structs.resize(_size82);
+            uint32_t _i86;
+            for (_i86 = 0; _i86 < _size82; ++_i86)
             {
-              xfer += this->structs[_i74].read(iprot);
+              xfer += this->structs[_i86].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1058,10 +1058,10 @@ uint32_t Database_storeStructures_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("structs", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->structs.size()));
-    std::vector<IdaStruct> ::const_iterator _iter75;
-    for (_iter75 = this->structs.begin(); _iter75 != this->structs.end(); ++_iter75)
+    std::vector<IdaStruct> ::const_iterator _iter87;
+    for (_iter87 = this->structs.begin(); _iter87 != this->structs.end(); ++_iter87)
     {
-      xfer += (*_iter75).write(oprot);
+      xfer += (*_iter87).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -1079,10 +1079,10 @@ uint32_t Database_storeStructures_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("structs", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->structs)).size()));
-    std::vector<IdaStruct> ::const_iterator _iter76;
-    for (_iter76 = (*(this->structs)).begin(); _iter76 != (*(this->structs)).end(); ++_iter76)
+    std::vector<IdaStruct> ::const_iterator _iter88;
+    for (_iter88 = (*(this->structs)).begin(); _iter88 != (*(this->structs)).end(); ++_iter88)
     {
-      xfer += (*_iter76).write(oprot);
+      xfer += (*_iter88).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -1389,14 +1389,14 @@ uint32_t Database_listStrings_result::read(::apache::thrift::protocol::TProtocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size77;
-            ::apache::thrift::protocol::TType _etype80;
-            xfer += iprot->readListBegin(_etype80, _size77);
-            this->success.resize(_size77);
-            uint32_t _i81;
-            for (_i81 = 0; _i81 < _size77; ++_i81)
+            uint32_t _size89;
+            ::apache::thrift::protocol::TType _etype92;
+            xfer += iprot->readListBegin(_etype92, _size89);
+            this->success.resize(_size89);
+            uint32_t _i93;
+            for (_i93 = 0; _i93 < _size89; ++_i93)
             {
-              xfer += this->success[_i81].read(iprot);
+              xfer += this->success[_i93].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1427,10 +1427,10 @@ uint32_t Database_listStrings_result::write(::apache::thrift::protocol::TProtoco
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ida_string> ::const_iterator _iter82;
-      for (_iter82 = this->success.begin(); _iter82 != this->success.end(); ++_iter82)
+      std::vector<ida_string> ::const_iterator _iter94;
+      for (_iter94 = this->success.begin(); _iter94 != this->success.end(); ++_iter94)
       {
-        xfer += (*_iter82).write(oprot);
+        xfer += (*_iter94).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1465,14 +1465,14 @@ uint32_t Database_listStrings_presult::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size83;
-            ::apache::thrift::protocol::TType _etype86;
-            xfer += iprot->readListBegin(_etype86, _size83);
-            (*(this->success)).resize(_size83);
-            uint32_t _i87;
-            for (_i87 = 0; _i87 < _size83; ++_i87)
+            uint32_t _size95;
+            ::apache::thrift::protocol::TType _etype98;
+            xfer += iprot->readListBegin(_etype98, _size95);
+            (*(this->success)).resize(_size95);
+            uint32_t _i99;
+            for (_i99 = 0; _i99 < _size95; ++_i99)
             {
-              xfer += (*(this->success))[_i87].read(iprot);
+              xfer += (*(this->success))[_i99].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1523,9 +1523,9 @@ uint32_t Database_xrefsTo_args::read(::apache::thrift::protocol::TProtocol* ipro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast88;
-          xfer += iprot->readI32(ecast88);
-          this->refType = (IdaRefType::type)ecast88;
+          int32_t ecast100;
+          xfer += iprot->readI32(ecast100);
+          this->refType = (IdaRefType::type)ecast100;
           this->__isset.refType = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1601,14 +1601,14 @@ uint32_t Database_xrefsTo_result::read(::apache::thrift::protocol::TProtocol* ip
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size89;
-            ::apache::thrift::protocol::TType _etype92;
-            xfer += iprot->readListBegin(_etype92, _size89);
-            this->success.resize(_size89);
-            uint32_t _i93;
-            for (_i93 = 0; _i93 < _size89; ++_i93)
+            uint32_t _size101;
+            ::apache::thrift::protocol::TType _etype104;
+            xfer += iprot->readListBegin(_etype104, _size101);
+            this->success.resize(_size101);
+            uint32_t _i105;
+            for (_i105 = 0; _i105 < _size101; ++_i105)
             {
-              xfer += this->success[_i93].read(iprot);
+              xfer += this->success[_i105].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1639,10 +1639,10 @@ uint32_t Database_xrefsTo_result::write(::apache::thrift::protocol::TProtocol* o
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<IdaRef> ::const_iterator _iter94;
-      for (_iter94 = this->success.begin(); _iter94 != this->success.end(); ++_iter94)
+      std::vector<IdaRef> ::const_iterator _iter106;
+      for (_iter106 = this->success.begin(); _iter106 != this->success.end(); ++_iter106)
       {
-        xfer += (*_iter94).write(oprot);
+        xfer += (*_iter106).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1677,14 +1677,14 @@ uint32_t Database_xrefsTo_presult::read(::apache::thrift::protocol::TProtocol* i
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size95;
-            ::apache::thrift::protocol::TType _etype98;
-            xfer += iprot->readListBegin(_etype98, _size95);
-            (*(this->success)).resize(_size95);
-            uint32_t _i99;
-            for (_i99 = 0; _i99 < _size95; ++_i99)
+            uint32_t _size107;
+            ::apache::thrift::protocol::TType _etype110;
+            xfer += iprot->readListBegin(_etype110, _size107);
+            (*(this->success)).resize(_size107);
+            uint32_t _i111;
+            for (_i111 = 0; _i111 < _size107; ++_i111)
             {
-              xfer += (*(this->success))[_i99].read(iprot);
+              xfer += (*(this->success))[_i111].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1735,9 +1735,9 @@ uint32_t Database_xrefsFrom_args::read(::apache::thrift::protocol::TProtocol* ip
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast100;
-          xfer += iprot->readI32(ecast100);
-          this->refType = (IdaRefType::type)ecast100;
+          int32_t ecast112;
+          xfer += iprot->readI32(ecast112);
+          this->refType = (IdaRefType::type)ecast112;
           this->__isset.refType = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1813,14 +1813,14 @@ uint32_t Database_xrefsFrom_result::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size101;
-            ::apache::thrift::protocol::TType _etype104;
-            xfer += iprot->readListBegin(_etype104, _size101);
-            this->success.resize(_size101);
-            uint32_t _i105;
-            for (_i105 = 0; _i105 < _size101; ++_i105)
+            uint32_t _size113;
+            ::apache::thrift::protocol::TType _etype116;
+            xfer += iprot->readListBegin(_etype116, _size113);
+            this->success.resize(_size113);
+            uint32_t _i117;
+            for (_i117 = 0; _i117 < _size113; ++_i117)
             {
-              xfer += this->success[_i105].read(iprot);
+              xfer += this->success[_i117].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1851,10 +1851,10 @@ uint32_t Database_xrefsFrom_result::write(::apache::thrift::protocol::TProtocol*
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<IdaRef> ::const_iterator _iter106;
-      for (_iter106 = this->success.begin(); _iter106 != this->success.end(); ++_iter106)
+      std::vector<IdaRef> ::const_iterator _iter118;
+      for (_iter118 = this->success.begin(); _iter118 != this->success.end(); ++_iter118)
       {
-        xfer += (*_iter106).write(oprot);
+        xfer += (*_iter118).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1889,14 +1889,14 @@ uint32_t Database_xrefsFrom_presult::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size107;
-            ::apache::thrift::protocol::TType _etype110;
-            xfer += iprot->readListBegin(_etype110, _size107);
-            (*(this->success)).resize(_size107);
-            uint32_t _i111;
-            for (_i111 = 0; _i111 < _size107; ++_i111)
+            uint32_t _size119;
+            ::apache::thrift::protocol::TType _etype122;
+            xfer += iprot->readListBegin(_etype122, _size119);
+            (*(this->success)).resize(_size119);
+            uint32_t _i123;
+            for (_i123 = 0; _i123 < _size119; ++_i123)
             {
-              xfer += (*(this->success))[_i111].read(iprot);
+              xfer += (*(this->success))[_i123].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2148,14 +2148,14 @@ uint32_t Database_listFunctions_result::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size112;
-            ::apache::thrift::protocol::TType _etype115;
-            xfer += iprot->readListBegin(_etype115, _size112);
-            this->success.resize(_size112);
-            uint32_t _i116;
-            for (_i116 = 0; _i116 < _size112; ++_i116)
+            uint32_t _size124;
+            ::apache::thrift::protocol::TType _etype127;
+            xfer += iprot->readListBegin(_etype127, _size124);
+            this->success.resize(_size124);
+            uint32_t _i128;
+            for (_i128 = 0; _i128 < _size124; ++_i128)
             {
-              xfer += this->success[_i116].read(iprot);
+              xfer += this->success[_i128].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2186,10 +2186,10 @@ uint32_t Database_listFunctions_result::write(::apache::thrift::protocol::TProto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<IdaFunction> ::const_iterator _iter117;
-      for (_iter117 = this->success.begin(); _iter117 != this->success.end(); ++_iter117)
+      std::vector<IdaFunction> ::const_iterator _iter129;
+      for (_iter129 = this->success.begin(); _iter129 != this->success.end(); ++_iter129)
       {
-        xfer += (*_iter117).write(oprot);
+        xfer += (*_iter129).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -2224,14 +2224,14 @@ uint32_t Database_listFunctions_presult::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size118;
-            ::apache::thrift::protocol::TType _etype121;
-            xfer += iprot->readListBegin(_etype121, _size118);
-            (*(this->success)).resize(_size118);
-            uint32_t _i122;
-            for (_i122 = 0; _i122 < _size118; ++_i122)
+            uint32_t _size130;
+            ::apache::thrift::protocol::TType _etype133;
+            xfer += iprot->readListBegin(_etype133, _size130);
+            (*(this->success)).resize(_size130);
+            uint32_t _i134;
+            for (_i134 = 0; _i134 < _size130; ++_i134)
             {
-              xfer += (*(this->success))[_i122].read(iprot);
+              xfer += (*(this->success))[_i134].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2434,7 +2434,7 @@ uint32_t Database_parseTypeDeclaration_args::read(::apache::thrift::protocol::TP
     }
     switch (fid)
     {
-      case -1:
+      case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->typeDeclaration);
           this->__isset.typeDeclaration = true;
@@ -2458,7 +2458,7 @@ uint32_t Database_parseTypeDeclaration_args::write(::apache::thrift::protocol::T
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_parseTypeDeclaration_args");
 
-  xfer += oprot->writeFieldBegin("typeDeclaration", ::apache::thrift::protocol::T_STRING, -1);
+  xfer += oprot->writeFieldBegin("typeDeclaration", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->typeDeclaration);
   xfer += oprot->writeFieldEnd();
 
@@ -2471,7 +2471,7 @@ uint32_t Database_parseTypeDeclaration_pargs::write(::apache::thrift::protocol::
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_parseTypeDeclaration_pargs");
 
-  xfer += oprot->writeFieldBegin("typeDeclaration", ::apache::thrift::protocol::T_STRING, -1);
+  xfer += oprot->writeFieldBegin("typeDeclaration", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->typeDeclaration)));
   xfer += oprot->writeFieldEnd();
 
@@ -2596,7 +2596,7 @@ uint32_t Database_formatTypeInfo_args::read(::apache::thrift::protocol::TProtoco
     }
     switch (fid)
     {
-      case -1:
+      case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->typeInfo.read(iprot);
           this->__isset.typeInfo = true;
@@ -2620,7 +2620,7 @@ uint32_t Database_formatTypeInfo_args::write(::apache::thrift::protocol::TProtoc
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_formatTypeInfo_args");
 
-  xfer += oprot->writeFieldBegin("typeInfo", ::apache::thrift::protocol::T_STRUCT, -1);
+  xfer += oprot->writeFieldBegin("typeInfo", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->typeInfo.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -2633,7 +2633,7 @@ uint32_t Database_formatTypeInfo_pargs::write(::apache::thrift::protocol::TProto
   uint32_t xfer = 0;
   xfer += oprot->writeStructBegin("Database_formatTypeInfo_pargs");
 
-  xfer += oprot->writeFieldBegin("typeInfo", ::apache::thrift::protocol::T_STRUCT, -1);
+  xfer += oprot->writeFieldBegin("typeInfo", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->typeInfo)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -2738,6 +2738,179 @@ uint32_t Database_formatTypeInfo_presult::read(::apache::thrift::protocol::TProt
   return xfer;
 }
 
+uint32_t Database_listTypeLibraries_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Database_listTypeLibraries_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("Database_listTypeLibraries_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+uint32_t Database_listTypeLibraries_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  xfer += oprot->writeStructBegin("Database_listTypeLibraries_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+uint32_t Database_listTypeLibraries_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size135;
+            ::apache::thrift::protocol::TType _etype138;
+            xfer += iprot->readListBegin(_etype138, _size135);
+            this->success.resize(_size135);
+            uint32_t _i139;
+            for (_i139 = 0; _i139 < _size135; ++_i139)
+            {
+              xfer += this->success[_i139].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Database_listTypeLibraries_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Database_listTypeLibraries_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
+      std::vector<IdaTypeLibrary> ::const_iterator _iter140;
+      for (_iter140 = this->success.begin(); _iter140 != this->success.end(); ++_iter140)
+      {
+        xfer += (*_iter140).write(oprot);
+      }
+      xfer += oprot->writeListEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+uint32_t Database_listTypeLibraries_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size141;
+            ::apache::thrift::protocol::TType _etype144;
+            xfer += iprot->readListBegin(_etype144, _size141);
+            (*(this->success)).resize(_size141);
+            uint32_t _i145;
+            for (_i145 = 0; _i145 < _size141; ++_i145)
+            {
+              xfer += (*(this->success))[_i145].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
 uint32_t Database_listNamedAddresses_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
@@ -2807,14 +2980,14 @@ uint32_t Database_listNamedAddresses_result::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size123;
-            ::apache::thrift::protocol::TType _etype126;
-            xfer += iprot->readListBegin(_etype126, _size123);
-            this->success.resize(_size123);
-            uint32_t _i127;
-            for (_i127 = 0; _i127 < _size123; ++_i127)
+            uint32_t _size146;
+            ::apache::thrift::protocol::TType _etype149;
+            xfer += iprot->readListBegin(_etype149, _size146);
+            this->success.resize(_size146);
+            uint32_t _i150;
+            for (_i150 = 0; _i150 < _size146; ++_i150)
             {
-              xfer += this->success[_i127].read(iprot);
+              xfer += this->success[_i150].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2845,10 +3018,10 @@ uint32_t Database_listNamedAddresses_result::write(::apache::thrift::protocol::T
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<IdaNamedAddress> ::const_iterator _iter128;
-      for (_iter128 = this->success.begin(); _iter128 != this->success.end(); ++_iter128)
+      std::vector<IdaNamedAddress> ::const_iterator _iter151;
+      for (_iter151 = this->success.begin(); _iter151 != this->success.end(); ++_iter151)
       {
-        xfer += (*_iter128).write(oprot);
+        xfer += (*_iter151).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -2883,14 +3056,14 @@ uint32_t Database_listNamedAddresses_presult::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size129;
-            ::apache::thrift::protocol::TType _etype132;
-            xfer += iprot->readListBegin(_etype132, _size129);
-            (*(this->success)).resize(_size129);
-            uint32_t _i133;
-            for (_i133 = 0; _i133 < _size129; ++_i133)
+            uint32_t _size152;
+            ::apache::thrift::protocol::TType _etype155;
+            xfer += iprot->readListBegin(_etype155, _size152);
+            (*(this->success)).resize(_size152);
+            uint32_t _i156;
+            for (_i156 = 0; _i156 < _size152; ++_i156)
             {
-              xfer += (*(this->success))[_i133].read(iprot);
+              xfer += (*(this->success))[_i156].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -3937,6 +4110,63 @@ void DatabaseClient::recv_formatTypeInfo(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "formatTypeInfo failed: unknown result");
 }
 
+void DatabaseClient::listTypeLibraries(std::vector<IdaTypeLibrary> & _return)
+{
+  send_listTypeLibraries();
+  recv_listTypeLibraries(_return);
+}
+
+void DatabaseClient::send_listTypeLibraries()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("listTypeLibraries", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Database_listTypeLibraries_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void DatabaseClient::recv_listTypeLibraries(std::vector<IdaTypeLibrary> & _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("listTypeLibraries") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Database_listTypeLibraries_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listTypeLibraries failed: unknown result");
+}
+
 void DatabaseClient::listNamedAddresses(std::vector<IdaNamedAddress> & _return)
 {
   send_listNamedAddresses();
@@ -4924,6 +5154,60 @@ void DatabaseProcessor::process_formatTypeInfo(int32_t seqid, ::apache::thrift::
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "Database.formatTypeInfo", bytes);
+  }
+}
+
+void DatabaseProcessor::process_listTypeLibraries(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("Database.listTypeLibraries", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Database.listTypeLibraries");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "Database.listTypeLibraries");
+  }
+
+  Database_listTypeLibraries_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "Database.listTypeLibraries", bytes);
+  }
+
+  Database_listTypeLibraries_result result;
+  try {
+    iface_->listTypeLibraries(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "Database.listTypeLibraries");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("listTypeLibraries", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "Database.listTypeLibraries");
+  }
+
+  oprot->writeMessageBegin("listTypeLibraries", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "Database.listTypeLibraries", bytes);
   }
 }
 
