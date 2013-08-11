@@ -6,11 +6,9 @@ Target of the project is to significantly simplify creation of "plug-ins" on dif
 Now if you want to add some advanced logic (like automatic structures/functions detection, calculating and marking constants etc) you should write your own plug-in or find some with similar functionality (but it is not always possible).
 
 And imagine now that you can do it in on your favorite language with just a few steps:
-1) Install idaas plug-in for IDA;
-2) Generate client for your favorite language with amazing thrift tool by idaas.thrift;
-3) Add generated client to your project.
-
-You got it!
+- Install idaas plug-in for IDA
+- Generate client for your favorite language with amazing thrift tool by idaas.thrift
+- Add generated client to your project
 
 You may still not access to full power of IDA API, but this project is open source and you always can contribute and extend remote API with necessary features or fork in special cases.
 This open ways to produce frameworks and libraries based on remote API and, even more, because remote API creates new abstraction layer it theorethecally may be extended on other disassemblers. Also, it may be composed to develope in remote mode and release in plug-in mode with same API.
